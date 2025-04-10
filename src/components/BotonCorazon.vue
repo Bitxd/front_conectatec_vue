@@ -17,7 +17,7 @@
 
 <script>
 export default {
-    name: 'LikeButton',
+    name: 'BotonCorazon',
     props: {
         liked: {
             type: Boolean,
@@ -34,9 +34,9 @@ export default {
 
 <style scoped>
 .like-button {
-    background-color: #f5f5f5; /* Fondo suave */
-    border: 2px solid #ddd; /* Borde suave */
-    border-radius: 50%; /* Forma redonda */
+    background-color: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 50%;
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
@@ -48,21 +48,21 @@ export default {
 }
 
 .like-button:hover {
-    background-color: #eee; /* Fondo más oscuro cuando pasa el mouse */
+    background-color: #eee;
 }
 
 .heart-icon {
     width: 24px;
     height: 24px;
-    fill: #aaa; /* Color gris cuando no está presionado */
+    fill: #aaa;
     transition: fill 0.3s ease, transform 0.2s ease;
 }
 
 .heart-icon.liked {
-    fill: #e74c3c; /* Rojo brillante cuando está activado */
+    fill: #e74c3c;
 }
 
 .like-button:hover .heart-icon {
-    transform: scale(1.2); /* Efecto de escala al pasar el mouse */
+    transform: scale(1.2);
 }
 </style>

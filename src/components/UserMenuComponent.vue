@@ -1,5 +1,6 @@
 <template>
     <div class="user-menu" ref="userMenu">
+        <BotonImagenComponent image="/icons/notificacion-icon.svg" altText="Notificaciones" description="Notificaciones"/>
         <span class="username">{{ username }}</span>
         <BotonImagenComponent image="/icons/user-icon.svg" altText="Usuario" @click="toggleMenu" />
         <div v-if="menuVisible" class="menu">
