@@ -1,5 +1,5 @@
 <template>
-  <div class="detalles-universidad">
+  <div class="detalles-universidad" v-if="universidad && universidad.nombre">
     <div class="universidad-header">
       <div class="nombre-logo">
         <h1 class="nombre">{{ universidad.nombre }}</h1>
@@ -9,7 +9,7 @@
         <HerramientasUniversidadComponent />
         <div class="separator-container"></div>
         <BotonTextoImagenComponent image="/icons/mapa-virtual-icon.svg" text="Mapa Virtual" />
-        <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" />
+        <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" @click="botonForo"/>
         <BotonTextoImagenComponent image="/icons/calendario-icon.svg" text="Calendario" />
       </div>
     </div>
@@ -20,7 +20,9 @@
       <BotonTextoImagenComponent image="/icons/informacion-general-icon.svg" text="Información General" />
       <BotonTextoImagenComponent image="/icons/inscripcion-icon.svg" text="Inscripciones" />
     </div>
-
+  </div>
+  <div v-else>
+    <p>Cargando información de la universidad...</p>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ export default {
   },
   data() {
     return {
-      universidad: {}
+      universidad: null
     };
   },
   mounted() {
@@ -52,15 +54,15 @@ export default {
         console.error('Error al cargar la universidad:', error);
       }
     },
-    openLink(link) {
-      window.open(link, '_blank');
+    botonForo(){
+      this.$router.push({name: 'Foro', params: { id: this.universidad.id }});
     }
   }
 };
 </script>
 
+
 <style scoped>
-/* Contenedor general */
 .detalles-universidad {
   padding: 20px 30px;
   background-color: #ffffff;

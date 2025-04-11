@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import ChatbotPage from '../pages/ChatbotPage.vue';
 import UniversidadesPage from '@/pages/UniversidadesPage.vue';
+import ForoPage from '@/pages/ForoPage.vue';
 
 const routes = [
   {
@@ -23,7 +24,13 @@ const routes = [
     path: '/universidades/:id',
     name: 'DetallesUniversidad',
     component: () => import('@/pages/DetallesUniversidad.vue')
-  }
+  },
+  {
+    path: '/:id/foro',
+    name: 'Foro',
+    component: ForoPage,
+    props: true, 
+  },
 ];
 
 const router = createRouter({
