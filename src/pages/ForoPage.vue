@@ -3,20 +3,16 @@
     <header class="foro-header">
       <div class="header-left">
         <TituloLabel text="Foro" background="#ae1be4" />
-        <!-- Se muestra el nombre del foro obtenido; si no, se muestra "Universidad" -->
         <UniversidadLabel class="titulo-universidad" :text="foro?.nombre || 'Universidad'" />
       </div>
       <div class="header-right">
-        <BotonTextoImagenComponent image="/icons/agregar-icon.svg" altText="Publicar" text="Publicar" />
+        <BotonTextoImagenComponent image="/icons/agregar-icon.svg" altText="Publicar" text="Publicar"
+          @click="crearPublicacion" />
         <BotonImagenComponent image="/icons/filtrar-icon.svg" altText="Filtrar" description="Filtrar" />
       </div>
     </header>
 
-    <EntradaTextoComponent
-      class="entrada-foro"
-      placeholder="Buscar en el foro..."
-      icon="/icons/busqueda-icon.svg"
-    />
+    <EntradaTextoComponent class="entrada-foro" placeholder="Buscar en el foro..." icon="/icons/busqueda-icon.svg" />
 
     <hr class="separator" />
 
@@ -26,38 +22,31 @@
     </div>
 
     <div class="contenedor-publicaciones">
-      <div v-for="publicacion in publicaciones" :key="publicacion.idPublicacion" class="tarjeta-publicacion">
-        <div class="tarjeta-header">
-          <img class="perfil-img" :src="publicacion.usuario.imagenPerfil" alt="Imagen de perfil" />
-          <div class="usuario-info">
-            <h3 class="username">{{ publicacion.usuario.username }}</h3>
-            <p class="fullname">{{ publicacion.usuario.fullname }}</p>
-          </div>
-        </div>
-        <h2 class="tarjeta-titulo">{{ publicacion.titulo }}</h2>
-        <div v-if="publicacion.imagenPublicacion" class="tarjeta-imagen">
-          <img :src="publicacion.imagenPublicacion" alt="Imagen de publicación" />
-        </div>
-        <div class="tarjeta-footer">
-          <div class="categoria">
-            <span class="categoria-punto"></span>
-            <span>{{ publicacion.categoria }}</span>
-          </div>
-          <span class="me-gusta">👍 {{ publicacion.totalMeGusta }}</span>
-          <span class="comentarios">💬 {{ publicacion.totalComentarios }}</span>
-        </div>
-      </div>
+      <TarjetaPublicacionComponent v-for="publicacion in publicaciones" :key="publicacion.idPublicacion"
+        :publicacion="publicacion" @seleccionada="handleSeleccion" />
     </div>
   </div>
+
+  <!-- Componente de notificación -->
+  <NotificationComponent :message="notificationMessage" :notificationType="notificationType"
+    @clear-message="notificationMessage = ''" />
+
+  <!-- Modal para crear publicación -->
+  <CrearPublicacionComponent v-if="mostrarModalCrearPublicacion" @cerrar-modal="cerrarModalCrearPublicacion" />
+
 </template>
 
 <script>
-import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue';
-import BotonImagenComponent from '@/components/BotonImagenComponent.vue';
-import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue';
-import TituloLabel from '@/components/labels/TituloLabel.vue';
-import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
-import obtenerForoPorEscuela from '@/apis/foroApi'; // Función que realiza la petición GET
+import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue'
+import BotonImagenComponent from '@/components/BotonImagenComponent.vue'
+import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue'
+import TituloLabel from '@/components/labels/TituloLabel.vue'
+import UniversidadLabel from '@/components/labels/UniversidadLabel.vue'
+import TarjetaPublicacionComponent from '@/components/forum/TarjetaPublicacionComponent.vue'
+import NotificationComponent from '@/components/alerts/NotificationComponent.vue'
+import CrearPublicacionComponent from '@/components/forum/CrearPublicacionComponent.vue'
+import obtenerForoPorEscuela from '@/apis/foroApi'
+import authService from '@/services/authService'
 
 export default {
   name: 'ForoPage',
@@ -67,40 +56,49 @@ export default {
     EntradaTextoComponent,
     TituloLabel,
     UniversidadLabel,
+    TarjetaPublicacionComponent,
+    NotificationComponent,
+    CrearPublicacionComponent
   },
   data() {
     return {
       foro: null,
-      publicaciones: []
-    };
+      publicaciones: [],
+      notificationMessage: '',
+      notificationType: '',
+      mostrarModalCrearPublicacion: false
+    }
+  },
+  methods: {
+    handleSeleccion(publicacion) {
+      console.log('Publicación seleccionada:', publicacion)
+    },
+    crearPublicacion() {
+      if (!authService.isAuthenticated()) {
+        this.notificationMessage = 'Debes iniciar sesión para publicar.';
+        this.notificationType = 'error';
+        return;
+      }
+      this.mostrarModalCrearPublicacion = true;
+    },
+    cerrarModalCrearPublicacion() {
+      this.mostrarModalCrearPublicacion = false;
+    }
   },
   async mounted() {
     try {
-      const idEscuela = this.$route.params.id;
-      const data = await obtenerForoPorEscuela(idEscuela);
+      const idEscuela = this.$route.params.id
+      const data = await obtenerForoPorEscuela(idEscuela)
       if (data) {
-        this.foro = data.foro;
-        this.publicaciones = data.publicaciones;
-        // Verificamos si 'publicaciones' tiene datos antes de mostrar la alerta
-        if (this.publicaciones && this.publicaciones.length > 0) {
-          alert('Publicaciones cargadas correctamente.');
-          // Mostrar el título de la primera publicación
-          alert(`Primer publicación: ${this.publicaciones[0].titulo}`);
-        } else {
-          alert('No se encontraron publicaciones.');
-        }
-      } else {
-        alert('No se recibió datos del foro.');
+        this.foro = data.foro
+        this.publicaciones = data.publicaciones
       }
     } catch (error) {
-      console.error('Error al obtener datos del foro:', error);
-      alert('Ocurrió un error al cargar las publicaciones.');
+      console.error('Error al obtener datos del foro:', error)
     }
   }
-};
+}
 </script>
-
-
 
 
 <style scoped>
@@ -109,7 +107,6 @@ export default {
   color: #333;
 }
 
-/* Estilos para la cabecera */
 .foro-header {
   display: flex;
   justify-content: space-between;
@@ -125,7 +122,7 @@ export default {
   align-items: center;
 }
 
-.header-right > *:not(:last-child) {
+.header-right>*:not(:last-child) {
   margin-right: 16px;
 }
 
@@ -165,80 +162,11 @@ export default {
   margin-left: 18px;
 }
 
-/* Contenedor para las publicaciones */
 .contenedor-publicaciones {
-  width: 90%;
-  max-width: 1000px;
-  margin: 0 auto 40px;
+  width: 95%;
   display: flex;
+  margin-left: 20px;
   flex-direction: column;
-  gap: 20px;
-}
-
-/* Estilos para TarjetaPublicacionComponent */
-.tarjeta-publicacion {
-  background-color: #fff;
-  border: 1px solid #f7f7f7;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tarjeta-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.perfil-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.usuario-info {
-  margin-left: 10px;
-}
-
-.username {
-  margin: 0;
-  font-size: 16px;
-  color: #333;
-}
-
-.fullname {
-  margin: 0;
-  font-size: 12px;
-  color: #777;
-}
-
-.tarjeta-titulo {
-  font-size: 18px;
-  color: #333;
-  margin: 10px 0;
-}
-
-.tarjeta-contenido {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.tarjeta-imagen img {
-  width: 100%;
-  border-radius: 4px;
-}
-
-.tarjeta-footer {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: #777;
-  margin-top: 10px;
-}
-
-.tarjeta-footer span {
-  margin-right: 10px;
+  gap: 0;
 }
 </style>

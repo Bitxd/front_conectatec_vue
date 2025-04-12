@@ -13,7 +13,7 @@
 
 <script>
 import HeaderComponent from './components/HeaderComponent.vue';
-import AdvertenciaComponent from './components/AdvertenciaComponent.vue';
+import AdvertenciaComponent from './components/alerts/AdvertenciaComponent.vue';
 
 export default {
   name: 'App',

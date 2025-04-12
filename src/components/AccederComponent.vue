@@ -15,21 +15,21 @@
 
 <script>
 import BotonTextoImagenComponent from './BotonTextoImagenComponent.vue';
-import LoginComponent from './LoginComponent.vue';
-import RegisterComponent from './RegisterComponent.vue'; // Importamos el componente de registro
+import LoginComponent from './user/LoginComponent.vue';
+import RegisterComponent from './user/RegisterComponent.vue'; 
 
 export default {
     name: "AccederComponent",
     components: {
         BotonTextoImagenComponent,
         LoginComponent,
-        RegisterComponent, // Agregamos el componente de registro
+        RegisterComponent,
     },
     data() {
         return {
             isMenuOpen: false,
             isLoginModalVisible: false,
-            isRegisterModalVisible: false, // Nueva propiedad para controlar la visibilidad del modal de registro
+            isRegisterModalVisible: false, 
         };
     },
     methods: {

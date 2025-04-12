@@ -22,7 +22,7 @@ import SidebarComponent from './SidebarComponent.vue';
 import LogoComponent from './LogoComponent.vue';
 import BotonImagenComponent from './BotonImagenComponent.vue';
 import AccederComponent from './AccederComponent.vue';
-import UserMenuComponent from './UserMenuComponent.vue';
+import UserMenuComponent from './user/UserMenuComponent.vue';
 import authService from '../services/authService';
 
 export default {
