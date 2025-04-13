@@ -23,7 +23,7 @@
 
     <div class="contenedor-publicaciones">
       <TarjetaPublicacionComponent v-for="publicacion in publicaciones" :key="publicacion.idPublicacion"
-        :publicacion="publicacion" @seleccionada="handleSeleccion" />
+        :publicacion="publicacion" :usuarioActualId="usuarioActualId" @seleccionada="handleSeleccion" />
     </div>
   </div>
 
@@ -32,8 +32,11 @@
     @clear-message="notificationMessage = ''" />
 
   <!-- Modal para crear publicación -->
-  <CrearPublicacionComponent v-if="mostrarModalCrearPublicacion" @cerrar-modal="cerrarModalCrearPublicacion" />
-
+  <CrearPublicacionComponent
+    v-if="mostrarModalCrearPublicacion"
+    :foro-id="foro?._id"
+    @cerrar-modal="cerrarModalCrearPublicacion"
+  />
 </template>
 
 <script>
@@ -45,7 +48,7 @@ import UniversidadLabel from '@/components/labels/UniversidadLabel.vue'
 import TarjetaPublicacionComponent from '@/components/forum/TarjetaPublicacionComponent.vue'
 import NotificationComponent from '@/components/alerts/NotificationComponent.vue'
 import CrearPublicacionComponent from '@/components/forum/CrearPublicacionComponent.vue'
-import obtenerForoPorEscuela from '@/apis/foroApi'
+import foroApi from '@/apis/foroApi'
 import authService from '@/services/authService'
 
 export default {
@@ -58,7 +61,8 @@ export default {
     UniversidadLabel,
     TarjetaPublicacionComponent,
     NotificationComponent,
-    CrearPublicacionComponent
+    CrearPublicacionComponent,
+
   },
   data() {
     return {
@@ -66,7 +70,8 @@ export default {
       publicaciones: [],
       notificationMessage: '',
       notificationType: '',
-      mostrarModalCrearPublicacion: false
+      mostrarModalCrearPublicacion: false,
+      usuarioActualId: ''
     }
   },
   methods: {
@@ -85,20 +90,26 @@ export default {
       this.mostrarModalCrearPublicacion = false;
     }
   },
-  async mounted() {
+  async mounted()
+  {
+    // obtenemos el id actual del usuario
+    this.usuarioActualId = await authService.getIdUser();
+
+
     try {
-      const idEscuela = this.$route.params.id
-      const data = await obtenerForoPorEscuela(idEscuela)
+      const idEscuela = this.$route.params.id;
+      const data = await foroApi.obtenerForoPorEscuela(idEscuela);
       if (data) {
-        this.foro = data.foro
-        this.publicaciones = data.publicaciones
+        this.foro = data.foro;
+        this.publicaciones = data.publicaciones;
       }
     } catch (error) {
-      console.error('Error al obtener datos del foro:', error)
+      console.error('Error al obtener datos del foro:', error);
     }
   }
 }
 </script>
+
 
 
 <style scoped>

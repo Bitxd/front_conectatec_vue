@@ -3,32 +3,43 @@ export default
     isAuthenticated()
     {
         const token = localStorage.getItem('token');
-        if (token)
+        if (!token) return false;
+        
+        try
         {
-            try
-            {
-                const decodedToken = JSON.parse(atob(token.split('.')[1]));
-     
-                if (decodedToken.exp * 1000 > Date.now())
-                {
-                    return true;
-                }
-                else
-                {
-                    this.logout();
-                    return false;
-                }
-            }
-            catch (error)
-            {
-                this.logout();
-                return false;
-            }
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.exp * 1000 > Date.now();
         }
-        return false;
+        catch
+        {
+            this.logout();
+            return false;
+        }
     },
+
     logout()
     {
         localStorage.removeItem('token');
+    },
+
+    getToken()
+    {
+        return localStorage.getItem('token');
+    },
+
+    getIdUser()
+    {
+        const token = this.getToken();
+        if (!token) return null;
+        
+        try
+        {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            return payload.id;  
+        }
+        catch
+        {
+            return null;
+        }
     }
 };

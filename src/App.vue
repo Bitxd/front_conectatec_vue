@@ -8,32 +8,54 @@
       :message="warningMessage"
       @close="closeWarning"
     />
+    
+    <!-- Usamos tu NotificationComponent original SIN CAMBIOS -->
+    <NotificationComponent
+      v-if="notification.show"
+      :message="notification.message"
+      :notificationType="notification.type"
+      @clear-message="hideNotification"
+    />
   </div>
 </template>
 
 <script>
 import HeaderComponent from './components/HeaderComponent.vue';
 import AdvertenciaComponent from './components/alerts/AdvertenciaComponent.vue';
+import NotificationComponent from '@/components/alerts/NotificationComponent.vue'; // Usa tu componente original
 
 export default {
   name: 'App',
   components: {
     HeaderComponent,
-    AdvertenciaComponent
+    AdvertenciaComponent,
+    NotificationComponent
   },
   data() {
     return {
       showWarning: false,
-      warningMessage: ''
+      warningMessage: '',
+      notification: {
+        show: false,
+        message: '',
+        type: 'info' 
+      }
     }
   },
-  mounted() {
-    window.addEventListener('show-auth-warning', this.handleAuthWarning);
-  },
-  beforeUnmount() {
-    window.removeEventListener('show-auth-warning', this.handleAuthWarning);
-  },
   methods: {
+
+    showNotification(message, type = 'info') {
+      this.notification = {
+        show: true,
+        message,
+        type
+      };
+      // Cierre automático después de 5 segundos
+      setTimeout(() => this.hideNotification(), 5000);
+    },
+    hideNotification() {
+      this.notification.show = false;
+    },
     handleAuthWarning(event) {
       this.warningMessage = event.detail.message;
       this.showWarning = true;
@@ -41,6 +63,15 @@ export default {
     closeWarning() {
       this.showWarning = false;
     }
+  },
+  mounted() {
+
+    window.showGlobalNotification = this.showNotification;
+    window.addEventListener('show-auth-warning', this.handleAuthWarning);
+  },
+  beforeUnmount() {
+    window.removeEventListener('show-auth-warning', this.handleAuthWarning);
+    delete window.showGlobalNotification;
   }
 }
 </script>

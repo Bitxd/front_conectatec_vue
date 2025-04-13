@@ -1,9 +1,11 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
-import router from './routes'; // Importa el router (asume que tu archivo está en ./router/index.js)
+import router from './routes';
 
 const app = createApp(App);
 
-app.use(router); // Registra el router en la aplicación
+app.use(createPinia());
+app.use(router);
 
-app.mount('#app'); // Monta la aplicación
+app.mount('#app');

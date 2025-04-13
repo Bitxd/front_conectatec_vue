@@ -3,23 +3,15 @@
     <div class="modal-container">
       <header class="modal-header">
         <h3>Crear Publicación</h3>
-        
+
         <div class="categoria-section">
           <span v-if="categoria" class="categoria-activa">{{ categoria.nombre }}</span>
           <span v-else class="categoria-faltante">Selecciona una categoría</span>
-          <BotonTextoImagenComponent 
-            image="/icons/categoria-icon.svg" 
-            altText="Categoria" 
-            text="Categoria"
-            @click="mostrarSelectorCategoria = !mostrarSelectorCategoria" 
-          />
+          <BotonTextoImagenComponent image="/icons/categoria-icon.svg" altText="Categoria" text="Categoria"
+            @click="mostrarSelectorCategoria = !mostrarSelectorCategoria" />
           <div v-if="mostrarSelectorCategoria" class="categoria-selector">
-            <div 
-              v-for="cat in categorias" 
-              :key="cat._id.$oid" 
-              class="categoria-item"
-              @click="seleccionarCategoria(cat)"
-            >
+            <div v-for="cat in categorias" :key="cat._id.$oid" class="categoria-item"
+              @click="seleccionarCategoria(cat)">
               {{ cat.nombre }}
             </div>
           </div>
@@ -29,8 +21,8 @@
       <div class="modal-content">
         <div class="content-row">
           <div class="image-upload-section">
-            <div class="image-preview" v-if="imagenSeleccionada"
-              :style="{ backgroundImage: 'url(' + imagenSeleccionada + ')' }"></div>
+            <div class="image-preview" v-if="imagenPreview" :style="{ backgroundImage: 'url(' + imagenPreview + ')' }">
+            </div>
             <div class="image-placeholder" v-else>
               <span>Vista previa de la imagen</span>
             </div>
@@ -39,12 +31,13 @@
               <BotonTextoImagenComponent image="/icons/agregar-imagen-icon.svg" altText="Añadir imagen"
                 text="Añadir imagen" @click="abrirSelectorImagen" />
               <BotonTextoImagenComponent image="/icons/eliminar-icon.svg" altText="Eliminar imagen"
-                text="Eliminar imagen" :disabled="!imagenSeleccionada" @click="eliminarImagen" />
+                text="Eliminar imagen" :disabled="!imagenPreview" @click="eliminarImagen" />
             </div>
           </div>
           <div class="text-fields">
             <input type="text" class="title-input" placeholder="Título de la publicación" v-model="titulo" />
-            <textarea class="body-input" placeholder="Escribe el contenido aquí..." v-model="contenido"></textarea>
+            <textarea class="body-input" placeholder="Escribe el contenido aquí..." v-model="contenido">
+            </textarea>
 
             <p v-if="errorMensaje" class="error-text">{{ errorMensaje }}</p>
           </div>
@@ -64,16 +57,25 @@
 <script>
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue'
 import obtenerCategorias from '@/apis/categoriaApi'
+import foroApi from '@/apis/foroApi'
+import { useNotificationStore } from '@/stores/notificationStore' 
 
 export default {
   name: 'CrearPublicacionComponent',
   components: {
-    BotonTextoImagenComponent,
+    BotonTextoImagenComponent
+  },
+  props: {
+    foroId: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
       categorias: [],
       imagenSeleccionada: null,
+      imagenPreview: null,
       titulo: '',
       contenido: '',
       categoria: null,
@@ -90,61 +92,120 @@ export default {
         this.categorias = await obtenerCategorias();
       } catch (error) {
         console.error('Error al cargar categorías:', error);
-        this.errorMensaje = 'No se pudieron cargar las categorías';
+        const notificationStore = useNotificationStore();
+        notificationStore.showNotification('No se pudieron cargar las categorías', 'error');
       }
     },
     abrirSelectorImagen() {
       this.$refs.fileInput.click();
     },
     seleccionarImagen(event) {
-      const file = event.target.files[0]
+      const file = event.target.files[0];
       if (file) {
-        const reader = new FileReader()
-        reader.onload = (e) => {
-          this.imagenSeleccionada = e.target.result
+        const notificationStore = useNotificationStore();
+        
+        if (!file.type.match('image.*')) {
+          notificationStore.showNotification('Por favor selecciona un archivo de imagen válido', 'error');
+          return;
         }
-        reader.readAsDataURL(file)
+        
+        if (file.size > 5 * 1024 * 1024) {
+          notificationStore.showNotification('La imagen no debe exceder los 5MB', 'error');
+          return;
+        }
+
+        this.imagenSeleccionada = file;
+        this.imagenPreview = URL.createObjectURL(file);
       }
     },
     eliminarImagen() {
-      this.imagenSeleccionada = null
-      this.$refs.fileInput.value = null
+      this.imagenSeleccionada = null;
+      this.imagenPreview = null;
+      this.$refs.fileInput.value = null;
     },
     seleccionarCategoria(categoria) {
       this.categoria = categoria;
       this.mostrarSelectorCategoria = false;
     },
-    publicar() {
-      this.errorMensaje = ''
+    async publicar() {
+      this.errorMensaje = '';
+      const notificationStore = useNotificationStore();
 
       if (!this.titulo.trim()) {
         this.errorMensaje = 'Por favor ingresa un título para la publicación.';
+        notificationStore.showNotification(this.errorMensaje, 'error');
         return;
       }
 
       if (!this.contenido.trim()) {
         this.errorMensaje = 'Por favor escribe el contenido de la publicación.';
+        notificationStore.showNotification(this.errorMensaje, 'error');
         return;
       }
 
       if (!this.categoria) {
         this.errorMensaje = 'Por favor selecciona una categoría antes de publicar.';
+        notificationStore.showNotification(this.errorMensaje, 'error');
         return;
       }
 
-      console.log('Publicación creada:', {
-        titulo: this.titulo,
-        contenido: this.contenido,
-        categoria: this.categoria,
-        imagen: this.imagenSeleccionada
-      })
+      const token = localStorage.getItem('token');
+      if (!token) {
+        notificationStore.showNotification('Debes iniciar sesión para publicar', 'error');
+        return;
+      }
 
-      this.cerrarModal()
+      try {
+        const formData = new FormData();
+        formData.append('titulo', this.titulo);
+        formData.append('contenido', this.contenido);
+        formData.append('categoriaId', this.categoria._id);
+        formData.append('foroId', this.foroId);
+        if (this.imagenSeleccionada) {
+          formData.append('imagen', this.imagenSeleccionada);
+        }
+
+        await foroApi.crearPublicacion(token, formData);
+        
+        notificationStore.showNotification('Publicación creada exitosamente', 'success');
+        
+        // Limpiar el formulario
+        this.titulo = '';
+        this.contenido = '';
+        this.categoria = null;
+        this.eliminarImagen();
+        this.$root.showNotification('Se ha publicado correctamente', 'success');  
+        // Cerrar el modal
+        this.$emit('cerrar-modal');
+        this.$emit('publicacion-creada');
+      
+      }
+      catch (error)
+      {
+        console.error('Error al crear publicación:', error);
+        let errorMessage = 'Ocurrió un error al crear la publicación';
+        
+        if (error.response)
+        {
+          if (error.response.status === 401)
+          {
+            this.$root.showNotification('No autorizado, por favor inicia sesion nuevamente', 'error');
+          }
+          else if (error.response.data && error.response.data.message)
+          {
+            this.$root.showNotification('Error al publicar', 'error');
+            errorMessage = error.response.data.message;
+          }
+        }
+        
+        notificationStore.showNotification(errorMessage, 'error');
+      }
+      window.location.reload();
     },
     cerrarModal() {
-      this.$emit('cerrar-modal')
-    },
-  },
+      this.$emit('cerrar-modal');
+    }
+  }
 }
 </script>
 
