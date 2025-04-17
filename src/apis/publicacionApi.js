@@ -16,6 +16,7 @@ export const obtenerPublicacionesIdForo = async (idForo) => {
   try {
     console.log(`id pasado por parametro: ${idForo}`);
     const response = await axios.get(`http://localhost:5000/api/foro/${idForo}/publicaciones`);
+   
     return response.data;
   }
   catch (error) {

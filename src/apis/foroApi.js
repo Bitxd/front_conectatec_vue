@@ -8,6 +8,7 @@ const obtenerForoPorEscuela = async (idEscuela) =>
   {
 
     const response = await axios.get(`http://localhost:5000/api/escuelas/${idEscuela}/foro`);
+    
     return response.data;
   }
   catch (error)

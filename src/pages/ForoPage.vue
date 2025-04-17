@@ -63,7 +63,6 @@ export default {
     TarjetaPublicacionComponent,
     NotificationComponent,
     CrearPublicacionComponent,
-
   },
   data() {
     return {
@@ -75,51 +74,39 @@ export default {
       usuarioActualId: ''
     }
   },
-  methods:
-  {
-    handleSeleccion(publicacion)
-    {
-
+  methods: {
+    handleSeleccion(publicacion) {
       console.log('Publicación seleccionada:', publicacion)
     },
-    crearPublicacion()
-    {
-      if (!authService.isAuthenticated())
-      {
-        this.notificationMessage = 'Debes iniciar sesión para publicar.';
-        this.notificationType = 'error';
-        return;
+    crearPublicacion() {
+      if (!authService.isAuthenticated()) {
+        this.notificationMessage = 'Debes iniciar sesión para publicar.'
+        this.notificationType = 'error'
+        return
       }
-      this.mostrarModalCrearPublicacion = true;
+      this.mostrarModalCrearPublicacion = true
     },
-    cerrarModalCrearPublicacion()
-    {
-      this.mostrarModalCrearPublicacion = false;
+    cerrarModalCrearPublicacion() {
+      this.mostrarModalCrearPublicacion = false
     }
   },
-  async mounted()
-  {
-    // obtenemos el id actual del usuario
-    this.usuarioActualId = await authService.getIdUser();
+  async mounted() {
+    this.usuarioActualId = await authService.getIdUser()
 
+    try {
+      const idEscuela = this.$route.params.id
+      const responseForo = await foroApi.obtenerForoPorEscuela(idEscuela)
 
-    try
-    {
-      const idEscuela = this.$route.params.id;
-      const responseForo = await foroApi.obtenerForoPorEscuela(idEscuela);
-      const responsePublicaciones = await obtenerPublicacionesIdForo(responseForo.foro._id);
-      if (responseForo && responsePublicaciones)
-      {
-        this.foro = responseForo.foro;
-        this.publicaciones = responsePublicaciones.publicaciones;
+      // Asignar el foro de inmediato para que su nombre se renderice
+      this.foro = responseForo.foro
+      alert(JSON.stringify(this.foro, null, 2))
 
-        console.log("PUBLICACIONES DEL FORO:\n", JSON.stringify(this.publicaciones, null, 2));
-
+      const responsePublicaciones = await obtenerPublicacionesIdForo(this.foro._id)
+      if (responsePublicaciones && responsePublicaciones.publicaciones) {
+        this.publicaciones = responsePublicaciones.publicaciones
       }
-    }
-    catch (error)
-    {
-      console.error('Error al obtener datos:', error);
+    } catch (error) {
+      console.error('Error al obtener datos:', error)
     }
   }
 }
