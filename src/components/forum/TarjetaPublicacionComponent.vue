@@ -1,7 +1,7 @@
 <template>
   <div class="tarjeta-publicacion" @click="handleCardClick">
     <div class="tarjeta-header">
-      <img class="perfil-img" :src="publicacion.usuario.imagenPerfil" alt="Imagen de perfil" />
+      <img class="perfil-img" :src="publicacion.usuario.imagenPerfil" alt="Imagen de perfil">
       <div class="contenido-principal">
         <div class="titulo-e-interacciones">
           <h2 class="tarjeta-titulo">{{ publicacion.titulo }}</h2>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <!-- Botón de tres puntos -->
+      <!-- Menú de opciones -->
       <div class="menu-container">
         <button class="menu-button" @click.stop="toggleMenu">
           <span class="menu-dot"></span>
@@ -35,49 +35,49 @@
           <span class="menu-dot"></span>
         </button>
 
-        <!-- Menú desplegable -->
         <div v-if="showMenu" class="menu-flotante" v-click-outside="closeMenu">
-          <BotonTextoImagenComponent 
-            v-if="esMiPublicacion"
-            image="/icons/eliminar-icon.svg"
-            altText="Eliminar"
-            text="Eliminar"
-            @click="handleMenuItemClick('eliminar')"
-            class="menu-item"
-          />
-          <BotonTextoImagenComponent 
-            v-else
-            image="/icons/advertencia-icon.svg"
-            altText="Reportar"
-            text="Reportar"
-            @click="handleMenuItemClick('reportar')"
-            class="menu-item"
-          />
-          <BotonTextoImagenComponent 
-            image="/icons/compartir-icon.svg"
-            altText="Compartir"
-            text="Compartir"
-            @click="handleMenuItemClick('compartir')"
-            class="menu-item"
-          />
+          <BotonTextoImagenComponent v-if="esMiPublicacion" image="/icons/eliminar-icon.svg" text="Eliminar"
+            @click="eliminarPublicacion" />
+
+          <BotonTextoImagenComponent v-else image="/icons/advertencia-icon.svg" text="Reportar"
+            @click="handleMenuItemClick('reportar')" />
+
+          <BotonTextoImagenComponent image="/icons/compartir-icon.svg" text="Compartir"
+            @click="handleMenuItemClick('compartir')" />
         </div>
       </div>
     </div>
   </div>
+
+   <!-- Modal de Confirmación -->
+   <ConfirmacionComponent
+      v-if="confirmacionVisible"
+      :visible="confirmacionVisible"
+      :titulo="confirmacionTitulo"
+      :mensaje="confirmacionMensaje"
+      @confirmar="onConfirmacionConfirmada"
+      @cancelar="onConfirmacionCancelada"
+    />
 </template>
 
 <script>
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue';
+import ConfirmacionComponent from '@/components/notification/ConfirmacionComponent.vue';
+import publicacionApi from '@/apis/publicacionApi';
+import authService from '@/services/authService';
+import { useNotificationStore } from '@/stores/notificationStore';
 
 export default {
   name: 'TarjetaPublicacionComponent',
   components: {
-    BotonTextoImagenComponent
+    BotonTextoImagenComponent,
+    ConfirmacionComponent
   },
   props: {
     publicacion: {
       type: Object,
-      required: true
+      required: true,
+      validator: (pub) => pub.idPublicacion && pub.usuario
     },
     usuarioActualId: {
       type: String,
@@ -87,8 +87,14 @@ export default {
   data() {
     return {
       showMenu: false,
-      clickListener: null
-    }
+      clickListener: null,
+      // Datos para el modal de confirmación:
+      confirmacionVisible: false,
+      confirmacionTitulo: '',
+      confirmacionMensaje: '',
+      confirmacionResolve: null,
+      confirmacionReject: null
+    };
   },
   computed: {
     esMiPublicacion() {
@@ -96,15 +102,113 @@ export default {
     }
   },
   methods: {
-    handleCardClick() {
+    // Método que muestra el modal y retorna una promesa que se resuelve cuando el usuario confirma
+    solicitarConfirmacion({ titulo, mensaje }) {
+      return new Promise((resolve, reject) => {
+        this.confirmacionTitulo = titulo;
+        this.confirmacionMensaje = mensaje;
+        this.confirmacionVisible = true;
+        this.confirmacionResolve = resolve;
+        this.confirmacionReject = reject;
+      });
+    },
+    // Método que se ejecuta cuando el usuario confirma en el modal
+    onConfirmacionConfirmada() {
+      if (this.confirmacionResolve) {
+        this.confirmacionResolve();
+      }
+      this._resetConfirmacion();
+    },
+    // Método que se ejecuta cuando el usuario cancela en el modal
+    onConfirmacionCancelada() {
+      if (this.confirmacionReject) {
+        this.confirmacionReject(new Error('Cancelado'));
+      }
+      this._resetConfirmacion();
+    },
+    // Método auxiliar para limpiar los datos del modal de confirmación
+    _resetConfirmacion() {
+      this.confirmacionVisible = false;
+      this.confirmacionTitulo = '';
+      this.confirmacionMensaje = '';
+      this.confirmacionResolve = null;
+      this.confirmacionReject = null;
+    },
+    // Método para eliminar la publicación, ahora usando la confirmación importada
+    async eliminarPublicacion() {
+      const notificationStore = useNotificationStore();
+
+      // Solicitar confirmación al usuario
+      try {
+        await this.solicitarConfirmacion({
+          titulo: 'Confirmar eliminación',
+          mensaje: '¿Estás seguro de eliminar esta publicación?'
+        });
+      } catch (error) {
+
+        return false;
+      }
+
+
+      try {
+        const tokenUser = authService.getToken();
+        if (!tokenUser) {
+          notificationStore.showNotification("Debes iniciar sesión", "error");
+          return false;
+        }
+
+        const idPublicacion = this.publicacion.idPublicacion;
+        const response = await publicacionApi.eliminarPublicacion(idPublicacion, tokenUser);
+
+        const successMessage = response.data?.mensaje || "Operación completada";
+        notificationStore.showNotification(successMessage, "success");
+
+        // Emitir el evento para que otros componentes puedan reaccionar a la eliminación
+        this.$emit('publicacion-eliminada', idPublicacion);
+        window.location.reload();
+
+        
+        return true;
+      } catch (error) {
+        const errorMessage = error.response?.data?.mensaje ||
+          error.response?.data?.error ||
+          error.message ||
+          "Error al procesar la solicitud";
+
+        notificationStore.showNotification(errorMessage, "error");
+
+        console.error("Error completo:", {
+          status: error.response?.status,
+          data: error.response?.data,
+          stack: error.stack
+        });
+        return false;
+      }
+    },
+    // Ejemplo de uso en el menú de la tarjeta
+    handleMenuItemClick(action) {
       this.closeMenu();
-      this.$emit('seleccionada', this.publicacion);
+      const acciones = {
+        eliminar: () => this.eliminarPublicacion(),
+        reportar: () => this.$emit('reportar', this.publicacion.idPublicacion),
+        compartir: () => this.$emit('compartir', this.publicacion.idPublicacion)
+      };
+      acciones[action]?.();
+    },
+    // Métodos relacionados con el manejo del menú
+    handleCardClick() {
+      console.log("PUBLICACIÓN RECIBIDA A TARJETA PUBLICACION:", JSON.stringify(this.publicacion, null, 2));
+      localStorage.setItem('publicacion-actual', JSON.stringify(this.publicacion));
+      this.$router.push({
+        name: 'Publicacion',
+        params: { id: this.publicacion.idPublicacion }
+      });
+      this.closeMenu();
     },
     toggleMenu(e) {
       e.stopPropagation();
       this.closeAllMenus();
       this.showMenu = !this.showMenu;
-      
       if (this.showMenu) {
         this.clickListener = (event) => {
           if (!this.$el.contains(event.target)) {
@@ -125,32 +229,18 @@ export default {
     },
     closeAllMenus() {
       window.dispatchEvent(new CustomEvent('close-all-menus'));
-    },
-    handleMenuItemClick(action) {
-      this.closeMenu();
-      switch(action) {
-        case 'eliminar':
-          this.$emit('eliminar', this.publicacion.id);
-          break;
-        case 'reportar':
-          this.$emit('reportar', this.publicacion.id);
-          break;
-        case 'compartir':
-          this.$emit('compartir', this.publicacion.id);
-          break;
-      }
     }
   },
   created() {
     window.addEventListener('close-all-menus', this.closeMenu);
   },
-  beforeUnmount() {  // <-- Cambiado de beforeDestroy a beforeUnmount
+  beforeUnmount() {
     window.removeEventListener('close-all-menus', this.closeMenu);
     if (this.clickListener) {
       document.removeEventListener('click', this.clickListener);
     }
   }
-}
+};
 </script>
 
 

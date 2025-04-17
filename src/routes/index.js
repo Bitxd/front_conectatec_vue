@@ -2,6 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import ChatbotPage from '../pages/ChatbotPage.vue';
 import UniversidadesPage from '@/pages/UniversidadesPage.vue';
 import ForoPage from '@/pages/ForoPage.vue';
+import PublicacionPage from '@/pages/PublicacionPage.vue';
+import CalendarioPage from '@/pages/CalendarioPage.vue';
+
+
 
 const routes = [
   {
@@ -29,8 +33,21 @@ const routes = [
     path: '/:id/foro',
     name: 'Foro',
     component: ForoPage,
-    props: true, 
+    props: true,
   },
+  {
+    path: '/publicacion/:id',
+    name: 'Publicacion',
+    component: PublicacionPage,
+  },
+  {
+    path: '/universidad/:id/calendario',
+    name: 'Calendario',
+    component: CalendarioPage
+  }
+  
+
+
 ];
 
 const router = createRouter({
@@ -41,7 +58,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       window.dispatchEvent(new CustomEvent('show-auth-warning', {
         detail: {

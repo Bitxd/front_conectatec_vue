@@ -49,6 +49,7 @@ import TarjetaPublicacionComponent from '@/components/forum/TarjetaPublicacionCo
 import NotificationComponent from '@/components/alerts/NotificationComponent.vue'
 import CrearPublicacionComponent from '@/components/forum/CrearPublicacionComponent.vue'
 import foroApi from '@/apis/foroApi'
+import { obtenerPublicacionesIdForo } from '@/apis/publicacionApi'
 import authService from '@/services/authService'
 
 export default {
@@ -74,19 +75,25 @@ export default {
       usuarioActualId: ''
     }
   },
-  methods: {
-    handleSeleccion(publicacion) {
+  methods:
+  {
+    handleSeleccion(publicacion)
+    {
+
       console.log('Publicación seleccionada:', publicacion)
     },
-    crearPublicacion() {
-      if (!authService.isAuthenticated()) {
+    crearPublicacion()
+    {
+      if (!authService.isAuthenticated())
+      {
         this.notificationMessage = 'Debes iniciar sesión para publicar.';
         this.notificationType = 'error';
         return;
       }
       this.mostrarModalCrearPublicacion = true;
     },
-    cerrarModalCrearPublicacion() {
+    cerrarModalCrearPublicacion()
+    {
       this.mostrarModalCrearPublicacion = false;
     }
   },
@@ -96,15 +103,23 @@ export default {
     this.usuarioActualId = await authService.getIdUser();
 
 
-    try {
+    try
+    {
       const idEscuela = this.$route.params.id;
-      const data = await foroApi.obtenerForoPorEscuela(idEscuela);
-      if (data) {
-        this.foro = data.foro;
-        this.publicaciones = data.publicaciones;
+      const responseForo = await foroApi.obtenerForoPorEscuela(idEscuela);
+      const responsePublicaciones = await obtenerPublicacionesIdForo(responseForo.foro._id);
+      if (responseForo && responsePublicaciones)
+      {
+        this.foro = responseForo.foro;
+        this.publicaciones = responsePublicaciones.publicaciones;
+
+        console.log("PUBLICACIONES DEL FORO:\n", JSON.stringify(this.publicaciones, null, 2));
+
       }
-    } catch (error) {
-      console.error('Error al obtener datos del foro:', error);
+    }
+    catch (error)
+    {
+      console.error('Error al obtener datos:', error);
     }
   }
 }

@@ -2,14 +2,13 @@
   <div id="app">
     <HeaderComponent />
     <router-view />
-    
-    <AdvertenciaComponent 
+
+    <AdvertenciaComponent
       v-if="showWarning"
       :message="warningMessage"
       @close="closeWarning"
     />
-    
-    <!-- Usamos tu NotificationComponent original SIN CAMBIOS -->
+
     <NotificationComponent
       v-if="notification.show"
       :message="notification.message"
@@ -22,7 +21,7 @@
 <script>
 import HeaderComponent from './components/HeaderComponent.vue';
 import AdvertenciaComponent from './components/alerts/AdvertenciaComponent.vue';
-import NotificationComponent from '@/components/alerts/NotificationComponent.vue'; // Usa tu componente original
+import NotificationComponent from '@/components/alerts/NotificationComponent.vue';
 
 export default {
   name: 'App',
@@ -38,24 +37,25 @@ export default {
       notification: {
         show: false,
         message: '',
-        type: 'info' 
+        type: 'info'
       }
     }
   },
   methods: {
-
+    // Notificaciones
     showNotification(message, type = 'info') {
       this.notification = {
         show: true,
         message,
         type
       };
-      // Cierre automático después de 5 segundos
       setTimeout(() => this.hideNotification(), 5000);
     },
     hideNotification() {
       this.notification.show = false;
     },
+
+    // Advertencias
     handleAuthWarning(event) {
       this.warningMessage = event.detail.message;
       this.showWarning = true;
@@ -65,7 +65,6 @@ export default {
     }
   },
   mounted() {
-
     window.showGlobalNotification = this.showNotification;
     window.addEventListener('show-auth-warning', this.handleAuthWarning);
   },
@@ -84,5 +83,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  position: static; 
+  transform: none
 }
 </style>

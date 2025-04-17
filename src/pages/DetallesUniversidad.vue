@@ -9,8 +9,8 @@
         <HerramientasUniversidadComponent />
         <div class="separator-container"></div>
         <BotonTextoImagenComponent image="/icons/mapa-virtual-icon.svg" text="Mapa Virtual" />
-        <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" @click="botonForo"/>
-        <BotonTextoImagenComponent image="/icons/calendario-icon.svg" text="Calendario" />
+        <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" @click="botonForo" />
+        <BotonTextoImagenComponent image="/icons/calendario-icon.svg" text="Calendario" @click="botonCalendario" />
       </div>
     </div>
 
@@ -54,9 +54,17 @@ export default {
         console.error('Error al cargar la universidad:', error);
       }
     },
-    botonForo(){
-      this.$router.push({name: 'Foro', params: { id: this.universidad.id }});
+    botonForo() {
+      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } });
+    },
+    botonCalendario() {
+      this.$router.push({
+        name: 'Calendario',
+        params: { id: this.universidad.id },
+        query: { nombre: this.universidad.nombre }
+      });
     }
+
   }
 };
 </script>
@@ -128,18 +136,22 @@ export default {
   .nombre {
     font-size: 24px;
   }
+
   .universidad-header {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .header-right {
     width: 100%;
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+
   .detalle-titulo {
     font-size: 22px;
   }
+
   .detalle-texto {
     font-size: 16px;
   }

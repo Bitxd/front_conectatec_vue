@@ -1,0 +1,182 @@
+PETICION INDIVIDUAL DE PUBLICACION
+
+publicacionApi.js:22 id pasado por parametro: 64f1e24f6780bb4fbb8c5e1a
+index.js??clonedRuleSet-40.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/PublicacionPage.vue?vue&type=script&setup=true&lang=js:33 Publicacion de PublicacionPage: {
+  "idPublicacion": "67d3e777937460aee19da8d3",
+  "titulo": "La Revolución Digital en las Aulas",
+  "contenido": "La educación está atravesando un cambio radical gracias a la tecnología. Las herramientas digitales permiten una interacción más profunda entre estudiantes y profesores, y la educación en línea ofrece flexibilidad y acceso global. Este artículo explora cómo las universidades y escuelas de todo el mundo están adoptando estas tecnologías para transformar el aprendizaje y mejorar la calidad educativa.",
+  "imagenPublicacion": "https://www.solunion.es/wp-content/uploads/elementor/thumbs/Solunion_SieteHerramientas_TransformacionDigital-qcaflzqlwt6wpulmaiux40p7vb39yakznc1dp3fqrc.png",
+  "fechaPublicacion": "2025-03-14T10:30:00Z",
+  "totalMeGusta": 0,
+  "totalComentarios": 0,
+  "categoria": "Tecnología",
+  "usuario": {
+    "idUsuario": "67d390fc9f8197c517ecc12a",
+    "username": "cabrito",
+    "fullname": "Cesar David Ureta Vizcarra",
+    "rol": "usuario",
+    "imagenPerfil": "https://randomuser.me/api/portraits/men/0.jpg"
+  }
+}
+
+PETICION DE TODAS LAS PUBLICACIONES DE UN FORO
+publicacionApi.js:22 id pasado por parametro: 64f1e24f6780bb4fbb8c5e1a
+index.js??clonedRuleSet-40.use[0]!./node_modules/vue-loader/dist/index.js??ruleSet[0].use[0]!./src/pages/ForoPage.vue?vue&type=script&lang=js:72 PUBLICACIONES DEL FORO:
+ [
+  {
+    "idPublicacion": "67d3e777937460aee19da8d3",
+    "titulo": "La Revolución Digital en las Aulas",
+    "contenido": "La educación está atravesando un cambio radical gracias a la tecnología. Las herramientas digitales permiten una interacción más profunda entre estudiantes y profesores, y la educación en línea ofrece flexibilidad y acceso global. Este artículo explora cómo las universidades y escuelas de todo el mundo están adoptando estas tecnologías para transformar el aprendizaje y mejorar la calidad educativa.",
+    "imagenPublicacion": "https://www.solunion.es/wp-content/uploads/elementor/thumbs/Solunion_SieteHerramientas_TransformacionDigital-qcaflzqlwt6wpulmaiux40p7vb39yakznc1dp3fqrc.png",
+    "fechaPublicacion": "2025-03-14T10:30:00Z",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Tecnología",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12a",
+      "username": "cabrito",
+      "fullname": "Cesar David Ureta Vizcarra",
+      "rol": "usuario",
+      "imagenPerfil": "https://randomuser.me/api/portraits/men/0.jpg"
+    }
+  },
+  {
+    "idPublicacion": "67f9bc6d8d4d4ededd47b0c3",
+    "titulo": "Foro sobre el Futuro del Trabajo",
+    "contenido": "En este foro discutiremos cómo la automatización, la IA y otros avances tecnológicos están moldeando el futuro del trabajo y las oportunidades que surgirán.",
+    "imagenPublicacion": null,
+    "fechaPublicacion": "2025-04-12T01:01:40.786270",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Eventos",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12b",
+      "username": "TECNM",
+      "fullname": "Instituto Tecnologico de Culiacan",
+      "rol": "administrador",
+      "imagenPerfil": "https://www.culiacan.tecnm.mx/wp-content/themes/tecnm/images/logo-itc.svg"
+    }
+  },
+  {
+    "idPublicacion": "67f9bc6d8d4d4ededd47b0bf",
+    "titulo": "Evento de Innovación Tecnológica",
+    "contenido": "La innovación tecnológica está transformando el mundo. En este evento exploraremos las últimas tendencias en el desarrollo de software y hardware.",
+    "imagenPublicacion": null,
+    "fechaPublicacion": "2025-04-12T01:01:40.786270",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Eventos",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12b",
+      "username": "TECNM",
+      "fullname": "Instituto Tecnologico de Culiacan",
+      "rol": "administrador",
+      "imagenPerfil": "https://www.culiacan.tecnm.mx/wp-content/themes/tecnm/images/logo-itc.svg"
+    }
+  },
+  {
+    "idPublicacion": "67f9bc6d8d4d4ededd47b0c0",
+    "titulo": "Conferencia sobre Inteligencia Artificial",
+    "contenido": "Únete a nuestra conferencia sobre Inteligencia Artificial donde expertos de todo el mundo compartirán sus conocimientos y avances en el área.",
+    "imagenPublicacion": null,
+    "fechaPublicacion": "2025-04-12T01:01:40.786270",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Eventos",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12b",
+      "username": "TECNM",
+      "fullname": "Instituto Tecnologico de Culiacan",
+      "rol": "administrador",
+      "imagenPerfil": "https://www.culiacan.tecnm.mx/wp-content/themes/tecnm/images/logo-itc.svg"
+    }
+  },
+  {
+    "idPublicacion": "67f9bc6d8d4d4ededd47b0c2",
+    "titulo": "Seminario de Marketing Digital para 2025",
+    "contenido": "El marketing digital está en constante evolución. Aprende las últimas estrategias y herramientas para mejorar tu presencia online en nuestro seminario.",
+    "imagenPublicacion": null,
+    "fechaPublicacion": "2025-04-12T01:01:40.786270",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Eventos",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12b",
+      "username": "TECNM",
+      "fullname": "Instituto Tecnologico de Culiacan",
+      "rol": "administrador",
+      "imagenPerfil": "https://www.culiacan.tecnm.mx/wp-content/themes/tecnm/images/logo-itc.svg"
+    }
+  },
+  {
+    "idPublicacion": "67f9bc6d8d4d4ededd47b0c1",
+    "titulo": "Evento sobre Transformación Digital en la Educación",
+    "contenido": "Descubre cómo las herramientas digitales están cambiando el panorama educativo. Este evento abordará el impacto de la tecnología en las aulas.",
+    "imagenPublicacion": null,
+    "fechaPublicacion": "2025-04-12T01:01:40.786270",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Eventos",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12b",
+      "username": "TECNM",
+      "fullname": "Instituto Tecnologico de Culiacan",
+      "rol": "administrador",
+      "imagenPerfil": "https://www.culiacan.tecnm.mx/wp-content/themes/tecnm/images/logo-itc.svg"
+    }
+  },
+  {
+    "idPublicacion": "67fc4bce73bd8355b164bc1e",
+    "titulo": "PUBLICACION DE PRUEBA",
+    "contenido": "PUBLICACION DE PRUEBA",
+    "imagenPublicacion": "pub-20250413234206-564417.PNG",
+    "fechaPublicacion": "2025-04-13T23:42:06.630Z",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Dudas",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12a",
+      "username": "cabrito",
+      "fullname": "Cesar David Ureta Vizcarra",
+      "rol": "usuario",
+      "imagenPerfil": "https://randomuser.me/api/portraits/men/0.jpg"
+    }
+  },
+  {
+    "idPublicacion": "67fc4e1873bd8355b164bc72",
+    "titulo": "equisdeeeeeeeeeeeeeeeeee",
+    "contenido": "equisdeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "imagenPublicacion": null,
+    "fechaPublicacion": "2025-04-13T23:51:52.993Z",
+    "totalMeGusta": 0,
+    "totalComentarios": 0,
+    "categoria": "Consejos",
+    "usuario": {
+      "idUsuario": "67d390fc9f8197c517ecc12a",
+      "username": "cabrito",
+      "fullname": "Cesar David Ureta Vizcarra",
+      "rol": "usuario",
+      "imagenPerfil": "https://randomuser.me/api/portraits/men/0.jpg"
+    }
+  }
+]
+
+
+DATOS ENVIADOS DE FORO A TARJETA PUBLICACION
+PUBLICACIÓN RECIBIDA A TARJETA PUBLICACION: {
+  "idPublicacion": "67d3e777937460aee19da8d3",
+  "titulo": "La Revolución Digital en las Aulas",
+  "contenido": "La educación está atravesando un cambio radical gracias a la tecnología. Las herramientas digitales permiten una interacción más profunda entre estudiantes y profesores, y la educación en línea ofrece flexibilidad y acceso global. Este artículo explora cómo las universidades y escuelas de todo el mundo están adoptando estas tecnologías para transformar el aprendizaje y mejorar la calidad educativa.",
+  "imagenPublicacion": "https://www.solunion.es/wp-content/uploads/elementor/thumbs/Solunion_SieteH…entas_TransformacionDigital-qcaflzqlwt6wpulmaiux40p7vb39yakznc1dp3fqrc.png",
+  "fechaPublicacion": "2025-03-14T10:30:00Z",
+  "totalMeGusta": 0,
+  "totalComentarios": 0,
+  "categoria": "Tecnología",
+  "usuario": {
+    "idUsuario": "67d390fc9f8197c517ecc12a",
+    "username": "cabrito",
+    "fullname": "Cesar David Ureta Vizcarra",
+    "rol": "usuario",
+    "imagenPerfil": "https://randomuser.me/api/portraits/men/0.jpg"
+  }
+}

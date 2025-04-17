@@ -1,0 +1,296 @@
+<template>
+    <div>
+        <div class="comentarios-header">
+            <h3 class="title">Comentarios</h3>
+            <button class="toggle-btn" @click="mostrar = !mostrar">
+                {{ mostrar ? 'Ocultar comentarios' : 'Mostrar comentarios' }}
+                <span class="icon">{{ mostrar ? '▲' : '▼' }}</span>
+            </button>
+        </div>
+
+        <transition name="fade-slide">
+            <div v-if="mostrar" class="comentarios-container">
+                <div v-if="comentarios.length > 0" class="comentarios-list">
+                    <div v-for="comentario in comentarios" :key="comentario.idComentario" class="comentario-card">
+                        <div class="comentario-header">
+                            <img :src="comentario.usuario.imagenPerfil || '/default-avatar.png'" class="usuario-avatar"
+                                alt="Avatar" />
+                            <div class="usuario-info">
+                                <div class="usuario-nombres">
+                                    <span class="nombre">{{ comentario.usuario.fullname }}</span>
+                                    <span class="username">@{{ comentario.usuario.username }}</span>
+                                </div>
+                            </div>
+                            <span class="fecha">{{ formatearFecha(comentario.fechaCreacion) }}</span>
+                        </div>
+                        <div class="comentario-content">
+                            <p>{{ comentario.contenido }}</p>
+                        </div>
+                        <button class="like-btn" @click="meGustaComentario(comentario.idComentario)">
+                            <span class="icon">👍</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div v-else class="no-comentarios">
+                    <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+                </div>
+            </div>
+        </transition>
+    </div>
+</template>
+
+
+<script>
+import { ref, onMounted, watch } from 'vue'
+import publicacionApi from '@/apis/publicacionApi'
+
+export default {
+    name: 'ComentariosComponent',
+    props: {
+        id: String
+    },
+    setup(props) {
+        const comentarios = ref([])
+        const mostrar = ref(false)
+
+        const fetchComentarios = async () => {
+            try {
+                const response = await publicacionApi.obtenerComentariosPorId(props.id)
+                comentarios.value = Array.isArray(response) ? response : []
+            } catch (error) {
+                console.error('Error al cargar comentarios:', error)
+                comentarios.value = []
+            }
+        }
+
+        onMounted(() => {
+            fetchComentarios()
+        })
+
+        watch(() => props.id, (newId) => {
+            if (newId) fetchComentarios()
+        })
+
+        const formatearFecha = (fechaIso) => {
+            if (!fechaIso) return ''
+            return new Date(fechaIso).toLocaleDateString('es-MX', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        }
+
+        const meGustaComentario = (idComentario) => {
+            console.log(`Me gusta al comentario con ID: ${idComentario}`)
+        }
+
+        return {
+            comentarios,
+            mostrar,
+            formatearFecha,
+            meGustaComentario
+        }
+    }
+
+}
+</script>
+
+<style scoped>
+.comentarios-header {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    border-left: 4px solid #a551e9;
+    padding-left: 10px;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.toggle-btn {
+    background-color: #a551e9;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, transform 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.toggle-btn .icon {
+    font-size: 0.9rem;
+}
+
+.toggle-btn:hover {
+    background-color: #8c3fd2;
+    transform: translateY(-1px);
+}
+
+.comentarios-container {
+    background-color: white;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.comentarios-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.comentario-card {
+    margin-left: 15px;
+    background: #ffffff;
+    padding: 16px;
+    width: 95%;
+    position: relative;
+    border-bottom: 1px solid #f4f6f9;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-radius: 8px;
+}
+
+.comentario-card:hover {
+    background-color: #f9f7fe;
+    box-shadow: 0 2px 8px rgba(165, 81, 233, 0.15);
+    border-color: #d7c2f3;
+}
+
+.comentario-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+
+.usuario-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.usuario-info {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
+}
+
+.usuario-nombres {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nombre {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.username {
+    color: #777;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.fecha {
+    color: #777;
+    font-size: 0.8rem;
+    margin-left: auto;
+    padding-left: 12px;
+    flex-shrink: 0;
+}
+
+.comentario-content {
+    padding-left: 52px;
+    margin-top: 4px;
+}
+
+.comentario-content p {
+    text-align: left;
+    margin: 0;
+    color: #333;
+    line-height: 1.5;
+    word-break: break-word;
+    font-size: 0.9rem;
+    top: 2;
+}
+
+.like-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: #777;
+    transition: all 0.2s ease;
+}
+
+.like-btn:hover {
+    color: #dc3545;
+    transform: scale(1.1);
+}
+
+.no-comentarios {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-style: italic;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+    transition: all 0.3s ease;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+@media (max-width: 480px) {
+    .usuario-nombres {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .fecha {
+        font-size: 0.75rem;
+        padding-left: 8px;
+    }
+}
+
+</style>
