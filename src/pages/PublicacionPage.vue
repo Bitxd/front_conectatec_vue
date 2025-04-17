@@ -21,8 +21,8 @@
                 <h1 class="publicacion-titulo">{{ publicacion.titulo }}</h1>
                 <p class="publicacion-texto">{{ publicacion.contenido }}</p>
 
-                <template v-if="publicacion.imagenPublicacion">
-                    <img :src="publicacion.imagenPublicacion" class="publicacion-imagen" alt="Imagen de publicación" />
+                <template v-if="publicacion.imagen">
+                    <img :src="publicacion.imagen" class="publicacion-imagen" alt="Imagen de publicación" />
                 </template>
             </div>
 

@@ -232,6 +232,7 @@ export default {
     }
   },
   created() {
+    console.log("Publicación recibida por props:", this.publicacion);
     window.addEventListener('close-all-menus', this.closeMenu);
   },
   beforeUnmount() {
