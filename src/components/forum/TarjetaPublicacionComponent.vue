@@ -98,7 +98,8 @@ export default {
   },
   computed: {
     esMiPublicacion() {
-      return this.publicacion?.usuario?.idUsuario === this.usuarioActualId;
+
+      return this.publicacion?.idUsuario=== this.usuarioActualId;
     }
   },
   methods: {
@@ -197,6 +198,8 @@ export default {
     },
     // Métodos relacionados con el manejo del menú
     handleCardClick() {
+
+
       console.log("PUBLICACIÓN RECIBIDA A TARJETA PUBLICACION:", JSON.stringify(this.publicacion, null, 2));
       localStorage.setItem('publicacion-actual', JSON.stringify(this.publicacion));
       this.$router.push({

@@ -15,7 +15,16 @@
                 <p><strong>Fecha de fin:</strong> {{ calendario.fechaFin || 'No especificada' }}</p>
                 <p><strong>Lugar:</strong> {{ calendario.lugar || 'No especificado' }}</p>
                 <p><strong>Tipo de evento:</strong> {{ calendario.tipoEvento }}</p>
-                <p><strong>Creado por:</strong> {{ calendario.creadoPor }}</p>
+                <p><strong>Creado por:</strong> 
+                    <span v-if="calendario.creadoPor">
+                        {{ calendario.creadoPor.username }} ({{ calendario.creadoPor.fullname }})
+                    </span>
+                    <span v-else>No disponible</span>
+                </p>
+                <p><strong>Foto de perfil:</strong> 
+                    <img v-if="calendario.creadoPor?.fotoPerfil" :src="calendario.creadoPor.fotoPerfil" alt="Foto de perfil" />
+                </p>
+                <p><strong>Rol:</strong> {{ calendario.creadoPor?.rol || 'No especificado' }}</p>
                 <p><strong>Fecha de creación:</strong> {{ calendario.fechaCreacion }}</p>
                 <p><strong>Fecha de actualización:</strong> {{ calendario.fechaActualizacion }}</p>
             </div>
@@ -41,8 +50,6 @@ const nombreUniversidad = ref(route.query.nombre)
 const calendarios = ref([])  
 
 onMounted(async () => {
-    console.log('ID de la universidad: ' + escuelaId.value)  
-
     if (escuelaId.value) {
         try {
             const data = await universidadApi.obtenerCalendariosPorEscuela(escuelaId.value)
