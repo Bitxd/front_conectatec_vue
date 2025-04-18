@@ -3,14 +3,16 @@
         <div class="publicacion-card">
             <!-- Header de usuario -->
             <div class="usuario-header">
-                <img :src="publicacion.usuario.imagenPerfil || '/default-avatar.png'" class="usuario-avatar" alt="Avatar" />
+                <img :src="publicacion.usuario.imagenPerfil || '/default-avatar.png'" class="usuario-avatar"
+                    alt="Avatar" />
                 <div class="usuario-info">
                     <div class="usuario-nombres">
                         <span class="usuario-fullname">{{ publicacion.usuario.fullname }}</span>
                         <span class="usuario-username">@{{ publicacion.usuario.username }}</span>
                     </div>
                     <div class="publicacion-meta">
-                        <span class="publicacion-fecha">{{ formatearFecha(publicacion.usuario.fechaPublicacion) }}</span>
+                        <span class="publicacion-fecha">{{ formatearFecha(publicacion.usuario.fechaPublicacion)
+                            }}</span>
                         <span class="publicacion-categoria">{{ publicacion.categoria }}</span>
                     </div>
                 </div>
@@ -41,7 +43,8 @@
         </div>
 
         <div class="modern-separator"></div>
-        <ComentariosComponent :id="publicacion.idPublicacion" />
+        <ComentariosComponent v-if="publicacion.idPublicacion" :id="publicacion.idPublicacion" />
+
     </div>
 </template>
 

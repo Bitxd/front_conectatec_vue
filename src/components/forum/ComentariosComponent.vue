@@ -40,9 +40,7 @@
     </div>
 </template>
 
-
 <script>
-import { ref, onMounted, watch } from 'vue'
 import publicacionApi from '@/apis/publicacionApi'
 
 export default {
@@ -50,29 +48,30 @@ export default {
     props: {
         id: String
     },
-    setup(props) {
-        const comentarios = ref([])
-        const mostrar = ref(false)
-
-        const fetchComentarios = async () => {
+    data() {
+        return {
+            comentarios: [],  // Usamos un arreglo convencional
+            mostrar: false
+        }
+    },
+    methods: {
+        // Función para obtener los comentarios por su ID
+        async fetchComentarios() {
             try {
-                const response = await publicacionApi.obtenerComentariosPorId(props.id)
-                comentarios.value = Array.isArray(response) ? response : []
+                const response = await publicacionApi.obtenerComentariosPorId(this.id)
+                this.comentarios = response.comentarios
+
+                // Mostrar los comentarios en un alert
+                alert(JSON.stringify(this.comentarios, null, 2)) // Imprime todos los comentarios
+
             } catch (error) {
                 console.error('Error al cargar comentarios:', error)
-                comentarios.value = []
+                this.comentarios = []  // Si hay error, asignamos un arreglo vacío
             }
-        }
+        },
 
-        onMounted(() => {
-            fetchComentarios()
-        })
-
-        watch(() => props.id, (newId) => {
-            if (newId) fetchComentarios()
-        })
-
-        const formatearFecha = (fechaIso) => {
+        // Función para formatear la fecha de creación del comentario
+        formatearFecha(fechaIso) {
             if (!fechaIso) return ''
             return new Date(fechaIso).toLocaleDateString('es-MX', {
                 year: 'numeric',
@@ -81,22 +80,29 @@ export default {
                 hour: '2-digit',
                 minute: '2-digit'
             })
-        }
+        },
 
-        const meGustaComentario = (idComentario) => {
+        // Función para manejar el "me gusta" en los comentarios
+        meGustaComentario(idComentario) {
             console.log(`Me gusta al comentario con ID: ${idComentario}`)
+            alert(`Me gusta al comentario con ID: ${idComentario}`) // Mostrar alert con el ID del comentario
         }
-
-        return {
-            comentarios,
-            mostrar,
-            formatearFecha,
-            meGustaComentario
+    },
+    watch: {
+        // Verificamos si el ID ha cambiado y recargamos los comentarios si es necesario
+        id(newId, oldId) {
+            if (newId && newId !== oldId) {
+                this.fetchComentarios()
+            }
         }
+    },
+    mounted() {
+        this.fetchComentarios()
     }
-
 }
 </script>
+
+
 
 <style scoped>
 .comentarios-header {
@@ -292,5 +298,4 @@ export default {
         padding-left: 8px;
     }
 }
-
 </style>
