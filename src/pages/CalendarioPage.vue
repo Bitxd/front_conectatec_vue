@@ -2,101 +2,77 @@
     <div class="calendario-page">
         <header class="header">
             <div class="header-content">
-                <TituloLabel :text="'Calendario'" background="linear-gradient(135deg, #28a745, #6dbf77)" />
-                <UniversidadLabel class="titulo-universidad" :text="nombreUniversidad || 'Universidad'" />
+                <TituloLabel :text="'Calendario'" />
+                <UniversidadLabel class="titulo-universidad" :text="universidadNombre || 'Universidad'" />
             </div>
         </header>
+        <ListaEventosComponent :calendarios="calendarios" />
 
-        <div v-if="calendarios.length > 0" class="calendarios-list">
-            <div v-for="calendario in calendarios" :key="calendario._id" class="calendario-item">
-                <h3>{{ calendario.titulo }}</h3>
-                <p><strong>Descripción:</strong> {{ calendario.descripcion }}</p>
-                <p><strong>Fecha de inicio:</strong> {{ calendario.fechaInicio }}</p>
-                <p><strong>Fecha de fin:</strong> {{ calendario.fechaFin || 'No especificada' }}</p>
-                <p><strong>Lugar:</strong> {{ calendario.lugar || 'No especificado' }}</p>
-                <p><strong>Tipo de evento:</strong> {{ calendario.tipoEvento }}</p>
-                <p><strong>Creado por:</strong> 
-                    <span v-if="calendario.creadoPor">
-                        {{ calendario.creadoPor.username }} ({{ calendario.creadoPor.fullname }})
-                    </span>
-                    <span v-else>No disponible</span>
-                </p>
-                <p><strong>Foto de perfil:</strong> 
-                    <img v-if="calendario.creadoPor?.fotoPerfil" :src="calendario.creadoPor.fotoPerfil" alt="Foto de perfil" />
-                </p>
-                <p><strong>Rol:</strong> {{ calendario.creadoPor?.rol || 'No especificado' }}</p>
-                <p><strong>Fecha de creación:</strong> {{ calendario.fechaCreacion }}</p>
-                <p><strong>Fecha de actualización:</strong> {{ calendario.fechaActualizacion }}</p>
-            </div>
-        </div>
-
-        <div v-else class="no-calendarios">
-            <p>No se han encontrado calendarios para esta universidad.</p>
-        </div>
     </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import universidadApi from '@/apis/universidadApi' 
-import TituloLabel from '@/components/labels/TituloLabel.vue'
-import UniversidadLabel from '@/components/labels/UniversidadLabel.vue'
+<script>
+import TituloLabel from '@/components/labels/TituloLabel.vue';
+import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
+import universidadApi from '@/apis/universidadApi'; 
+// Componente de lista de eventos
+import ListaEventosComponent from '@/components/calendar/ListaEventosComponent.vue';
 
-const route = useRoute()
-const escuelaId = ref(route.params.id)  
-const nombreUniversidad = ref(route.query.nombre)  
+export default {
+    name: 'CalendarioPage',
+    components: {
+        TituloLabel,
+        UniversidadLabel,
+        ListaEventosComponent
+    },
+    data() {
+        return {
+            universidadNombre: this.$route.query.nombre || 'Universidad',
+            calendarios: []
+        };
+    },
+    mounted()
+    {
+        const escuelaId = this.$route.params.id;
+        this.obtenerCalendarios(escuelaId);
+    },
+    methods:
+    {
+        async obtenerCalendarios(escuelaId) {
+            try
+            {
 
-const calendarios = ref([])  
+                this.calendarios = await universidadApi.obtenerCalendariosPorEscuela(escuelaId) || [];
 
-onMounted(async () => {
-    if (escuelaId.value) {
-        try {
-            const data = await universidadApi.obtenerCalendariosPorEscuela(escuelaId.value)
-            calendarios.value = data || []  
-        } catch (error) {
-            console.error('Error al obtener los calendarios:', error)
+            }
+            catch (error)
+            {
+
+                alert('Hubo un error al obtener los calendarios. Por favor, inténtalo más tarde.');
+            }
         }
     }
-})
+}
 </script>
 
 <style scoped>
 .calendario-page {
-    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
 .header {
-    background-color: white;
-    padding: 15px 0;
-    border-bottom: 2px solid #e0e0e0;
+    background-color: #fff;
+    padding: 12px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .header-content {
     display: flex;
     align-items: center;
-    gap: 20px;
-}
-
-.titulo-universidad {
-    margin-left: -5px;
-}
-
-.calendarios-list {
-    margin-top: 20px;
-}
-
-.calendario-item {
-    background: #f9f9f9;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.no-calendarios {
-    text-align: center;
-    padding: 20px;
-    font-size: 1.2em;
+    gap: 15px;
 }
 </style>

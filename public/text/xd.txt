@@ -22,3 +22,220 @@
     "fechaActualizacion": "2024-06-20T12:00:00.000Z"
   },
  */
+
+
+
+
+ <template>
+    <aside class="tabla-eventos">
+        <div v-for="(eventos, mes) in eventosPorMes" :key="mes" class="mes-section">
+            <div class="mes-cabecera" @click="toggleMes(mes)">
+                <div class="mes-izquierda">
+                    <span class="flecha">{{ mesAbierto[mes] ? '▼' : '▶' }}</span>
+                    <h3 class="mes-titulo">{{ mes }}</h3>
+                </div>
+                <span class="badge">{{ eventos.length }}</span>
+            </div>
+
+            <transition name="slide">
+                <div v-if="mesAbierto[mes]" class="eventos-lista">
+                    <div v-for="evento in eventos" :key="evento._id" class="evento-item">
+                        <div class="evento-marcador"></div>
+                        <div class="evento-contenido">
+                            <div class="evento-titulo">{{ evento.titulo }}</div>
+                            <div class="evento-fecha">
+                                {{ formatearFecha(evento.fechaInicio) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </div>
+    </aside>
+</template>
+
+<script>
+export default {
+    name: 'TablaEventosComponent',
+
+    // 1) Props definidas en Options API
+    props: {
+        calendarios: {
+            type: Array,
+            required: true,
+            default: () => []
+        }
+    },
+
+    // 2) Estado local
+    data() {
+        return {
+            mesAbierto: {}
+        }
+    },
+
+    // 3) Agrupación de eventos por mes
+    computed: {
+        eventosPorMes() {
+            const agrupados = {}
+            this.calendarios.forEach(evento => {
+                const fecha = new Date(evento.fechaInicio)
+                const mesNombre = fecha
+                    .toLocaleDateString('es-MX', { month: 'long' })
+                    .toUpperCase()
+                if (!agrupados[mesNombre]) agrupados[mesNombre] = []
+                agrupados[mesNombre].push(evento)
+            })
+            return agrupados
+        }
+    },
+
+    // 4) Métodos auxiliares
+    methods: {
+        formatearFecha(fechaStr) {
+            const fecha = new Date(fechaStr)
+            return fecha.toLocaleDateString('es-MX', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            })
+        },
+        toggleMes(mes) {
+            this.$set(this.mesAbierto, mes, !this.mesAbierto[mes])
+        }
+    }
+}
+</script>
+
+
+
+
+<style scoped>
+.tabla-eventos {
+    width: 320px;
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    background: #f5f7fa;
+    border-right: 1px solid #dde2e8;
+    padding: 12px 0;
+}
+
+.mes-section {
+    margin-bottom: 10px;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    margin: 0 10px 10px 10px;
+}
+
+.mes-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+.mes-cabecera:hover {
+    background: #f0f4f8;
+}
+
+.mes-izquierda {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flecha {
+    font-size: 12px;
+    color: #4a6fa5;
+}
+
+.mes-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.badge {
+    background: #4a6fa5;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+.eventos-lista {
+    padding: 5px 0 10px 0;
+}
+
+.evento-item {
+    display: flex;
+    gap: 12px;
+    padding: 8px 15px;
+    border-bottom: 1px solid #edf2f7;
+    align-items: flex-start;
+}
+
+.evento-item:last-child {
+    border-bottom: none;
+}
+
+.evento-marcador {
+    width: 10px;
+    height: 10px;
+    background: #4a6fa5;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.evento-contenido {
+    flex: 1;
+    text-align: left;
+}
+
+.evento-titulo {
+    font-size: 14px;
+    font-weight: 500;
+    color: #34495e;
+    line-height: 1.4;
+    margin-bottom: 2px;
+}
+
+.evento-fecha {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin-top: 0;
+}
+
+.slide-enter-active {
+    transition: all 0.2s ease-out;
+}
+
+.slide-leave-active {
+    transition: all 0.15s ease-in;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+/* Scrollbar */
+.tabla-eventos::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tabla-eventos::-webkit-scrollbar-thumb {
+    background: #b8c2cc;
+    border-radius: 3px;
+}
+</style>
