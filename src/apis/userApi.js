@@ -128,4 +128,28 @@ const actualizarUniversidadFavorita = async (token, universidadId) => {
   }
 };
 
-export default { login, obtenerPerfilUsuario, establecerUniversidadFavorita, obtenerUniversidadFavorita, eliminarUniversidadFavorita, actualizarUniversidadFavorita};
+// Retorna los datos del recordatorio si existe, o null si no existe
+const verificarRecordatorio = async (calendarioId, token) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:5000/api/calendarios/${calendarioId}/recordatorio`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+   
+    return response.data ? response.data : null;
+  } catch (error) {
+    if (error.response) {
+      console.error('Error en la respuesta:', error.response.data);
+    } else {
+      console.error('Hubo un problema al conectar con el servidor:', error.message);
+    }
+    throw error; 
+  }
+};
+
+
+export default { login, obtenerPerfilUsuario, establecerUniversidadFavorita, obtenerUniversidadFavorita, eliminarUniversidadFavorita, actualizarUniversidadFavorita, verificarRecordatorio};

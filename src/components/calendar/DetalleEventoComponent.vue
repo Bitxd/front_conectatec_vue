@@ -14,7 +14,9 @@
             <div class="titulo-descripcion">
                 <div class="contenedor-titulo">
                     <h3 class="titulo">{{ calendario.titulo }}</h3>
-                    <BotonNotificacionComponent />
+                    <div @click="abrirModal">
+                        <BotonNotificacionComponent />
+                    </div>
                 </div>
                 <p class="descripcion">{{ calendario.descripcion }}</p>
             </div>
@@ -38,7 +40,7 @@
             <div class="evento-info">
                 <div class="info-item lugar-item">
                     <div class="acento"></div>
-                    <img src="/icons/mapa-virtual.svg" alt="Lugar" class="icono" />
+                    <img src="/icons/mapa-virtual-icon.svg" alt="Lugar" class="icono" />
                     <div class="lugar-texto">
                         <span><strong>Lugar:</strong> {{ calendario.lugar }}</span>
                     </div>
@@ -56,12 +58,19 @@
                 </div>
             </div>
         </div>
+
+
+        <RecordatorioComponent :visible="modalVisible" :calendario="calendario"
+            @update:visible="modalVisible = $event" />
+
     </div>
 </template>
 
 <script>
 import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
 import BotonNotificacionComponent from '../buttons/BotonNotificacionComponent.vue';
+import RecordatorioComponent from './RecordatorioComponent.vue';
+
 export default {
     name: 'DetalleEventoComponent',
     props: {
@@ -69,16 +78,26 @@ export default {
     },
     components: {
         BotonTextoImagenComponent,
-        BotonNotificacionComponent
+        BotonNotificacionComponent,
+        RecordatorioComponent
+    },
+    data() {
+        return {
+            modalVisible: false
+        };
     },
     methods: {
         formatDate(fecha) {
             const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
             return new Date(fecha).toLocaleDateString('es-ES', opciones);
+        },
+        abrirModal() {
+            this.modalVisible = true;
         }
     }
 };
 </script>
+
 
 <style scoped>
 .panel-derecho {

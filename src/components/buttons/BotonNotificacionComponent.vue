@@ -1,12 +1,15 @@
 <template>
-    <button class="boton-notificacion" :class="{ active: isActive }" @click="toggleAccion">
-        <div class="icono-circulo">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icono" :class="{ 'icono-active': isActive }" width="24" height="24" viewBox="0 0 24 24">
-                <path
-                    d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.93 6 11v5l-2 2v1h16v-1l-2-2z" />
-            </svg>
-        </div>
-    </button>
+    <div class="tooltip-container">
+        <span class="tooltip-text">Recordar</span>
+        <button class="boton-notificacion" :class="{ active: isActive }" @click="toggleAccion">
+            <div class="icono-circulo">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icono" :class="{ 'icono-active': isActive }" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                        d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.93 6 11v5l-2 2v1h16v-1l-2-2z" />
+                </svg>
+            </div>
+        </button>
+    </div>
 </template>
 
 <script>
@@ -37,6 +40,34 @@ export default {
 </script>
 
 <style scoped>
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-text {
+    position: absolute;
+    left: -90px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #4f46e5;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+    z-index: 10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip-container:hover .tooltip-text {
+    opacity: 1;
+    transform: translateY(-50%) translateX(-5px);
+}
+
 .boton-notificacion {
     background: transparent;
     border: none;
