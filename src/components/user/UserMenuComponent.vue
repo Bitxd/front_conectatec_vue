@@ -76,7 +76,7 @@ export default
         },
         botonConfiguracion()
         {
-            alert("Boton configuracion");
+            this.$router.push({ name: 'Configuracion'});
         },
         botonCerrarSesion()
         {

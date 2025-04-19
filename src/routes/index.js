@@ -4,6 +4,7 @@ import UniversidadesPage from '@/pages/UniversidadesPage.vue';
 import ForoPage from '@/pages/ForoPage.vue';
 import PublicacionPage from '@/pages/PublicacionPage.vue';
 import CalendarioPage from '@/pages/CalendarioPage.vue';
+import ConfiguracionPage from '@/pages/ConfiguracionPage.vue';
 
 
 
@@ -44,6 +45,12 @@ const routes = [
     path: '/universidad/:id/calendario',
     name: 'Calendario',
     component: CalendarioPage
+  },
+  {
+    path: '/perfil/configuracion',
+    name: 'Configuracion',
+    component: ConfiguracionPage,
+    meta: { requiresAuth: true }
   }
   
 
