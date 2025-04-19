@@ -35,7 +35,12 @@
                 </div>
 
                 <div v-if="mesesAbiertos[mes]" class="contenido-mes">
-                    <div v-for="calendario in calendariosMes" :key="calendario._id" class="item-calendario">
+                    <div
+                        v-for="calendario in calendariosMes"
+                        :key="calendario._id"
+                        class="item-calendario"
+                        @click="$emit('calendario-seleccionado', calendario._id)"
+                    >
                         <div class="item-contenido">
                             <div class="item-header">
                                 <span class="circulo"></span>
@@ -108,7 +113,7 @@ export default {
 
 <style scoped>
 .lista-calendarios {
-    width: 40%;
+    width: 35%;
     padding: 12px;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     border: 1px solid #e2e8f0;
@@ -139,9 +144,11 @@ export default {
 
 .scrollable-contenido {
     padding: 0;
-    overflow-y: auto;
-    max-height: 500px; /* Ajusta la altura máxima del scroll según lo que necesites */
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    max-height: 500px; 
 }
+
 
 .mes-seccion {
     margin: 0;
