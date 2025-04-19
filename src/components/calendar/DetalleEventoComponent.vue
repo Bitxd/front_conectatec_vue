@@ -58,18 +58,12 @@
                 </div>
             </div>
         </div>
-
-
-        <RecordatorioComponent :visible="modalVisible" :calendario="calendario"
-            @update:visible="modalVisible = $event" />
-
     </div>
 </template>
 
 <script>
 import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
 import BotonNotificacionComponent from '../buttons/BotonNotificacionComponent.vue';
-import RecordatorioComponent from './RecordatorioComponent.vue';
 
 export default {
     name: 'DetalleEventoComponent',
@@ -78,25 +72,17 @@ export default {
     },
     components: {
         BotonTextoImagenComponent,
-        BotonNotificacionComponent,
-        RecordatorioComponent
-    },
-    data() {
-        return {
-            modalVisible: false
-        };
+        BotonNotificacionComponent
     },
     methods: {
         formatDate(fecha) {
             const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
             return new Date(fecha).toLocaleDateString('es-ES', opciones);
         },
-        abrirModal() {
-            this.modalVisible = true;
-        }
     }
 };
 </script>
+
 
 
 <style scoped>

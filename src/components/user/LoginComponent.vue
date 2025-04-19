@@ -47,7 +47,7 @@
 
 <script>
 import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
-import authService from '../../apis/userApi';
+import authService from '../../apis/userApi';  // Asegúrate de tener esta API configurada correctamente
 import NotificationComponent from '../alerts/NotificationComponent.vue';
 
 export default
@@ -82,11 +82,23 @@ export default
     {
       try
       {
-        if (await authService.login(this.email, this.password))
+        // Intentar login
+        const userLoggedIn = await authService.login(this.email, this.password);
+
+        if (userLoggedIn)
         {
+          // Mostrar notificación de éxito
           this.showNotification('Autenticación exitosa', 'success');
           this.handleCancel();
-          // Recargamos la pagina para que se refresquen los datos
+
+          // Obtener configuración del usuario después de iniciar sesión
+          const token = userLoggedIn.token; // Suponiendo que el token esté en la respuesta
+          const configuracion = await authService.obtenerConfiguracionUsuario(token);
+          
+          // Guardar la configuración en localStorage
+          localStorage.setItem('configuracionUsuario', JSON.stringify(configuracion));
+
+          // Recargar la página para que se refresquen los datos
           location.reload();
         }
       }
@@ -120,6 +132,7 @@ export default
 
 
 
+
 <style scoped>
 .overlay {
   position: fixed;
@@ -140,7 +153,7 @@ export default
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  /* Fondo oscuro semi-transparente */
+  
 }
 
 .modal {

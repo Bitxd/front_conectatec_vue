@@ -4,49 +4,62 @@
       <div class="modal-container">
         <h1 class="titulo">Registrarse</h1>
         <form @submit.prevent="handleRegister" class="formulario">
-          <!-- Campo de nombre de usuario -->
+          <!-- Usuario -->
           <div class="campo">
             <label for="user" class="label">Usuario</label>
-            <input type="text" id="user" v-model="user" placeholder="Introduce tu usuario" required />
+            <input id="user" v-model="user" placeholder="Introduce tu usuario" required />
           </div>
 
-          <!-- Campo de nombre completo -->
+          <!-- Nombre completo -->
           <div class="campo">
             <label for="fullname" class="label">Nombre Completo</label>
-            <input type="text" id="fullname" v-model="fullname" placeholder="Introduce tu nombre completo" required />
+            <input id="fullname" v-model="fullname" placeholder="Introduce tu nombre completo" required />
           </div>
 
-          <!-- Campo de correo electrónico -->
+          <!-- Email -->
           <div class="campo">
             <label for="email" class="label">Correo Electrónico</label>
-            <input type="email" id="email" v-model="email" placeholder="Introduce tu correo" required />
+            <input id="email" type="email" v-model="email" placeholder="Introduce tu correo" required />
           </div>
 
-          <!-- Campo de teléfono -->
+          <!-- Teléfono (opcional) -->
           <div class="campo">
             <label for="phone" class="label">Número de Teléfono (Opcional)</label>
-            <input type="tel" id="phone" v-model="phone" placeholder="Introduce tu número" />
+            <input id="phone" type="tel" v-model="phone" placeholder="Introduce tu número" />
           </div>
 
-          <!-- Campo de contraseña -->
+          <!-- Contraseña -->
           <div class="campo">
             <label for="password" class="label">Contraseña</label>
-            <input type="password" id="password" v-model="password" placeholder="Introduce tu contraseña" required />
+            <input id="password" type="password" v-model="password" placeholder="Introduce tu contraseña" required />
           </div>
 
-          <!-- Campo de confirmación de contraseña -->
+          <!-- Confirmar contraseña -->
           <div class="campo">
-            <label for="confirmPassword" class="label">Confirmar Contraseña</label>
-            <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="Confirma tu contraseña"
-              required />
+            <label for="confirmpassword" class="label">Confirmar Contraseña</label>
+            <input
+              id="confirmpassword"
+              type="password"
+              v-model="confirmpassword"
+              placeholder="Confirma tu contraseña"
+              required
+            />
           </div>
 
           <!-- Botones -->
           <div class="acciones">
-            <BotonTextoImagenComponent :image="'/icons/cancelar-icon.svg'" :altText="'Cancelar'" text="Cancelar"
-              @click="handleCancel" />
-            <BotonTextoImagenComponent :image="'/icons/registro-icon.svg'" :altText="'Registrar'" text="Registrar"
-              type="submit" />
+            <BotonTextoImagenComponent
+              :image="'/icons/cancelar-icon.svg'"
+              altText="Cancelar"
+              text="Cancelar"
+              @click="handleCancel"
+            />
+            <BotonTextoImagenComponent
+              :image="'/icons/registro-icon.svg'"
+              altText="Registrar"
+              text="Registrar"
+              type="submit"
+            />
           </div>
         </form>
       </div>
@@ -57,50 +70,56 @@
 
 <script>
 import BotonTextoImagenComponent from "../BotonTextoImagenComponent.vue";
+import userApi from "@/apis/userApi";
 
 export default {
   name: "RegisterComponent",
-  components: {
-    BotonTextoImagenComponent,
-  },
+  components: { BotonTextoImagenComponent },
   data() {
     return {
-      isModalVisible: true, 
+      isModalVisible: true,
       user: "",
       fullname: "",
       email: "",
       phone: "",
       password: "",
-      confirmPassword: "",
+      confirmpassword: ""
     };
   },
   methods: {
-    handleRegister() {
-      // Aquí podrías manejar el registro del usuario
-      if (this.password !== this.confirmPassword) {
+    async handleRegister() {
+      if (this.password !== this.confirmpassword) {
         alert("Las contraseñas no coinciden.");
         return;
       }
-      console.log("Registro exitoso", {
-        user: this.user,
-        fullname: this.fullname,
-        email: this.email,
-        phone: this.phone,
-        password: this.password,
-      });
+
+      try {
+        const response = await userApi.registrar(
+          this.fullname,
+          this.user,
+          this.email,
+          this.password,
+          this.confirmpassword,
+          this.phone
+        );
+        alert(response.data.mensaje);
+        this.handleCancel();
+      } catch (error) {
+        const mensaje = error.response?.data?.mensaje || "Error al registrar usuario.";
+        alert(mensaje);
+      }
     },
     handleCancel() {
-      this.isModalVisible = false; // Ocultar el modal
+      this.isModalVisible = false;
       this.user = "";
       this.fullname = "";
       this.email = "";
       this.phone = "";
       this.password = "";
-      this.confirmPassword = "";
-      this.$emit("close"); // Emitir el evento para que el componente padre lo maneje
-      console.log("Formulario cancelado");
-    },
-  },
+      this.confirmpassword = "";
+      this.$emit("close");
+    }
+  }
 };
 </script>
 

@@ -1,52 +1,68 @@
 import axios from 'axios';
 
 // Peticion para iniciar sesion
-const login = async (email, password) =>
-{
-    try
-    {
-        const response = await axios.post('http://localhost:5000/api/login', { email, password });
-        
-        // Guardar el token en el localStorage
-        localStorage.setItem('token', response.data.token);
+const login = async (email, password) => {
+  try {
+    const response = await axios.post('http://localhost:5000/api/login', { email, password });
 
-        return response; // Devolver la respuesta para el manejo posterior
+    // Guardar el token en el localStorage
+    localStorage.setItem('token', response.data.token);
+
+    return response; // Devolver la respuesta para el manejo posterior
+  }
+  catch (error) {
+    if (error.response) {
+      console.error('Error en login:', error.response.data.mensaje);
     }
-    catch (error)
-    {
-        if (error.response)
-        {
-            console.error('Error en login:', error.response.data.mensaje);
-        }
-        else
-        {
-            console.error('Hubo un problema al conectar con el servidor:', error.message);
-        }
-        throw error; // Lanza el error para que pueda ser manejado en el componente
+    else {
+      console.error('Hubo un problema al conectar con el servidor:', error.message);
     }
+    throw error; // Lanza el error para que pueda ser manejado en el componente
+  }
 };
 
+// Petición para registrar un nuevo usuario
+const registrar = async (fullname, username, email, password, confirmpassword, phone = '') => {
+  try {
+    const response = await axios.post('http://localhost:5000/api/register', {
+      fullname,
+      username,
+      email,
+      password,
+      confirmpassword,
+      phone
+    });
+
+    console.log('Registro exitoso:', response.data.mensaje);
+    return response; // Puedes retornar para manejarlo después si quieres
+  }
+  catch (error) {
+    if (error.response) {
+      console.error('Error en registro:', error.response.data.mensaje);
+    }
+    else {
+      console.error('Hubo un problema al conectar con el servidor:', error.message);
+    }
+    throw error; // Para manejar el error en el componente que lo llama
+  }
+};
+
+
 // Peticion get para obtener los datos del usuario
-const obtenerPerfilUsuario = async (token) =>
-{
-  try
-  {
-    const response = await axios.get('http://localhost:5000/api/profile', {headers: { Authorization: `Bearer ${token}`, },});
+const obtenerPerfilUsuario = async (token) => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/profile', { headers: { Authorization: `Bearer ${token}`, }, });
     return response.data;
   }
-  catch (error)
-  {
-    if (error.response)
-    {
+  catch (error) {
+    if (error.response) {
       console.error('Error en la respuesta:', error.response.data);
     }
-    else if (error.request)
-    {
+    else if (error.request) {
 
       console.error('No se recibió respuesta del servidor:', error.request);
     }
-    else
-    {
+    else {
 
       console.error('Error al configurar la petición:', error.message);
     }
@@ -124,7 +140,7 @@ const actualizarUniversidadFavorita = async (token, universidadId) => {
     } else {
       console.error('Hubo un problema al conectar con el servidor:', error.message);
     }
-    throw error; 
+    throw error;
   }
 };
 
@@ -139,7 +155,7 @@ const verificarRecordatorio = async (calendarioId, token) => {
         },
       }
     );
-   
+
     return response.data ? response.data : null;
   } catch (error) {
     if (error.response) {
@@ -147,9 +163,25 @@ const verificarRecordatorio = async (calendarioId, token) => {
     } else {
       console.error('Hubo un problema al conectar con el servidor:', error.message);
     }
-    throw error; 
+    throw error;
   }
 };
 
 
-export default { login, obtenerPerfilUsuario, establecerUniversidadFavorita, obtenerUniversidadFavorita, eliminarUniversidadFavorita, actualizarUniversidadFavorita, verificarRecordatorio};
+// Peticion para obtener la configuracion del usuario
+const obtenerConfiguracionUsuario = async (token) => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/configuracion', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log('Configuración obtenida:', response.data);
+  } catch (error) {
+    console.error('Error al obtener la configuración:', error);
+  }
+};
+
+
+export default { login, registrar, obtenerPerfilUsuario, establecerUniversidadFavorita, obtenerUniversidadFavorita, eliminarUniversidadFavorita, actualizarUniversidadFavorita, verificarRecordatorio, obtenerConfiguracionUsuario };
