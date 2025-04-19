@@ -1,84 +1,125 @@
 <template>
     <div class="configuracion-page">
-        <h1>Configuración de Notificaciones</h1>
-        <p>Aquí puedes gestionar las configuraciones de notificaciones para tu cuenta.</p>
-        <form @submit.prevent="guardarConfiguracion">
-            <div>
-                <label for="activar-notificaciones">Activar notificaciones:</label>
-                <input type="checkbox" id="activar-notificaciones" v-model="configuracion.activarNotificaciones" />
-            </div>
-
-            <div v-if="configuracion.activarNotificaciones">
-                <label for="frecuencia-notificaciones">Frecuencia de notificaciones:</label>
-                <select id="frecuencia-notificaciones" v-model="configuracion.frecuenciaNotificaciones">
-                    <option value="diaria">Diaria</option>
-                    <option value="semanal">Semanal</option>
-                    <option value="mensual">Mensual</option>
-                </select>
-            </div>
-
-            <div>
-                <button type="submit">Guardar Configuración</button>
-            </div>
-        </form>
+      <aside class="config-sidebar">
+        <div class="sidebar-title">Configuración</div>
+        <nav class="menu-opciones">
+          <button class="menu-item" @click="setActiveComponent('perfil')">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none">
+              <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4z" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M4 20c0-2.67 4-4 8-4s8 1.33 8 4" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Mi perfil</span>
+          </button>
+          <button class="menu-item" @click="setActiveComponent('notificaciones')">
+            <svg class="menu-icon" viewBox="0 0 24 24" fill="none">
+              <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9z" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M13.73 21a2 2 0 01-3.46 0" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>Notificaciones</span>
+          </button>
+        </nav>
+      </aside>
+  
+      <main class="config-content">
+        <MiPerfilConfigComponent v-if="activeComponent === 'perfil'" />
+        <NotificacionConfigComponent v-else-if="activeComponent === 'notificaciones'" />
+      </main>
     </div>
-</template>
-
-<script>
-export default {
+  </template>
+  
+  <script>
+  import MiPerfilConfigComponent from '@/components/config/MiPerfilConfigComponent.vue'
+  import NotificacionConfigComponent from '@/components/config/NotificacionConfigComponent.vue'
+  
+  export default {
+    components: {
+      MiPerfilConfigComponent,
+      NotificacionConfigComponent,
+    },
     data() {
-        return {
-            configuracion: {
-                activarNotificaciones: false,
-                frecuenciaNotificaciones: 'diaria',
-            },
-        };
+      return {
+        activeComponent: 'perfil',
+      }
     },
     methods: {
-        guardarConfiguracion()
-        {
-            console.log("Configuración guardada:", this.configuracion);
-        },
+      setActiveComponent(component) {
+        this.activeComponent = component
+      },
     },
-};
-</script>
-
-<style scoped>
-.configuracion-page {
-    padding: 20px;
-}
-
-h1 {
-    font-size: 24px;
-}
-
-form {
-    margin-top: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-select {
-    margin-left: 10px;
-}
-
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
+  }
+  </script>
+  
+  <style scoped>
+  .configuracion-page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .config-sidebar {
+    width: 260px;
+    background-color: #ffffff;
+    border-right: 2px solid #e0e0e0;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100vh;
+    box-sizing: border-box;
+  }
+  
+  .sidebar-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #2c3e50;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #5dade2;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  
+  .menu-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #f8f9fa;
     border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    color: #333;
     cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-</style>
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .menu-item:hover {
+    background-color: #d6eaff;
+    color: #007acc;
+  }
+  
+  .menu-icon {
+    width: 18px;
+    height: 18px;
+    stroke: #333;
+  }
+  
+  .config-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    padding: 8px 12px 12px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+  }
+  </style>
+  
