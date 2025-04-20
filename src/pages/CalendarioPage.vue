@@ -9,10 +9,7 @@
         </header>
 
         <div class="contenido-principal">
-            <ListaEventosComponent
-                :calendarios="calendarios"
-                @calendario-seleccionado="handleCalendarioSeleccionado"
-            />
+            <ListaEventosComponent :calendarios="calendarios" @calendario-seleccionado="handleCalendarioSeleccionado" />
 
             <!-- Mostrar mensaje si no hay calendario seleccionado -->
             <div v-if="!calendarioSeleccionado" class="mensaje-seleccion">
@@ -21,10 +18,7 @@
             </div>
 
             <!-- Detalle del evento -->
-            <DetalleEventoComponent
-                v-if="calendarioSeleccionado"
-                :calendario="calendarioSeleccionado"
-            />
+            <DetalleEventoComponent v-if="calendarioSeleccionado" :calendario="calendarioSeleccionado" />
         </div>
     </div>
 </template>
@@ -42,13 +36,14 @@ export default {
         TituloLabel,
         UniversidadLabel,
         ListaEventosComponent,
-        DetalleEventoComponent
+        DetalleEventoComponent,
     },
     data() {
         return {
             universidadNombre: this.$route.query.nombre || 'Universidad',
             calendarios: [],
-            calendarioSeleccionadoId: null
+            calendarioSeleccionadoId: null,
+
         };
     },
     computed: {
@@ -70,7 +65,7 @@ export default {
         },
         handleCalendarioSeleccionado(calendarioId) {
             this.calendarioSeleccionadoId = calendarioId;
-        }
+        },
     }
 };
 </script>

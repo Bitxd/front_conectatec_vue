@@ -39,23 +39,18 @@ export default {
         message: '',
         type: 'info'
       }
-    }
+    };
   },
   methods: {
-    // Notificaciones
+    // Notificaciones globales
     showNotification(message, type = 'info') {
-      this.notification = {
-        show: true,
-        message,
-        type
-      };
-      setTimeout(() => this.hideNotification(), 5000);
+      this.notification = { show: true, message, type };
+      setTimeout(this.hideNotification, 5000);
     },
     hideNotification() {
       this.notification.show = false;
     },
-
-    // Advertencias
+    // Advertencias de autenticación
     handleAuthWarning(event) {
       this.warningMessage = event.detail.message;
       this.showWarning = true;
@@ -65,6 +60,7 @@ export default {
     }
   },
   mounted() {
+    // Exponer función global de notificaciones
     window.showGlobalNotification = this.showNotification;
     window.addEventListener('show-auth-warning', this.handleAuthWarning);
   },
@@ -72,7 +68,7 @@ export default {
     window.removeEventListener('show-auth-warning', this.handleAuthWarning);
     delete window.showGlobalNotification;
   }
-}
+};
 </script>
 
 <style>
@@ -83,7 +79,5 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  position: static; 
-  transform: none
 }
 </style>
