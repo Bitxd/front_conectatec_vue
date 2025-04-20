@@ -1,25 +1,33 @@
 import axios from 'axios';
 
-// Peticion para iniciar sesion
+// Petición para iniciar sesión
 const login = async (email, password) => {
   try {
     const response = await axios.post('http://localhost:5000/api/login', { email, password });
 
-    // Guardar el token en el localStorage
     localStorage.setItem('token', response.data.token);
 
-    return response; // Devolver la respuesta para el manejo posterior
-  }
-  catch (error) {
+
+    const { usuario } = response.data;
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+
+
+    localStorage.setItem('configuracion', JSON.stringify(usuario.configuracion));
+
+
+    localStorage.setItem('recordatorios', JSON.stringify(usuario.recordatorios));
+
+    return response; 
+  } catch (error) {
     if (error.response) {
       console.error('Error en login:', error.response.data.mensaje);
-    }
-    else {
+    } else {
       console.error('Hubo un problema al conectar con el servidor:', error.message);
     }
-    throw error; // Lanza el error para que pueda ser manejado en el componente
+    throw error; 
   }
 };
+
 
 // Petición para registrar un nuevo usuario
 const registrar = async (fullname, username, email, password, confirmpassword, phone = '') => {

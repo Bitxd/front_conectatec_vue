@@ -27,7 +27,7 @@ export default
     {
         confirmarLogout()
         {
-            localStorage.removeItem('token');
+            localStorage.clear(); 
             this.$emit('cerrar');             
             location.reload();             
         },
@@ -38,6 +38,7 @@ export default
     }
 };
 </script>
+
 
 <style scoped>
 .logout-overlay {
