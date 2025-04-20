@@ -59,15 +59,27 @@
       </div>
     </div>
   </div>
-  <PrimeraNotificacionComponent :visible="mostrarNotificacion" @cerrar="mostrarNotificacion = false"
-    @configurarRecordatorios="manejarConfiguracion" />
 
+  <!-- Mostrar el componente CrearRecordatorioComponent cuando sea necesario -->
+  <CrearRecordatorioComponent 
+    :visible="mostrarFormulario" 
+    :calendario="calendario" 
+    @crearRecordatorio="manejarCreacionRecordatorio" 
+    @cerrar="mostrarFormulario = false" />
+  
+  <PrimeraNotificacionComponent 
+    :visible="mostrarNotificacion" 
+    @cerrar="mostrarNotificacion = false"
+    @configurarRecordatorios="manejarConfiguracion" />
 </template>
 
 <script>
+import userApi from '@/apis/userApi'; 
 import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
 import BotonNotificacionComponent from '../buttons/BotonNotificacionComponent.vue';
+import CrearRecordatorioComponent from './CrearRecordatorioComponent.vue'; 
 import PrimeraNotificacionComponent from '../notices/PrimeraNotificacionComponent.vue';
+import authService from '@/services/authService';
 
 export default {
   name: 'DetalleEventoComponent',
@@ -77,35 +89,55 @@ export default {
   components: {
     BotonTextoImagenComponent,
     BotonNotificacionComponent,
+    CrearRecordatorioComponent,  
     PrimeraNotificacionComponent
   },
   data() {
     return {
-      mostrarNotificacion: false
+      mostrarNotificacion: false,
+      mostrarFormulario: false  
     };
   },
-  methods:
-  {
+  methods: {
     formatDate(fecha) {
       const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
       return new Date(fecha).toLocaleDateString('es-ES', opciones);
     },
-    notificacionPresionada() {
+    async notificacionPresionada() {
       const config = JSON.parse(localStorage.getItem('configuracion') || '{}');
       if (config?.primerConfiguracionRecordatorio === true) {
         this.mostrarNotificacion = true;
-      }
-      else {
-        alert('Abrir opciones de recordatorio...');
+      } else {
+        try {
+          const token = authService.getToken();
+          const recordatorio = await userApi.verificarRecordatorio(this.calendario._id, token);
+
+          if (recordatorio) {
+            alert('Recordatorio ya existe');
+          } else {
+            this.mostrarFormulario = true;
+          }
+        } catch (error) {
+          if (error.response && error.response.status === 404) {
+            // Si el error es 404 (no existe el recordatorio), mostrar el modal
+            this.mostrarFormulario = true;
+          } else {
+            console.error('Error verificando el recordatorio:', error);
+          }
+        }
       }
     },
-    manejarConfiguracion()
-    {
-      this.$router.push({ name: 'Configuracion'});
+    manejarCreacionRecordatorio() {
+      alert('Recordatorio creado');
+      this.mostrarFormulario = false;
     },
+    manejarConfiguracion() {
+      alert('Configurando recordatorios...');
+    }
   }
 };
 </script>
+
 
 
 <style scoped>
