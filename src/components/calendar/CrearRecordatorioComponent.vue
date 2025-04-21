@@ -38,6 +38,9 @@
 </template>
 
 <script>
+import userApi from '@/apis/userApi.js';
+import authService from '@/services/authService';
+
 export default {
     name: 'CrearRecordatorioComponent',
     props: {
@@ -57,34 +60,52 @@ export default {
             hora: ''
         };
     },
-    computed:
-    {
+    computed: {
         maxFecha() {
-
             return this.calendario.fechaInicio?.split('T')[0] || '';
         },
         maxHora() {
             return this.calendario.horaInicio || '';
         }
     },
-    methods:
-    {
-        handleClick() {
-            const recordatorio =
+    methods: {
+        async handleClick()
+        {
+            if (!this.descripcion || !this.fecha || !this.hora)
             {
-                descripcion: this.descripcion.trim(),
-                fecha: this.fecha,
-                hora: this.hora
-            };
-            this.$emit('crearRecordatorio', recordatorio);
-            this.$emit('cerrar');
+                alert('Todos los campos son obligatorios.');
+            }
+
+            try
+            {
+                const token = authService.getToken();
+                const datos =
+                {
+                    titulo: this.descripcion.trim(),
+                    fechaRecordatorio: this.fecha,
+                    horaRecordatorio: this.hora,
+                };
+
+                const response = await userApi.crearRecordatorio(this.calendario._id, token, datos);
+                alert('¡Recordatorio creado con éxito!');
+                this.$emit('recordatorioCreado', response);
+            }
+            catch (error)
+            {
+                console.error('Error al crear recordatorio:', error);
+                alert('Error al crear el recordatorio.');
+            }
+            finally
+            {
+                this.$emit('cerrar');
+            }
         },
-        cancelar() {
+        cancelar()
+        {
             this.$emit('cerrar');
         }
     },
     mounted() {
-
         const inicioFecha = new Date(this.calendario.fechaInicio);
         const mes = inicioFecha.getMonth() + 1;
         const anio = inicioFecha.getFullYear();

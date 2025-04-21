@@ -17,14 +17,14 @@ const login = async (email, password) => {
 
     localStorage.setItem('recordatorios', JSON.stringify(usuario.recordatorios));
 
-    return response; 
+    return response;
   } catch (error) {
     if (error.response) {
       console.error('Error en login:', error.response.data.mensaje);
     } else {
       console.error('Hubo un problema al conectar con el servidor:', error.message);
     }
-    throw error; 
+    throw error;
   }
 };
 
@@ -176,6 +176,36 @@ const verificarRecordatorio = async (calendarioId, token) => {
 };
 
 
+// Crea un nuevo recordatorio para un calendario específico
+const crearRecordatorio = async (calendarioId, token, datos) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:5000/api/calendarios/${calendarioId}/recordatorio`,
+      {
+        titulo: datos.titulo,
+        fechaRecordatorio: datos.fechaRecordatorio, // formato ISO o 'YYYY-MM-DD'
+        horaRecordatorio: datos.horaRecordatorio,   // formato 'HH:mm'
+        metodoNotificacion: datos.metodoNotificacion || 'email' // opcional
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error('Error en la respuesta:', error.response.data);
+    } else {
+      console.error('Hubo un problema al conectar con el servidor:', error.message);
+    }
+    throw error;
+  }
+};
+
+
 // Peticion para obtener la configuracion del usuario
 const obtenerConfiguracionUsuario = async (token) => {
   try {
@@ -192,4 +222,15 @@ const obtenerConfiguracionUsuario = async (token) => {
 };
 
 
-export default { login, registrar, obtenerPerfilUsuario, establecerUniversidadFavorita, obtenerUniversidadFavorita, eliminarUniversidadFavorita, actualizarUniversidadFavorita, verificarRecordatorio, obtenerConfiguracionUsuario };
+export default { 
+  login, 
+  registrar, 
+  obtenerPerfilUsuario, 
+  establecerUniversidadFavorita, 
+  obtenerUniversidadFavorita, 
+  eliminarUniversidadFavorita, 
+  actualizarUniversidadFavorita, 
+  verificarRecordatorio, 
+  crearRecordatorio, 
+  obtenerConfiguracionUsuario
+};
