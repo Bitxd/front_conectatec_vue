@@ -1,0 +1,6 @@
+{
+  "escuela": { "$oid": "67bbdb7ea3900e84a32609cd" },  
+  "nombre": "Mapa de Aulas y Edificios",
+  "descripcion": "Este es el mapa virtual que muestra los edificios y las zonas de la universidad.",
+  "fecha_creacion": "2025-04-22T00:00:00.000Z"
+}

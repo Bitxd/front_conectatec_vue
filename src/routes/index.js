@@ -5,6 +5,7 @@ import ForoPage from '@/pages/ForoPage.vue';
 import PublicacionPage from '@/pages/PublicacionPage.vue';
 import CalendarioPage from '@/pages/CalendarioPage.vue';
 import ConfiguracionPage from '@/pages/ConfiguracionPage.vue';
+import MapaVirtualPage from '@/pages/MapaVirtualPage.vue';
 
 
 
@@ -51,6 +52,11 @@ const routes = [
     name: 'Configuracion',
     component: ConfiguracionPage,
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/:id/mapa',
+    name: 'Mapa',
+    component: MapaVirtualPage
   }
   
 

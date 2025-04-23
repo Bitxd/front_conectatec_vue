@@ -8,7 +8,7 @@
       <div class="header-right">
         <HerramientasUniversidadComponent />
         <div class="separator-container"></div>
-        <BotonTextoImagenComponent image="/icons/mapa-virtual-icon.svg" text="Mapa Virtual" />
+        <BotonTextoImagenComponent image="/icons/mapa-virtual-icon.svg" text="Mapa Virtual"  @click="botonMapa"/>
         <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" @click="botonForo" />
         <BotonTextoImagenComponent image="/icons/calendario-icon.svg" text="Calendario" @click="botonCalendario" />
       </div>
@@ -60,6 +60,14 @@ export default {
     botonCalendario() {
       this.$router.push({
         name: 'Calendario',
+        params: { id: this.universidad.id },
+        query: { nombre: this.universidad.nombre }
+      });
+    },
+    botonMapa()
+    {
+      this.$router.push({
+        name: 'Mapa',
         params: { id: this.universidad.id },
         query: { nombre: this.universidad.nombre }
       });

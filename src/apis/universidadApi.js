@@ -36,5 +36,16 @@ const obtenerCalendariosPorEscuela = async (escuelaId) => {
   }
 };
 
+// Petición GET para obtener el mapa virtual de una escuela por ID
+const obtenerMapaPorEscuela = async (escuelaId) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/api/mapa/${escuelaId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener el mapa virtual para la escuela con ID ${escuelaId}:`, error);
+  }
+};
 
-export default { obtenerUniversidades, obtenerUniversidadPorId, obtenerCalendariosPorEscuela};
+
+
+export default { obtenerUniversidades, obtenerUniversidadPorId, obtenerCalendariosPorEscuela, obtenerMapaPorEscuela};
