@@ -124,7 +124,7 @@ html, body {
 /* Panel izquierdo: lista */
 .panel-departamentos {
   flex: 1;
-  max-width: 500px;
+  max-width: 550px;
   overflow: hidden;
   height: 80vh;
 }
