@@ -7,6 +7,10 @@
       </div>
     </header>
     <div class="container">
+      <div class="departamentos-panel">
+        <ListaDepartamentosComponent :escuelaId="idEscuela" />
+      </div>
+
     </div>
   </div>
 </template>
@@ -14,12 +18,14 @@
 <script>
 import TituloLabel from '@/components/labels/TituloLabel.vue';
 import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
+import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';  
 
 export default {
   name: 'MapaVirtualPage',
   components: {
     TituloLabel,
-    UniversidadLabel
+    UniversidadLabel,
+    ListaDepartamentosComponent  
   },
   data() {
     return {
@@ -62,9 +68,20 @@ html, body {
   gap: 8px; 
 }
 
-
 .container {
   padding: 1rem;
+  display: flex;
   flex: 1;
+}
+
+.departamentos-panel {
+  width: 50%;
+  height: 90%;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-right: 20px;
 }
 </style>

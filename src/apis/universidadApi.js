@@ -46,6 +46,14 @@ const obtenerMapaPorEscuela = async (escuelaId) => {
   }
 };
 
+const obtenerDepartamentosID = async (escuelaId) => {
+  try {
+      const response = await axios.get(`http://localhost:5000/api/universidad/${escuelaId}/departamentos`);
+      return response.data;
+  } catch (error) {
+      console.error('Error al obtener departamentos:', error);
+      return null;
+  }
+};
 
-
-export default { obtenerUniversidades, obtenerUniversidadPorId, obtenerCalendariosPorEscuela, obtenerMapaPorEscuela};
+export default { obtenerUniversidades, obtenerUniversidadPorId, obtenerCalendariosPorEscuela, obtenerMapaPorEscuela, obtenerDepartamentosID};
