@@ -3,14 +3,44 @@
     <header class="page-header">
       <div class="header-left">
         <TituloLabel text="Mapa" />
-        <UniversidadLabel class="titulo-universidad" :text="nombreEscuela || 'Universidad'" />
+        <UniversidadLabel
+          class="titulo-universidad"
+          :text="nombreEscuela || 'Universidad'"
+        />
       </div>
     </header>
+
     <div class="container">
-      <div class="departamentos-panel">
-        <ListaDepartamentosComponent :escuelaId="idEscuela" />
+      <!-- Panel izquierdo: lista de departamentos -->
+      <div class="panel panel-departamentos">
+        <ListaDepartamentosComponent
+          v-if="idEscuela"
+          :escuelaId="idEscuela"
+          @select-departamento="onSelectDepartamento"
+        />
       </div>
 
+      <!-- Panel derecho: placeholder o detalles -->
+      <div class="panel panel-detalle">
+        <!-- Placeholder cuando no hay selección -->
+        <div v-if="!departamentoSeleccionado" class="placeholder">
+          <img
+            src="/images/edificio-png.PNG"
+            alt="Selecciona un departamento"
+            class="placeholder-img"
+          />
+          <p class="placeholder-text">
+            Selecciona un departamento para ver más detalles
+          </p>
+        </div>
+
+        <!-- Detalles tras la selección -->
+        <div v-else class="detalle-contenido">
+          <h3>{{ departamentoSeleccionado.nombre }}</h3>
+          <p>ID: {{ departamentoSeleccionado._id.$oid }}</p>
+          <!-- Agrega aquí más campos según tu modelo -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -18,29 +48,36 @@
 <script>
 import TituloLabel from '@/components/labels/TituloLabel.vue';
 import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
-import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';  
+import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';
 
 export default {
   name: 'MapaVirtualPage',
   components: {
     TituloLabel,
     UniversidadLabel,
-    ListaDepartamentosComponent  
+    ListaDepartamentosComponent
   },
   data() {
     return {
       idEscuela: null,
-      nombreEscuela: ''
+      nombreEscuela: '',
+      departamentoSeleccionado: null
     };
   },
-  mounted() {
-    this.idEscuela = this.$route.params.id;
+  created() {
+    this.idEscuela     = this.$route.params.id;
     this.nombreEscuela = this.$route.query.nombre || '';
+    // alert('ID de escuela enviado a ListaDepartamentosComponent: ' + this.idEscuela);
+  },
+  methods: {
+    onSelectDepartamento(depto) {
+      this.departamentoSeleccionado = depto;
+    }
   }
 };
 </script>
 
-<style>
+<style scoped>
 html, body {
   margin: 0;
   padding: 0;
@@ -69,19 +106,57 @@ html, body {
 }
 
 .container {
-  padding: 1rem;
   display: flex;
   flex: 1;
+  gap: 20px;
+  padding: 1rem;
 }
 
-.departamentos-panel {
-  width: 50%;
-  height: 90%;
-  overflow-y: auto;
-  padding: 10px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Panel genérico */
+.panel {
+  background: white;
   border-radius: 8px;
-  margin-right: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Panel izquierdo: lista */
+.panel-departamentos {
+  flex: 1;
+  max-width: 500px;
+  overflow: hidden;
+  height: 80vh;
+}
+
+/* Panel derecho: placeholder o detalles */
+.panel-detalle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  height: 80vh;
+}
+
+.placeholder {
+  text-align: center;
+  color: #475569;
+}
+
+.placeholder-img {
+  max-width: 180px;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.placeholder-text {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.detalle-contenido h3 {
+  margin: 0 0 8px;
+  color: #1e293b;
 }
 </style>
