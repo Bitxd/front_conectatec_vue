@@ -56,4 +56,14 @@ const obtenerDepartamentosID = async (escuelaId) => {
   }
 };
 
-export default { obtenerUniversidades, obtenerUniversidadPorId, obtenerCalendariosPorEscuela, obtenerMapaPorEscuela, obtenerDepartamentosID};
+const obtenerEncargadosIdDepartamento= async (departamentoId) => {
+  try {
+      const response = await axios.get(`http://localhost:5000/api/departamento/${departamentoId}/encargados`);
+      return response.data;
+  } catch (error) {
+      console.error('Error al obtener departamentos:', error);
+      return null;
+  }
+};
+
+export default { obtenerUniversidades, obtenerUniversidadPorId, obtenerCalendariosPorEscuela, obtenerMapaPorEscuela, obtenerDepartamentosID, obtenerEncargadosIdDepartamento};

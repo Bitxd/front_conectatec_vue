@@ -2,8 +2,9 @@
   <div class="departamentos-container">
     <div class="header-estilizado">
       <h2>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-          class="icono-edificio">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             xmlns="http://www.w3.org/2000/svg"
+             class="icono-edificio">
           <path d="M12 18V15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
           <path d="M2 22H22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
           <path d="M3 9H21V22H3V9Z" stroke="currentColor" stroke-width="1.5" />
@@ -11,13 +12,22 @@
         </svg>
         Departamentos
       </h2>
-      <input type="text" class="barra-busqueda" placeholder="Buscar departamentos..." v-model="searchQuery" />
+      <input
+        type="text"
+        class="barra-busqueda"
+        placeholder="Buscar departamentos..."
+        v-model="searchQuery"
+      />
     </div>
 
     <div class="contenedor-scroll">
       <ul class="lista-departamentos">
-        <li v-for="departamento in filteredDepartamentos" :key="departamento._id.$oid" class="item-departamento"
-          @click="seleccionarDepartamento(departamento)">
+        <li
+          v-for="departamento in filteredDepartamentos"
+          :key="departamento._id.$oid"
+          class="item-departamento"
+          @click="seleccionarDepartamento(departamento)"
+        >
           <div class="marcador-azul"></div>
           <span class="nombre">{{ departamento.nombre }}</span>
         </li>
@@ -48,7 +58,7 @@ export default {
       const query = this.searchQuery.toLowerCase();
       return this.departamentos.filter(depto =>
         depto.nombre.toLowerCase().includes(query)
-      ); 
+      );
     }
   },
   watch: {
@@ -69,11 +79,13 @@ export default {
       }
     },
     seleccionarDepartamento(depto) {
+      alert("Seleccionando departamento");
       this.$emit("select-departamento", depto);
     }
   }
 };
 </script>
+
 
 <style scoped>
 .departamentos-container {

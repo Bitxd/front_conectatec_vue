@@ -3,82 +3,37 @@
     <header class="page-header">
       <div class="header-left">
         <TituloLabel text="Mapa" />
-        <UniversidadLabel
-          class="titulo-universidad"
-          :text="nombreEscuela || 'Universidad'"
-        />
+        <UniversidadLabel class="titulo-universidad" :text="nombreEscuela || 'Universidad'" />
       </div>
     </header>
 
     <div class="container">
       <!-- Panel izquierdo: lista de departamentos -->
       <div class="panel panel-departamentos">
-        <ListaDepartamentosComponent
-          v-if="idEscuela"
-          :escuelaId="idEscuela"
-          @select-departamento="onSelectDepartamento"
-        />
+        <ListaDepartamentosComponent v-if="idEscuela" :escuelaId="idEscuela"
+          @select-departamento="onSelectDepartamento" />
       </div>
 
-      <!-- Panel derecho: placeholder o detalles -->
+      <!-- Panel derecho: detalles de encargados -->
       <div class="panel panel-detalle">
-        <!-- Placeholder cuando no hay selección -->
         <div v-if="!departamentoSeleccionado" class="placeholder">
-          <img
-            src="/images/edificio-png.PNG"
-            alt="Selecciona un departamento"
-            class="placeholder-img"
-          />
+          <img src="/images/edificio-png.PNG" alt="Selecciona un departamento" class="placeholder-img" />
           <p class="placeholder-text">
-            Selecciona un departamento para ver más detalles
+            Selecciona un departamento para ver los encargados
           </p>
         </div>
 
-        <!-- Detalles tras la selección -->
-        <div v-else class="detalle-contenido">
-          <h3>{{ departamentoSeleccionado.nombre }}</h3>
-          <p>ID: {{ departamentoSeleccionado._id.$oid }}</p>
-          <!-- Agrega aquí más campos según tu modelo -->
-        </div>
+        <PanelInformacionComponent v-else :departamentoId="computedDeptId" :departamento="departamentoSeleccionado" />
+
       </div>
     </div>
   </div>
 </template>
 
-<script>
-import TituloLabel from '@/components/labels/TituloLabel.vue';
-import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
-import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';
-
-export default {
-  name: 'MapaVirtualPage',
-  components: {
-    TituloLabel,
-    UniversidadLabel,
-    ListaDepartamentosComponent
-  },
-  data() {
-    return {
-      idEscuela: null,
-      nombreEscuela: '',
-      departamentoSeleccionado: null
-    };
-  },
-  created() {
-    this.idEscuela     = this.$route.params.id;
-    this.nombreEscuela = this.$route.query.nombre || '';
-    // alert('ID de escuela enviado a ListaDepartamentosComponent: ' + this.idEscuela);
-  },
-  methods: {
-    onSelectDepartamento(depto) {
-      this.departamentoSeleccionado = depto;
-    }
-  }
-};
-</script>
 
 <style scoped>
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
@@ -102,7 +57,7 @@ html, body {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 8px; 
+  gap: 8px;
 }
 
 .container {
@@ -112,7 +67,6 @@ html, body {
   padding: 1rem;
 }
 
-/* Panel genérico */
 .panel {
   background: white;
   border-radius: 8px;
@@ -121,7 +75,6 @@ html, body {
   flex-direction: column;
 }
 
-/* Panel izquierdo: lista */
 .panel-departamentos {
   flex: 1;
   max-width: 550px;
@@ -129,7 +82,6 @@ html, body {
   height: 80vh;
 }
 
-/* Panel derecho: placeholder o detalles */
 .panel-detalle {
   flex: 1;
   display: flex;
@@ -160,3 +112,49 @@ html, body {
   color: #1e293b;
 }
 </style>
+
+
+<script>
+import TituloLabel from '@/components/labels/TituloLabel.vue';
+import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
+import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';
+import PanelInformacionComponent from '@/components/map/PanelInformacionComponent.vue';
+
+export default {
+  name: 'MapaVirtualPage',
+  components: {
+    TituloLabel,
+    UniversidadLabel,
+    ListaDepartamentosComponent,
+    PanelInformacionComponent
+  },
+  data() {
+    return {
+      idEscuela: null,
+      nombreEscuela: '',
+      departamentoSeleccionado: null
+    };
+  },
+  computed: {
+    // Extrae en string el _id correcto
+    computedDeptId() {
+      const idObj = this.departamentoSeleccionado?._id;
+      // maneja tanto ObjectId con .\$oid como string
+      return idObj?.$oid || idObj || '';
+    }
+  },
+  created() {
+    this.idEscuela = this.$route.params.id;
+    this.nombreEscuela = this.$route.query.nombre || '';
+  },
+  methods: {
+    onSelectDepartamento(depto) {
+      console.log('MapaVirtualPage: departamento seleccionado →', depto);
+      this.departamentoSeleccionado = depto;
+    }
+  }
+};
+</script>
+
+
+
