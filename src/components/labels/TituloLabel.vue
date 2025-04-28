@@ -34,7 +34,5 @@ export default {
   transition: transform 0.3s ease;
 }
 
-.titulo-label:hover {
-  transform: translateY(-2px);
-}
+
 </style>

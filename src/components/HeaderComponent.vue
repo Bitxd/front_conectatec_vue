@@ -2,12 +2,23 @@
     <header class="header">
         <div class="container">
             <div class="left-items">
+                <div class="logo-and-buttons">
+                    <LogoComponent class="logo-move" @click="goHome" />
+                    <!-- Enlaces con SVG inline a la izquierda -->
+                    <a class="link" @click.prevent="botonChatbot">
+                        <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7l-5 4V6a2 2 0 0 1 2-2z" />
+                        </svg>
+                        <span>Chatbot</span>
+                    </a>
+                    <a class="link" @click.prevent="botonUniversidad">
+                        <svg class="link-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill="currentColor" d="M12 2l8 4v2H4V6l8-4zm0 6l7 3v8H5v-8l7-3z" />
+                        </svg>
+                        <span>Universidades</span>
+                    </a>
+                </div>
                 <SidebarComponent />
-                <LogoComponent />
-                <BotonImagenComponent :image="'/icons/chatbot-icon.svg'" alt-text="Icono" description="Chatbot"
-                    @click="botonChatbot" />
-                <BotonImagenComponent :image="'/icons/universidad-icon.svg'" alt-text="Icono"
-                    description="Universidades" @click="botonUniversidad" />
             </div>
             <div class="right-items">
                 <UserMenuComponent v-if="isAuthenticated" />
@@ -20,7 +31,6 @@
 <script>
 import SidebarComponent from './SidebarComponent.vue';
 import LogoComponent from './LogoComponent.vue';
-import BotonImagenComponent from './BotonImagenComponent.vue';
 import AccederComponent from './AccederComponent.vue';
 import UserMenuComponent from './user/UserMenuComponent.vue';
 import authService from '../services/authService';
@@ -30,7 +40,6 @@ export default {
     components: {
         SidebarComponent,
         LogoComponent,
-        BotonImagenComponent,
         AccederComponent,
         UserMenuComponent
     },
@@ -44,7 +53,10 @@ export default {
             this.$router.push({ name: 'Chatbot' });
         },
         botonUniversidad() {
-            this.$router.push({name: 'Universidades'});
+            this.$router.push({ name: 'Universidades' });
+        },
+        goHome() {
+            this.$router.push({ name: 'Home' });
         },
         closeMenu() {
             console.log("Cerrando el menú");
@@ -54,12 +66,12 @@ export default {
 </script>
 
 <style scoped>
-/* Estilos del encabezado */
 .header {
     background-color: #ffffff;
     color: #333333;
     padding: 0 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 1px 25px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1),
+        0 1px 25px rgba(0, 0, 0, 0.05);
     position: fixed;
     width: 100%;
     height: 48px;
@@ -84,8 +96,14 @@ export default {
 .left-items {
     display: flex;
     align-items: center;
-    gap: 20px;
-    height: 100%;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+.logo-and-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .right-items {
@@ -94,5 +112,45 @@ export default {
     justify-content: flex-end;
     position: absolute;
     right: 65px;
+}
+
+.logo-move {
+    margin-left: -120px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+/* Estilo actualizado para los enlaces */
+.link {
+    display: flex;
+    align-items: center;
+    color: #ffffff;
+    background-color: #5ac3f3;
+    /* Azul bajito */
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    /* Menos redondo */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.link:hover {
+    background-color: #7ecdeb;
+    /* Azul un poco más oscuro */
+    transform: translateY(-2px);
+}
+
+.link-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.link span {
+    display: inline-block;
 }
 </style>
