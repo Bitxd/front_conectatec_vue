@@ -75,8 +75,30 @@ export default {
       new maplibregl.Marker({
         element: createMarkerElement('/mapsImage/ing-sistemas.png', 'Aula de sistemas y TICS')
       })
-        .setLngLat([-107.39816416061161, 24.788735811387255]) 
+        .setLngLat([-107.39816416061161, 24.788735811387255])
         .addTo(map);
+
+
+      new maplibregl.Marker({
+        element: createMarkerElement('/mapsImage/ing-sistemas.png', 'Aula de sistemas')
+      })
+        .setLngLat([-107.39828320015589, 24.788507665584664])
+        .addTo(map);
+
+      new maplibregl.Marker({
+        element: createMarkerElement('/mapsImage/ing-bioquimica.png', 'Aulas de bioquimica')
+      })
+        .setLngLat([-107.39811739021332, 24.788218754902374])
+        .addTo(map);
+
+      new maplibregl.Marker({
+        element: createMarkerElement('/mapsImage/ing-bioquimica.png', 'Laboratorio triple de bioquimica')
+      })
+        .setLngLat([-107.39825856641362, 24.787975830179978])
+        .addTo(map);
+
+
+
 
 
 
