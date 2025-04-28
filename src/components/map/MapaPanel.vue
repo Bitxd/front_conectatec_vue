@@ -39,31 +39,51 @@ export default {
         maxZoom: 20
       });
 
-      // Marcador de "Centro de Computo"
       new maplibregl.Marker({
         element: createMarkerElement('/mapsImage/centro-computo.png', 'Centro de Computo')
       })
         .setLngLat([-107.39864493344014, 24.788977216613265])
         .addTo(map);
 
-      // Marcador de "Cafetería" en las nuevas coordenadas
       new maplibregl.Marker({
         element: createMarkerElement('/mapsImage/cafeteria.png', 'Cafetería')
       })
-        .setLngLat([-107.3975430735867, 24.78857462857472]) // Nuevas coordenadas
+        .setLngLat([-107.3975430735867, 24.78857462857472])
         .addTo(map);
 
       new maplibregl.Marker({
         element: createMarkerElement('/mapsImage/biblioteca.png', 'Biblioteca')
       })
-        .setLngLat([-107.3973856551091, 24.78890005908309]) // Coordenadas de la biblioteca
+        .setLngLat([-107.3973856551091, 24.78890005908309])
+        .addTo(map);
+
+
+      new maplibregl.Marker({
+        element: createMarkerElement('/mapsImage/oficinas-administrativas.png', 'Edificio\nadministrativo')
+      })
+        .setLngLat([-107.39623341540175, 24.7888743767061])
+        .addTo(map);
+
+
+      new maplibregl.Marker({
+        element: createMarkerElement('/mapsImage/jefatura.png', 'Jefatura\nSistemas')
+      })
+        .setLngLat([-107.39801253408456, 24.788971215458727])
+        .addTo(map);
+
+
+      new maplibregl.Marker({
+        element: createMarkerElement('/mapsImage/ing-sistemas.png', 'Aula de sistemas y TICS')
+      })
+        .setLngLat([-107.39816416061161, 24.788735811387255]) 
         .addTo(map);
 
 
 
+
+
+
     });
-
-
 
     const createMarkerElement = (iconUrl, label) => {
       const container = document.createElement('div');
