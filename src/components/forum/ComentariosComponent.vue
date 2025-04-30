@@ -2,105 +2,37 @@
     <div>
         <div class="comentarios-header">
             <h3 class="title">Comentarios</h3>
-            <button class="toggle-btn" @click="mostrar = !mostrar">
-                {{ mostrar ? 'Ocultar comentarios' : 'Mostrar comentarios' }}
-                <span class="icon">{{ mostrar ? '▲' : '▼' }}</span>
-            </button>
         </div>
 
-        <transition name="fade-slide">
-            <div v-if="mostrar" class="comentarios-container">
-                <div v-if="comentarios.length > 0" class="comentarios-list">
-                    <div v-for="comentario in comentarios" :key="comentario.idComentario" class="comentario-card">
-                        <div class="comentario-header">
-                            <img :src="comentario.usuario.imagenPerfil || '/default-avatar.png'" class="usuario-avatar"
-                                alt="Avatar" />
-                            <div class="usuario-info">
-                                <div class="usuario-nombres">
-                                    <span class="nombre">{{ comentario.usuario.fullname }}</span>
-                                    <span class="username">@{{ comentario.usuario.username }}</span>
-                                </div>
+        <div class="comentarios-container">
+            <div v-if="comentarios.length > 0" class="comentarios-list">
+                <div v-for="comentario in comentarios" :key="comentario.idComentario" class="comentario-card">
+                    <div class="comentario-header">
+                        <img :src="comentario.usuario.imagenPerfil || '/default-avatar.png'" class="usuario-avatar"
+                            alt="Avatar" />
+                        <div class="usuario-info">
+                            <div class="usuario-nombres">
+                                <span class="nombre">{{ comentario.usuario.fullname }}</span>
+                                <span class="username">@{{ comentario.usuario.username }}</span>
                             </div>
-                            <span class="fecha">{{ formatearFecha(comentario.fechaCreacion) }}</span>
                         </div>
-                        <div class="comentario-content">
-                            <p>{{ comentario.contenido }}</p>
-                        </div>
-                        <button class="like-btn" @click="meGustaComentario(comentario.idComentario)">
-                            <span class="icon">👍</span>
-                        </button>
+                        <span class="fecha">{{ formatearFecha(comentario.fechaCreacion) }}</span>
                     </div>
-                </div>
-
-                <div v-else class="no-comentarios">
-                    <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+                    <div class="comentario-content">
+                        <p>{{ comentario.contenido }}</p>
+                    </div>
+                    <button class="like-btn" @click="meGustaComentario(comentario.idComentario)">
+                        <span class="icon">👍</span>
+                    </button>
                 </div>
             </div>
-        </transition>
+
+            <div v-else class="no-comentarios">
+                <p>No hay comentarios aún. ¡Sé el primero en comentar!</p>
+            </div>
+        </div>
     </div>
 </template>
-
-<script>
-import publicacionApi from '@/apis/publicacionApi'
-
-export default {
-    name: 'ComentariosComponent',
-    props: {
-        id: String
-    },
-    data() {
-        return {
-            comentarios: [],  // Usamos un arreglo convencional
-            mostrar: false
-        }
-    },
-    methods: {
-        // Función para obtener los comentarios por su ID
-        async fetchComentarios() {
-            try {
-                const response = await publicacionApi.obtenerComentariosPorId(this.id)
-                this.comentarios = response.comentarios
-
-                // Mostrar los comentarios en un alert
-                alert(JSON.stringify(this.comentarios, null, 2)) // Imprime todos los comentarios
-
-            } catch (error) {
-                console.error('Error al cargar comentarios:', error)
-                this.comentarios = []  // Si hay error, asignamos un arreglo vacío
-            }
-        },
-
-        // Función para formatear la fecha de creación del comentario
-        formatearFecha(fechaIso) {
-            if (!fechaIso) return ''
-            return new Date(fechaIso).toLocaleDateString('es-MX', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            })
-        },
-
-        // Función para manejar el "me gusta" en los comentarios
-        meGustaComentario(idComentario) {
-            console.log(`Me gusta al comentario con ID: ${idComentario}`)
-            alert(`Me gusta al comentario con ID: ${idComentario}`) // Mostrar alert con el ID del comentario
-        }
-    },
-    watch: {
-        // Verificamos si el ID ha cambiado y recargamos los comentarios si es necesario
-        id(newId, oldId) {
-            if (newId && newId !== oldId) {
-                this.fetchComentarios()
-            }
-        }
-    },
-    mounted() {
-        this.fetchComentarios()
-    }
-}
-</script>
 
 
 
@@ -125,31 +57,6 @@ export default {
     margin: 0;
 }
 
-.toggle-btn {
-    background-color: #a551e9;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 14px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    transition: background-color 0.25s ease, transform 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-}
-
-.toggle-btn .icon {
-    font-size: 0.9rem;
-}
-
-.toggle-btn:hover {
-    background-color: #8c3fd2;
-    transform: translateY(-1px);
-}
-
 .comentarios-container {
     background-color: white;
     width: 100%;
@@ -169,7 +76,8 @@ export default {
     width: 95%;
     position: relative;
     border-bottom: 1px solid #f4f6f9;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease,
+        border-color 0.3s ease;
     border-radius: 8px;
 }
 
@@ -246,7 +154,6 @@ export default {
     line-height: 1.5;
     word-break: break-word;
     font-size: 0.9rem;
-    top: 2;
 }
 
 .like-btn {
@@ -299,3 +206,56 @@ export default {
     }
 }
 </style>
+
+<script>
+import publicacionApi from '@/apis/publicacionApi'
+
+export default {
+    name: 'ComentariosComponent',
+    props: {
+        id: String
+    },
+    data() {
+        return {
+            comentarios: []
+        }
+    },
+    methods: {
+        async fetchComentarios() {
+            try {
+                const response = await publicacionApi.obtenerComentariosPorId(this.id)
+                this.comentarios = response.comentarios
+                // Mostrar los comentarios en un alert
+                alert(JSON.stringify(this.comentarios, null, 2))
+            } catch (error) {
+                console.error('Error al cargar comentarios:', error)
+                this.comentarios = []
+            }
+        },
+        formatearFecha(fechaIso) {
+            if (!fechaIso) return ''
+            return new Date(fechaIso).toLocaleDateString('es-MX', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            })
+        },
+        meGustaComentario(idComentario) {
+            console.log(`Me gusta al comentario con ID: ${idComentario}`)
+            alert(`Me gusta al comentario con ID: ${idComentario}`)
+        }
+    },
+    watch: {
+        id(newId, oldId) {
+            if (newId && newId !== oldId) {
+                this.fetchComentarios()
+            }
+        }
+    },
+    mounted() {
+        this.fetchComentarios()
+    }
+}
+</script>

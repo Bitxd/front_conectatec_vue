@@ -115,7 +115,7 @@ export default {
 }
 
 .logo-move {
-    margin-left: -120px;
+    margin-left: -50px;
     margin-right: 20px;
     cursor: pointer;
 }
