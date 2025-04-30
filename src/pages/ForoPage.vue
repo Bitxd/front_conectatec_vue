@@ -99,7 +99,6 @@ export default {
 
       // Asignar el foro de inmediato para que su nombre se renderice
       this.foro = responseForo.foro
-      alert(JSON.stringify(this.foro, null, 2))
 
       const responsePublicaciones = await obtenerPublicacionesIdForo(this.foro._id)
       if (responsePublicaciones && responsePublicaciones.publicaciones) {

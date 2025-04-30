@@ -225,8 +225,8 @@ export default {
             try {
                 const response = await publicacionApi.obtenerComentariosPorId(this.id)
                 this.comentarios = response.comentarios
-                // Mostrar los comentarios en un alert
-                alert(JSON.stringify(this.comentarios, null, 2))
+
+
             } catch (error) {
                 console.error('Error al cargar comentarios:', error)
                 this.comentarios = []
