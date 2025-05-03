@@ -16,10 +16,6 @@
 
     <hr class="separator" />
 
-    <div class="foro-info">
-      <h2 class="foro-subtitulo">Lista de publicaciones</h2>
-      <p class="foro-recordatorio">Recuerda ser amable con la comunidad</p>
-    </div>
 
     <div class="contenedor-publicaciones">
       <TarjetaPublicacionComponent v-for="publicacion in publicaciones" :key="publicacion.idPublicacion"
@@ -157,18 +153,6 @@ export default {
   margin: 0 20px 24px;
 }
 
-.foro-subtitulo {
-  font-size: 20px;
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 6px;
-}
-
-.foro-recordatorio {
-  font-size: 14px;
-  color: #777;
-  margin: 0;
-}
 
 .titulo-universidad {
   margin-left: 18px;

@@ -22,7 +22,7 @@ export default {
         },
         description: {
             type: String,
-            default: ""  // Ahora la descripción es opcional
+            default: ""  
         }
     },
     data() {
