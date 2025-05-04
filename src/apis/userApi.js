@@ -222,15 +222,47 @@ const obtenerConfiguracionUsuario = async (token) => {
 };
 
 
-export default { 
-  login, 
-  registrar, 
-  obtenerPerfilUsuario, 
-  establecerUniversidadFavorita, 
-  obtenerUniversidadFavorita, 
-  eliminarUniversidadFavorita, 
-  actualizarUniversidadFavorita, 
-  verificarRecordatorio, 
-  crearRecordatorio, 
-  obtenerConfiguracionUsuario
+
+const actualizarImagenPerfil = async (token, imagenPerfil) => {
+  alert(`Token: ${token}\nImagen: ${imagenPerfil?.name || 'Archivo no válido'}`);
+  try {
+    const formData = new FormData();
+    formData.append('imagenPerfil', imagenPerfil);
+
+    const response = await axios.post(
+      'http://localhost:5000/api/usuario/imagen',
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error('Error al subir imagen:', error.response.data);
+    } else {
+      console.error('Hubo un problema al conectar con el servidor:', error.message);
+    }
+    throw error;
+  }
+};
+
+
+
+export default {
+  login,
+  registrar,
+  obtenerPerfilUsuario,
+  establecerUniversidadFavorita,
+  obtenerUniversidadFavorita,
+  eliminarUniversidadFavorita,
+  actualizarUniversidadFavorita,
+  verificarRecordatorio,
+  crearRecordatorio,
+  obtenerConfiguracionUsuario,
+  actualizarImagenPerfil
 };

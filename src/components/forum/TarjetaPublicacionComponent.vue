@@ -18,7 +18,7 @@
         </div>
         <div class="info-segunda-linea">
           <div class="user-info-container">
-            <h3 class="username">{{ publicacion.usuario.username }}</h3>
+            <h3 class="username">{{ publicacion.usuario.fullname }}</h3>
             <div class="categoria">
               <span class="categoria-punto"></span>
               <span>{{ publicacion.categoria }}</span>

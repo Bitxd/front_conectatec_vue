@@ -28,12 +28,86 @@
     @clear-message="notificationMessage = ''" />
 
   <!-- Modal para crear publicación -->
-  <CrearPublicacionComponent
-    v-if="mostrarModalCrearPublicacion"
-    :foro-id="foro?._id"
-    @cerrar-modal="cerrarModalCrearPublicacion"
-  />
+  <CrearPublicacionComponent v-if="mostrarModalCrearPublicacion" :foro-id="foro?._id"
+    @cerrar-modal="cerrarModalCrearPublicacion" />
 </template>
+
+
+
+<style scoped>
+.foro-page {
+  height: 100vh;            
+  overflow: hidden;      
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+}
+
+.foro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.titulo-universidad {
+  font-size: 1.4rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.header-right {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.entrada-foro {
+  margin: 20px 40px;
+  width: calc(100% - 80px);
+}
+
+.separator {
+  border: 0;
+  height: 1px;
+  background: #e0e0e0;
+  margin: 0 40px;
+}
+
+.contenedor-publicaciones {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px 40px;
+  margin: 0 20px;
+}
+
+/* Estilos de scrollbar personalizados */
+.contenedor-publicaciones::-webkit-scrollbar {
+  width: 8px;
+}
+
+.contenedor-publicaciones::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.contenedor-publicaciones::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.contenedor-publicaciones::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+</style>
 
 <script>
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue'
@@ -106,63 +180,3 @@ export default {
   }
 }
 </script>
-
-
-
-<style scoped>
-.foro-page {
-  background-color: #fff;
-  color: #333;
-}
-
-.foro-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background-color: #fff;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
-}
-
-.header-left,
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
-.header-right>*:not(:last-child) {
-  margin-right: 16px;
-}
-
-.entrada-foro {
-  width: 60%;
-  max-width: 500px;
-  margin: 20px auto 12px;
-  display: block;
-}
-
-.separator {
-  border: none;
-  height: 1px;
-  background-color: #ddd;
-  margin: 0 20px 24px;
-}
-
-.foro-info {
-  text-align: left;
-  margin: 0 20px 24px;
-}
-
-
-.titulo-universidad {
-  margin-left: 18px;
-}
-
-.contenedor-publicaciones {
-  width: 95%;
-  display: flex;
-  margin-left: 20px;
-  flex-direction: column;
-  gap: 0;
-}
-</style>

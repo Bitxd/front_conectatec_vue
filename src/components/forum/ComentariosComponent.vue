@@ -1,7 +1,9 @@
 <template>
     <div>
+        <!-- Header modificado -->
         <div class="comentarios-header">
             <h3 class="title">Comentarios</h3>
+            <span class="contador">{{ comentarios.length }} comentarios</span>
         </div>
 
         <div class="comentarios-container">
@@ -21,9 +23,6 @@
                     <div class="comentario-content">
                         <p>{{ comentario.contenido }}</p>
                     </div>
-                    <button class="like-btn" @click="meGustaComentario(comentario.idComentario)">
-                        <span class="icon">👍</span>
-                    </button>
                 </div>
             </div>
 
@@ -34,18 +33,52 @@
     </div>
 </template>
 
-
-
 <style scoped>
+/* Header estilizado */
 .comentarios-header {
-    margin-left: 15px;
-    margin-right: 15px;
-    margin-bottom: 12px;
+    background-color: #f8f9fa;
+    padding: 12px 20px;
+    margin: 0 15px 12px;
+    border-radius: 12px 12px 0 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.contador {
+    color: #777;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+/* Scroll en lista de comentarios */
+.comentarios-container {
+    height: calc(100vh - 250px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 15px;
+}
+
+.comentarios-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.comentarios-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.comentarios-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.comentarios-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Resto de estilos se mantienen igual */
 .title {
     color: #444;
     font-size: 1.1rem;
@@ -57,16 +90,11 @@
     margin: 0;
 }
 
-.comentarios-container {
-    background-color: white;
-    width: 100%;
-    padding: 10px 0;
-}
-
 .comentarios-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    padding-bottom: 20px;
 }
 
 .comentario-card {
@@ -156,22 +184,7 @@
     font-size: 0.9rem;
 }
 
-.like-btn {
-    position: absolute;
-    bottom: 8px;
-    right: 16px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: #777;
-    transition: all 0.2s ease;
-}
 
-.like-btn:hover {
-    color: #dc3545;
-    transform: scale(1.1);
-}
 
 .no-comentarios {
     text-align: center;
@@ -182,29 +195,6 @@
     width: 100%;
 }
 
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-    transition: all 0.3s ease;
-}
-
-.fade-slide-enter-from,
-.fade-slide-leave-to {
-    opacity: 0;
-    transform: translateY(-5px);
-}
-
-@media (max-width: 480px) {
-    .usuario-nombres {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-    }
-
-    .fecha {
-        font-size: 0.75rem;
-        padding-left: 8px;
-    }
-}
 </style>
 
 <script>
@@ -241,10 +231,6 @@ export default {
                 hour: '2-digit',
                 minute: '2-digit'
             })
-        },
-        meGustaComentario(idComentario) {
-            console.log(`Me gusta al comentario con ID: ${idComentario}`)
-            alert(`Me gusta al comentario con ID: ${idComentario}`)
         }
     },
     watch: {
