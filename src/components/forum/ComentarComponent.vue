@@ -113,7 +113,6 @@ const enviarComentario = async () => {
 
 
         if (resultado) {
-            alert('Comentario enviado correctamente');
             window.location.reload();
             commentText.value = ''
         } else {
