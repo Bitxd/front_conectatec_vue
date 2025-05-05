@@ -7,10 +7,9 @@
             </div>
 
             <div class="notification-scroll">
-                <!-- Descripción -->
+                <!-- Descripción del recordatorio -->
                 <label class="label">Descripción del recordatorio</label>
-                <input v-model="descripcion" type="text" class="input"
-                    placeholder="Ej. No olvidar la reinscripcion" />
+                <input v-model="descripcion" type="text" class="input" placeholder="Ej. No olvidar la reinscripción" />
 
                 <!-- Fecha y Hora -->
                 <div class="fecha-hora">
@@ -19,17 +18,17 @@
                         <input v-model="fecha" type="date" :max="maxFecha" class="input" />
                     </div>
                     <div class="campo">
-                        <label class="label">Hora</label>
+                        <label class="label">Hora del recordatorio</label>
                         <input v-model="hora" type="time" :max="maxHora" class="input" />
                     </div>
                 </div>
             </div>
 
             <div class="button-container">
-                <button @click="handleClick" class="notification-button">
+                <button @click="handleGuardar" class="notification-button">
                     Guardar cambios
                 </button>
-                <button @click="eliminarRecordatorio" class="notification-button eliminar">
+                <button @click="handleEliminar" class="notification-button eliminar">
                     Eliminar recordatorio
                 </button>
                 <button @click="cancelar" class="notification-button cancelar">
@@ -76,7 +75,7 @@ export default {
         }
     },
     methods: {
-        async handleClick() {
+        async handleGuardar() {
             if (!this.descripcion || !this.fecha || !this.hora) {
                 alert('Todos los campos son obligatorios.');
                 return;
@@ -87,7 +86,7 @@ export default {
                 const datos = {
                     titulo: this.descripcion.trim(),
                     fechaRecordatorio: this.fecha,
-                    horaRecordatorio: this.hora,
+                    horaRecordatorio: this.hora
                 };
 
                 const response = await userApi.actualizarRecordatorio(
@@ -105,13 +104,13 @@ export default {
             }
         },
 
-        async eliminarRecordatorio() {
+        async handleEliminar() {
             if (!confirm('¿Estás seguro de querer eliminar este recordatorio?')) return;
 
             try {
                 const token = authService.getToken();
                 await userApi.eliminarRecordatorio(this.recordatorio._id, token);
-                alert('Recordatorio eliminado correctamente');
+                alert('¡Recordatorio eliminado correctamente!');
                 this.$emit('recordatorioEliminado');
             } catch (error) {
                 console.error('Error al eliminar recordatorio:', error);
@@ -126,12 +125,13 @@ export default {
         }
     },
     mounted() {
-        this.descripcion = this.recordatorio.titulo;
+        this.descripcion = this.recordatorio.titulo || '';
         this.fecha = this.recordatorio.fechaRecordatorio?.split('T')[0] || '';
         this.hora = this.recordatorio.horaRecordatorio || '';
     }
 };
 </script>
+
 
 <style scoped>
 .notification-floating {
@@ -252,6 +252,7 @@ export default {
     transform: translateY(-20px) translateX(-50%);
     opacity: 0;
 }
+
 .notification-button.eliminar {
     background-color: #ef4444;
     margin-top: 5px;
