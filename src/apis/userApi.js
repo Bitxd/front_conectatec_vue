@@ -152,6 +152,54 @@ const actualizarUniversidadFavorita = async (token, universidadId) => {
   }
 };
 
+
+
+// Peticion para obtener la configuracion del usuario
+const obtenerConfiguracionUsuario = async (token) => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/configuracion', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log('Configuración obtenida:', response.data);
+  } catch (error) {
+    console.error('Error al obtener la configuración:', error);
+  }
+};
+
+
+
+const actualizarImagenPerfil = async (token, imagenPerfil) => {
+  alert(`Token: ${token}\nImagen: ${imagenPerfil?.name || 'Archivo no válido'}`);
+  try {
+    const formData = new FormData();
+    formData.append('imagenPerfil', imagenPerfil);
+
+    const response = await axios.post(
+      'http://localhost:5000/api/usuario/imagen',
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error('Error al subir imagen:', error.response.data);
+    } else {
+      console.error('Hubo un problema al conectar con el servidor:', error.message);
+    }
+    throw error;
+  }
+};
+
+
 // Retorna los datos del recordatorio si existe, o null si no existe
 const verificarRecordatorio = async (calendarioId, token) => {
   try {
@@ -206,46 +254,49 @@ const crearRecordatorio = async (calendarioId, token, datos) => {
 };
 
 
-// Peticion para obtener la configuracion del usuario
-const obtenerConfiguracionUsuario = async (token) => {
+const actualizarRecordatorio = async (recordatorioId, token, datos) => {
   try {
-    const response = await axios.get('http://localhost:5000/api/configuracion', {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await axios.put(
+      `http://localhost:5000/api/recordatorios/${recordatorioId}`,
+      {
+        titulo: datos.titulo,
+        fechaRecordatorio: datos.fechaRecordatorio, // ISO o 'YYYY-MM-DD'
+        horaRecordatorio: datos.horaRecordatorio    // 'HH:mm'
       },
-    });
-
-    console.log('Configuración obtenida:', response.data);
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
-    console.error('Error al obtener la configuración:', error);
+    if (error.response) {
+      console.error('Error en la respuesta al actualizar:', error.response.data);
+    } else {
+      console.error('Problema de conexión al actualizar:', error.message);
+    }
+    throw error;
   }
 };
 
 
-
-const actualizarImagenPerfil = async (token, imagenPerfil) => {
-  alert(`Token: ${token}\nImagen: ${imagenPerfil?.name || 'Archivo no válido'}`);
+const eliminarRecordatorio = async (recordatorioId, token) => {
   try {
-    const formData = new FormData();
-    formData.append('imagenPerfil', imagenPerfil);
-
-    const response = await axios.post(
-      'http://localhost:5000/api/usuario/imagen',
-      formData,
+    const response = await axios.delete(
+      `http://localhost:5000/api/recordatorios/${recordatorioId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
+        },
       }
     );
-
     return response.data;
   } catch (error) {
     if (error.response) {
-      console.error('Error al subir imagen:', error.response.data);
+      console.error('Error en la respuesta al eliminar:', error.response.data);
     } else {
-      console.error('Hubo un problema al conectar con el servidor:', error.message);
+      console.error('Problema de conexión al eliminar:', error.message);
     }
     throw error;
   }
@@ -264,5 +315,7 @@ export default {
   verificarRecordatorio,
   crearRecordatorio,
   obtenerConfiguracionUsuario,
-  actualizarImagenPerfil
+  actualizarImagenPerfil,
+  actualizarRecordatorio,
+  eliminarRecordatorio
 };

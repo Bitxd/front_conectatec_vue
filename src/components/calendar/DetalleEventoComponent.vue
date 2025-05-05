@@ -3,9 +3,13 @@
     <!-- Header con autor y su imagen -->
     <div class="header-autor">
       <p class="autor-info">
-        <strong>{{ calendario.creadoPor.username }}</strong> - {{ calendario.creadoPor.fullname }}
+        <strong>{{ calendario.creadoPor.username }}</strong> – {{ calendario.creadoPor.fullname }}
       </p>
-      <img :src="calendario.creadoPor.imagenPerfil" alt="Imagen del autor" class="imagen-creador" />
+      <img
+        :src="calendario.creadoPor.imagenPerfil"
+        alt="Imagen del autor"
+        class="imagen-creador"
+      />
     </div>
 
     <!-- Detalles del evento -->
@@ -26,13 +30,20 @@
         <div class="info-item">
           <div class="acento"></div>
           <img src="/icons/calendario-icon.svg" alt="Fecha" class="icono" />
-          <span><strong>Fecha:</strong> {{ formatDate(calendario.fechaInicio) }} a {{ formatDate(calendario.fechaFin)
-          }}</span>
+          <span>
+            <strong>Fecha:</strong>
+            {{ formatDate(calendario.fechaInicio) }}
+            a
+            {{ formatDate(calendario.fechaFin) }}
+          </span>
         </div>
         <div class="info-item">
           <div class="acento"></div>
           <img src="/icons/hora-icon.svg" alt="Hora" class="icono" />
-          <span><strong>Hora:</strong> {{ calendario.horaInicio }} - {{ calendario.horaFin }}</span>
+          <span>
+            <strong>Hora:</strong>
+            {{ calendario.horaInicio }} – {{ calendario.horaFin }}
+          </span>
         </div>
       </div>
 
@@ -40,12 +51,19 @@
       <div class="evento-info">
         <div class="info-item lugar-item">
           <div class="acento"></div>
-          <img src="/icons/mapa-virtual-icon.svg" alt="Lugar" class="icono" />
+          <img
+            src="/icons/mapa-virtual-icon.svg"
+            alt="Lugar"
+            class="icono"
+          />
           <div class="lugar-texto">
             <span><strong>Lugar:</strong> {{ calendario.lugar }}</span>
           </div>
           <div class="contenedor-boton">
-            <BotonTextoImagenComponent image="/images/localizacion.png" text="Localización" />
+            <BotonTextoImagenComponent
+              image="/images/localizacion.png"
+              text="Localización"
+            />
           </div>
         </div>
       </div>
@@ -54,48 +72,75 @@
       <div class="evento-info">
         <div class="info-item">
           <div class="acento"></div>
-          <span><strong>Tipo de evento:</strong> {{ calendario.tipoEvento }}</span>
+          <span>
+            <strong>Tipo de evento:</strong> {{ calendario.tipoEvento }}
+          </span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Mostrar el componente CrearRecordatorioComponent cuando sea necesario -->
-  <CrearRecordatorioComponent 
-    :visible="mostrarFormulario" 
-    :calendario="calendario" 
-    @crearRecordatorio="manejarCreacionRecordatorio" 
-    @cerrar="mostrarFormulario = false" />
-  
-  <PrimeraNotificacionComponent 
-    :visible="mostrarNotificacion" 
+  <!-- Formularios de recordatorio -->
+  <!-- Crear -->
+  <CrearRecordatorioComponent
+    v-if="mostrarFormularioCrear"
+    :visible="mostrarFormularioCrear"
+    :calendario="calendario"
+    @crearRecordatorio="manejarCreacionRecordatorio"
+    @cerrar="mostrarFormularioCrear = false"
+  />
+
+  <!-- Editar -->
+  <EditarRecordatorioComponent
+    v-if="mostrarFormularioEditar"
+    :visible="mostrarFormularioEditar"
+    :recordatorio="recordatorioSeleccionado"
+    :calendario="calendario"
+    @recordatorioActualizado="manejarActualizacionRecordatorio"
+    @recordatorioEliminado="manejarEliminacionRecordatorio"
+    @cerrar="mostrarFormularioEditar = false"
+  />
+
+  <!-- Primera configuración -->
+  <PrimeraNotificacionComponent
+    v-if="mostrarNotificacion"
+    :visible="mostrarNotificacion"
     @cerrar="mostrarNotificacion = false"
-    @configurarRecordatorios="manejarConfiguracion" />
+    @configurarRecordatorios="manejarConfiguracion"
+  />
 </template>
 
 <script>
-import userApi from '@/apis/userApi'; 
+import userApi from '@/apis/userApi';
+import authService from '@/services/authService';
+
 import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
 import BotonNotificacionComponent from '../buttons/BotonNotificacionComponent.vue';
-import CrearRecordatorioComponent from './CrearRecordatorioComponent.vue'; 
+import CrearRecordatorioComponent from './CrearRecordatorioComponent.vue';
+import EditarRecordatorioComponent from './EditarRecordatorioComponent.vue';
 import PrimeraNotificacionComponent from '../notices/PrimeraNotificacionComponent.vue';
-import authService from '@/services/authService';
 
 export default {
   name: 'DetalleEventoComponent',
   props: {
-    calendario: Object
+    calendario: {
+      type: Object,
+      required: true
+    }
   },
   components: {
     BotonTextoImagenComponent,
     BotonNotificacionComponent,
-    CrearRecordatorioComponent,  
+    CrearRecordatorioComponent,
+    EditarRecordatorioComponent,
     PrimeraNotificacionComponent
   },
   data() {
     return {
       mostrarNotificacion: false,
-      mostrarFormulario: false  
+      mostrarFormularioCrear: false,
+      mostrarFormularioEditar: false,
+      recordatorioSeleccionado: null
     };
   },
   methods: {
@@ -103,40 +148,63 @@ export default {
       const opciones = { day: '2-digit', month: '2-digit', year: 'numeric' };
       return new Date(fecha).toLocaleDateString('es-ES', opciones);
     },
+
     async notificacionPresionada() {
       const config = JSON.parse(localStorage.getItem('configuracion') || '{}');
       if (config?.primerConfiguracionRecordatorio === true) {
         this.mostrarNotificacion = true;
-      } else {
-        try {
-          const token = authService.getToken();
-          const recordatorio = await userApi.verificarRecordatorio(this.calendario._id, token);
+        return;
+      }
 
-          if (recordatorio) {
-            alert('Recordatorio ya existe');
-          } else {
-            this.mostrarFormulario = true;
-          }
-        } catch (error) {
-          if (error.response && error.response.status === 404) {
-            // Si el error es 404 (no existe el recordatorio), mostrar el modal
-            this.mostrarFormulario = true;
-          } else {
-            console.error('Error verificando el recordatorio:', error);
-          }
+      try {
+        const token = authService.getToken();
+        const recordatorio = await userApi.verificarRecordatorio(
+          this.calendario._id,
+          token
+        );
+
+        // Si ya existe el recordatorio, abrir el formulario de edición:
+        this.recordatorioSeleccionado = recordatorio;
+        this.mostrarFormularioEditar = true;
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          // No existe: abrir formulario de creación
+          this.mostrarFormularioCrear = true;
+        } else {
+          console.error('Error verificando el recordatorio:', error);
         }
       }
     },
+
     manejarCreacionRecordatorio() {
       alert('Recordatorio creado');
-      this.mostrarFormulario = false;
+      this.mostrarFormularioCrear = false;
+      // Aquí podrías actualizar tu lista o estado local de recordatorios
     },
+
+    manejarActualizacionRecordatorio() {
+      alert('Recordatorio actualizado con éxito');
+      this.mostrarFormularioEditar = false;
+      // Actualizar vista si es necesario
+    },
+
+    manejarEliminacionRecordatorio() {
+      alert('Recordatorio eliminado correctamente');
+      this.mostrarFormularioEditar = false;
+      // Quitar del estado local si es necesario
+    },
+
     manejarConfiguracion() {
       alert('Configurando recordatorios...');
+      // Marcar en localStorage que ya pasó la configuración inicial
+      const config = JSON.parse(localStorage.getItem('configuracion') || '{}');
+      config.primerConfiguracionRecordatorio = false;
+      localStorage.setItem('configuracion', JSON.stringify(config));
     }
   }
 };
 </script>
+
 
 
 

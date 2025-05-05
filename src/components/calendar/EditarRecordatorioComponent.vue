@@ -10,7 +10,7 @@
                 <!-- Descripción -->
                 <label class="label">Descripción del recordatorio</label>
                 <input v-model="descripcion" type="text" class="input"
-                    placeholder="Ej. No olvidar pagar antes del 10" />
+                    placeholder="Ej. No olvidar la reinscripcion" />
 
                 <!-- Fecha y Hora -->
                 <div class="fecha-hora">
