@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import tiempoSeccion from '@/services/tiempoSeccion';
+
 export default {
     name: "BienvenidaComponent",
     data() {
@@ -42,11 +44,19 @@ export default {
                     title: "Foro",
                     description: "Participa en el foro para hacer preguntas y resolver dudas."
                 }
-            ]
+            ],
+            startTime: null
         };
+    },
+    mounted() {
+        this.startTime = tiempoSeccion.iniciarConteo();
+    },
+    beforeUnmount() {
+        tiempoSeccion.finalizarConteo(this.startTime, 'bienvenida');
     }
 };
 </script>
+
 
 <style scoped>
 .bienvenido {

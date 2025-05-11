@@ -51,6 +51,7 @@ import publicacionApi from '@/apis/publicacionApi';
 import LikeButtonComponent from '@/components/buttons/LikeButtonComponent.vue';
 import ComentariosComponent from '@/components/forum/ComentariosComponent.vue';
 import ComentarComponent from '@/components/forum/ComentarComponent.vue';
+import tiempoSeccion from '@/services/tiempoSeccion'; 
 
 const publicacion = ref({
   idPublicacion: '',
@@ -69,7 +70,11 @@ const publicacion = ref({
   totalComentarios: 0
 });
 
+let startTime = null;
+
 onMounted(async () => {
+  startTime = tiempoSeccion.iniciarConteo(); 
+  
   const datosLocal = localStorage.getItem('publicacion-actual');
   if (datosLocal) {
     publicacion.value = JSON.parse(datosLocal);
@@ -81,6 +86,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+  tiempoSeccion.finalizarConteo(startTime, 'publicacion'); 
   localStorage.removeItem('publicacion-actual');
 });
 

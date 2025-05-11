@@ -46,6 +46,7 @@ import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
 import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';
 import PanelInformacionComponent from '@/components/map/PanelInformacionComponent.vue';
 import MapaPanel from '@/components/map/MapaPanel.vue';
+import tiempoSeccion from '@/services/tiempoSeccion'; 
 
 export default {
   name: 'MapaVirtualPage',
@@ -65,16 +66,20 @@ export default {
     };
   },
   computed: {
-    // Extrae en string el _id correcto
+
     computedDeptId() {
       const idObj = this.departamentoSeleccionado?._id;
-      // maneja tanto ObjectId con .$oid como string
+
       return idObj?.$oid || idObj || '';
     }
   },
   created() {
     this.idEscuela = this.$route.params.id;
     this.nombreEscuela = this.$route.query.nombre || '';
+    this.startTime = tiempoSeccion.iniciarConteo(); 
+  },
+  beforeUnmount() {
+    tiempoSeccion.finalizarConteo(this.startTime, 'mapa'); 
   },
   methods: {
     onSelectDepartamento(depto) {
@@ -90,6 +95,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 html,

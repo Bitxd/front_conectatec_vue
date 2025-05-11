@@ -30,6 +30,7 @@
 import universidadApi from '@/apis/universidadApi';
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue';
 import HerramientasUniversidadComponent from '@/components/HerramientasUniversidadComponent.vue';
+import tiempoSeccion from '@/services/tiempoSeccion';
 
 export default {
   name: 'DetallesUniversidad',
@@ -39,11 +40,16 @@ export default {
   },
   data() {
     return {
-      universidad: null
+      universidad: null,
+      startTime: null
     };
   },
   mounted() {
+    this.startTime = tiempoSeccion.iniciarConteo();
     this.loadUniversidad();
+  },
+  beforeUnmount() {
+    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad');
   },
   methods: {
     async loadUniversidad() {
@@ -64,18 +70,17 @@ export default {
         query: { nombre: this.universidad.nombre }
       });
     },
-    botonMapa()
-    {
+    botonMapa() {
       this.$router.push({
         name: 'Mapa',
         params: { id: this.universidad.id },
         query: { nombre: this.universidad.nombre }
       });
     }
-
   }
 };
 </script>
+
 
 
 <style scoped>

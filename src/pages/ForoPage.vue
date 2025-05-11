@@ -108,7 +108,6 @@
   background: #555;
 }
 </style>
-
 <script>
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue'
 import BotonImagenComponent from '@/components/BotonImagenComponent.vue'
@@ -121,6 +120,7 @@ import CrearPublicacionComponent from '@/components/forum/CrearPublicacionCompon
 import foroApi from '@/apis/foroApi'
 import { obtenerPublicacionesIdForo } from '@/apis/publicacionApi'
 import authService from '@/services/authService'
+import tiempoSeccion from '@/services/tiempoSeccion'
 
 export default {
   name: 'ForoPage',
@@ -141,7 +141,8 @@ export default {
       notificationMessage: '',
       notificationType: '',
       mostrarModalCrearPublicacion: false,
-      usuarioActualId: ''
+      usuarioActualId: '',
+      startTime: null
     }
   },
   methods: {
@@ -162,12 +163,12 @@ export default {
   },
   async mounted() {
     this.usuarioActualId = await authService.getIdUser()
+    this.startTime = tiempoSeccion.iniciarConteo()
 
     try {
       const idEscuela = this.$route.params.id
       const responseForo = await foroApi.obtenerForoPorEscuela(idEscuela)
 
-      // Asignar el foro de inmediato para que su nombre se renderice
       this.foro = responseForo.foro
 
       const responsePublicaciones = await obtenerPublicacionesIdForo(this.foro._id)
@@ -177,6 +178,9 @@ export default {
     } catch (error) {
       console.error('Error al obtener datos:', error)
     }
+  },
+  beforeUnmount() {
+    tiempoSeccion.finalizarConteo(this.startTime, 'foro')
   }
 }
 </script>

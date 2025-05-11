@@ -18,6 +18,7 @@
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue';
 import MensajeComponent from '@/components/MensajeComponent.vue';
 import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue';
+import tiempoSeccion from '@/services/tiempoSeccion';
 
 export default {
     components: {
@@ -31,7 +32,14 @@ export default {
             messages: [
                 { text: '¡Hola! ¿Cómo puedo ayudarte?', type: 'bot' },
             ],
+            startTime: null
         };
+    },
+    mounted() {
+        this.startTime = tiempoSeccion.iniciarConteo();
+    },
+    beforeUnmount() {
+        tiempoSeccion.finalizarConteo(this.startTime, 'chatbot');
     },
     methods: {
         sendMessage() {
@@ -53,6 +61,7 @@ export default {
     },
 };
 </script>
+
 
 <style scoped>
 * {

@@ -29,6 +29,7 @@ import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
 import universidadApi from '@/apis/universidadApi';
 import ListaEventosComponent from '@/components/calendar/ListaEventosComponent.vue';
 import DetalleEventoComponent from '@/components/calendar/DetalleEventoComponent.vue';
+import tiempoSeccion from '@/services/tiempoSeccion'; // Importando el servicio
 
 export default {
     name: 'CalendarioPage',
@@ -43,7 +44,7 @@ export default {
             universidadNombre: this.$route.query.nombre || 'Universidad',
             calendarios: [],
             calendarioSeleccionadoId: null,
-
+            startTime: null
         };
     },
     computed: {
@@ -52,6 +53,7 @@ export default {
         }
     },
     mounted() {
+        this.startTime = tiempoSeccion.iniciarConteo(); // Iniciar el conteo de tiempo
         const escuelaId = this.$route.params.id;
         this.obtenerCalendarios(escuelaId);
     },
@@ -66,9 +68,13 @@ export default {
         handleCalendarioSeleccionado(calendarioId) {
             this.calendarioSeleccionadoId = calendarioId;
         },
+    },
+    beforeUnmount() {
+        tiempoSeccion.finalizarConteo(this.startTime, 'calendario_page'); // Finalizar conteo de tiempo
     }
 };
 </script>
+
 
 <style scoped>
 .calendario-page {

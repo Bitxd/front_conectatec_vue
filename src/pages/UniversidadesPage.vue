@@ -36,6 +36,7 @@ import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue';
 import BotonCorazon from '@/components/BotonCorazon.vue';
 import universidadApi from '@/apis/universidadApi';
 import userApi from '@/apis/userApi';
+import tiempoSeccion from '@/services/tiempoSeccion';
 
 export default {
     name: 'UniversidadesPage',
@@ -47,7 +48,8 @@ export default {
         return {
             searchQuery: '',
             universities: [],
-            favoriteUniversityId: null // Almacena el _id de la universidad favorita actual
+            favoriteUniversityId: null, // Almacena el _id de la universidad favorita actual
+            startTime: null  // Almacena el inicio del conteo de tiempo para la sección
         };
     },
     computed: {
@@ -61,9 +63,16 @@ export default {
         }
     },
     async mounted() {
+        // Inicia el conteo de tiempo para esta sección
+        this.startTime = tiempoSeccion.iniciarConteo();
+
         // Primero se carga la lista de universidades y luego se obtiene la favorita.
         await this.loadUniversities();
         await this.loadFavoriteUniversity();
+    },
+    beforeUnmount() {
+        // Finaliza el conteo cuando el usuario deje la página
+        tiempoSeccion.finalizarConteo(this.startTime, 'universidades');
     },
     methods: {
         // Obtiene la lista de universidades del API

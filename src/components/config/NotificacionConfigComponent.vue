@@ -33,59 +33,54 @@
       </div>
     </section>
 
-    <button
-      class="guardar-btn"
-      :disabled="!configuracionModificada"
-      @click="guardarConfiguracion"
-    >
+    <button class="guardar-btn" :disabled="!configuracionModificada" @click="guardarConfiguracion">
       Guardar configuración
     </button>
   </div>
 </template>
 
 <script>
+import tiempoSeccion from '@/services/tiempoSeccion'; // Importando tiempoSeccion
+
 export default {
   data() {
-    // Inicializamos original con el mismo molde que notificaciones
     const plantilla = { modos: { email: false, sms: false, app: false } };
     return {
       notificaciones: JSON.parse(JSON.stringify(plantilla)),
       configuracionOriginal: JSON.parse(JSON.stringify(plantilla)),
+      startTime: null
     };
   },
   mounted() {
+    this.startTime = tiempoSeccion.iniciarConteo(); // Iniciar conteo de tiempo
     this.cargarConfiguracion();
   },
   computed: {
     configuracionModificada() {
-      // Comparamos solo los tres métodos
       return (
         this.notificaciones.modos.email !== this.configuracionOriginal.modos.email ||
-        this.notificaciones.modos.sms   !== this.configuracionOriginal.modos.sms   ||
-        this.notificaciones.modos.app   !== this.configuracionOriginal.modos.app
+        this.notificaciones.modos.sms !== this.configuracionOriginal.modos.sms ||
+        this.notificaciones.modos.app !== this.configuracionOriginal.modos.app
       );
     },
   },
   methods: {
-    cargarConfiguracion()
-    {
+    cargarConfiguracion() {
       const cfg = JSON.parse(localStorage.getItem('configuracion'));
-      if (cfg)
-      {
+      if (cfg) {
         this.notificaciones.modos.email = cfg.recordatorioCorreo;
-        this.notificaciones.modos.sms   = cfg.recordatorioMensaje;
-        this.notificaciones.modos.app   = cfg.recordatorioWhatsapp;
+        this.notificaciones.modos.sms = cfg.recordatorioMensaje;
+        this.notificaciones.modos.app = cfg.recordatorioWhatsapp;
 
         this.configuracionOriginal = JSON.parse(JSON.stringify(this.notificaciones));
       }
     },
-    guardarConfiguracion()
-    {
+    guardarConfiguracion() {
       const cfg = {
-        recordatorioCorreo:   this.notificaciones.modos.email,
-        recordatorioMensaje:  this.notificaciones.modos.sms,
+        recordatorioCorreo: this.notificaciones.modos.email,
+        recordatorioMensaje: this.notificaciones.modos.sms,
         recordatorioWhatsapp: this.notificaciones.modos.app,
-        primerConfiguracionRecordatorio: true, 
+        primerConfiguracionRecordatorio: true,
       };
       localStorage.setItem('configuracion', JSON.stringify(cfg));
       console.log('Configuraciones guardadas:', cfg);
@@ -93,8 +88,12 @@ export default {
       this.configuracionOriginal = JSON.parse(JSON.stringify(this.notificaciones));
     },
   },
+  beforeUnmount() {
+    tiempoSeccion.finalizarConteo(this.startTime, 'notificacion_config'); // Finalizar conteo de tiempo
+  }
 };
 </script>
+
 
 
 <style scoped>
@@ -204,15 +203,15 @@ export default {
   transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #2196F3;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(26px);
 }
 
@@ -234,6 +233,7 @@ input:checked + .slider:before {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .guardar-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
