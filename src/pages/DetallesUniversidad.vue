@@ -6,18 +6,27 @@
         <img :src="universidad.logoUrl" alt="Logo" class="imagen-header" />
       </div>
       <div class="header-right">
-        <HerramientasUniversidadComponent />
+        <HerramientasUniversidadComponent :id-escuela="universidad.id" />
         <div class="separator-container"></div>
-        <BotonTextoImagenComponent image="/icons/mapa-virtual-icon.svg" text="Mapa Virtual"  @click="botonMapa"/>
+        <BotonTextoImagenComponent
+          image="/icons/mapa-virtual-icon.svg"
+          text="Mapa Virtual"
+          @click="botonMapa"
+        />
         <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" @click="botonForo" />
-        <BotonTextoImagenComponent image="/icons/calendario-icon.svg" text="Calendario" @click="botonCalendario" />
+        <BotonTextoImagenComponent
+          image="/icons/calendario-icon.svg"
+          text="Calendario"
+          @click="botonCalendario"
+        />
       </div>
     </div>
-
     <hr class="separador-header" />
-
     <div class="botones-secundarios">
-      <BotonTextoImagenComponent image="/icons/informacion-general-icon.svg" text="Información General" />
+      <BotonTextoImagenComponent
+        image="/icons/informacion-general-icon.svg"
+        text="Información General"
+      />
       <BotonTextoImagenComponent image="/icons/inscripcion-icon.svg" text="Inscripciones" />
     </div>
   </div>
@@ -27,10 +36,10 @@
 </template>
 
 <script>
-import universidadApi from '@/apis/universidadApi';
-import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue';
-import HerramientasUniversidadComponent from '@/components/HerramientasUniversidadComponent.vue';
-import tiempoSeccion from '@/services/tiempoSeccion';
+import universidadApi from '@/apis/universidadApi'
+import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue'
+import HerramientasUniversidadComponent from '@/components/HerramientasUniversidadComponent.vue'
+import tiempoSeccion from '@/services/tiempoSeccion'
 
 export default {
   name: 'DetallesUniversidad',
@@ -42,43 +51,40 @@ export default {
     return {
       universidad: null,
       startTime: null
-    };
+    }
   },
-  mounted() {
-    this.startTime = tiempoSeccion.iniciarConteo();
-    this.loadUniversidad();
+  async mounted() {
+    this.startTime = tiempoSeccion.iniciarConteo()
+    const id = this.$route.params.id
+    try {
+      this.universidad = await universidadApi.obtenerUniversidadPorId(id)
+    } catch (e) {
+      console.error(e)
+    }
   },
   beforeUnmount() {
-    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad');
+    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad')
   },
   methods: {
-    async loadUniversidad() {
-      const id = this.$route.params.id;
-      try {
-        this.universidad = await universidadApi.obtenerUniversidadPorId(id);
-      } catch (error) {
-        console.error('Error al cargar la universidad:', error);
-      }
-    },
     botonForo() {
-      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } });
+      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } })
     },
     botonCalendario() {
       this.$router.push({
         name: 'Calendario',
         params: { id: this.universidad.id },
         query: { nombre: this.universidad.nombre }
-      });
+      })
     },
     botonMapa() {
       this.$router.push({
         name: 'Mapa',
         params: { id: this.universidad.id },
         query: { nombre: this.universidad.nombre }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 

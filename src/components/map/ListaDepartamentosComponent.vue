@@ -79,7 +79,6 @@ export default {
       }
     },
     seleccionarDepartamento(depto) {
-      alert("Seleccionando departamento");
       this.$emit("select-departamento", depto);
     }
   }
