@@ -40,6 +40,7 @@
           <BotonTextoImagenComponent
             image="/icons/coordinador-icon.svg"
             text="Coordinadores"
+            @click="goCoordinadores"
           />
         </div>
       </div>
@@ -61,6 +62,10 @@ export default {
     idEscuela: {
       type: String,
       required: true
+    },
+    nombreUniversidad: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -78,11 +83,16 @@ export default {
       }
     },
     goCarreras() {
-      this.$router.push({ name: 'Carreras', params: { id: this.idEscuela } })
+      this.$router.push({ name: 'Carreras', params: { id: this.idEscuela }, query: { nombre: this.nombreUniversidad } })
+      this.menuVisible = false
+    },
+    goCoordinadores() {
+      this.$router.push({ name: 'Coordinadores', params: { id: this.idEscuela }, query: { nombre: this.nombreUniversidad } })
       this.menuVisible = false
     }
   },
   mounted() {
+    console.log(`Universidad: ${this.nombreUniversidad}`)
     document.addEventListener('click', this.handleClickOutside)
   },
   beforeUnmount() {
@@ -90,6 +100,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .herramientas-universidad {
@@ -99,7 +110,7 @@ export default {
   height: 100%;
 }
 
-/* Menú flotante con animación, fondo blanco y sombra */
+
 .menu-flotante {
   position: absolute;
   top: 60px;
@@ -114,7 +125,7 @@ export default {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Animación para suavizar aparición del menú */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -127,7 +138,7 @@ export default {
   }
 }
 
-/* Descripción en la parte superior del menú */
+
 .descripcion {
   text-align: center;
   font-size: 16px;
@@ -137,20 +148,20 @@ export default {
   padding-bottom: 8px;
 }
 
-/* Rejilla para los botones del menú */
+
 .menu-items {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 12px;
 }
 
-/* Alineación de cada item */
+
 .menu-item {
   display: flex;
   justify-content: center;
 }
 
-/* Ajustes responsivos */
+
 @media (max-width: 768px) {
   .menu-flotante {
     width: 90%;

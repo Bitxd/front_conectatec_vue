@@ -7,6 +7,7 @@ import CalendarioPage from '@/pages/CalendarioPage.vue';
 import ConfiguracionPage from '@/pages/ConfiguracionPage.vue';
 import MapaVirtualPage from '@/pages/MapaVirtualPage.vue';
 import CarrerasPage from '@/pages/CarrerasPage.vue';
+import CoordinadoresPage from '@/pages/CoordinadoresPage.vue';
 
 
 
@@ -59,12 +60,17 @@ const routes = [
     name: 'Mapa',
     component: MapaVirtualPage
   },
-   {
+  {
     path: '/:id/carreras',
     name: 'Carreras',
     component: CarrerasPage
+  },
+  {
+    path: '/:id/coordinadores',
+    name: 'Coordinadores',
+    component: CoordinadoresPage
   }
-  
+
 
 
 ];

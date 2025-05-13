@@ -6,27 +6,17 @@
         <img :src="universidad.logoUrl" alt="Logo" class="imagen-header" />
       </div>
       <div class="header-right">
-        <HerramientasUniversidadComponent :id-escuela="universidad.id" />
+        <HerramientasUniversidadComponent :id-escuela="universidad.id" :nombre-universidad="universidad.nombre" />
+
         <div class="separator-container"></div>
-        <BotonTextoImagenComponent
-          image="/icons/mapa-virtual-icon.svg"
-          text="Mapa Virtual"
-          @click="botonMapa"
-        />
+        <BotonTextoImagenComponent image="/icons/mapa-virtual-icon.svg" text="Mapa Virtual" @click="botonMapa" />
         <BotonTextoImagenComponent image="/icons/foro-icon.svg" text="Foro" @click="botonForo" />
-        <BotonTextoImagenComponent
-          image="/icons/calendario-icon.svg"
-          text="Calendario"
-          @click="botonCalendario"
-        />
+        <BotonTextoImagenComponent image="/icons/calendario-icon.svg" text="Calendario" @click="botonCalendario" />
       </div>
     </div>
     <hr class="separador-header" />
     <div class="botones-secundarios">
-      <BotonTextoImagenComponent
-        image="/icons/informacion-general-icon.svg"
-        text="Información General"
-      />
+      <BotonTextoImagenComponent image="/icons/informacion-general-icon.svg" text="Información General" />
       <BotonTextoImagenComponent image="/icons/inscripcion-icon.svg" text="Inscripciones" />
     </div>
   </div>
