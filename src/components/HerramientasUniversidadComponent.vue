@@ -1,47 +1,31 @@
 <template>
   <div class="herramientas-universidad">
-    <BotonImagenComponent
-      image="/icons/menu-aplicaciones-icon.svg"
-      alt-text="Botón"
-      description="Herramientas"
-      @click="toggleMenu"
-    />
+    <BotonImagenComponent image="/icons/menu-aplicaciones-icon.svg" alt-text="Botón" description="Herramientas"
+      @click="toggleMenu" />
     <div v-if="menuVisible" class="menu-flotante" ref="menuFlotante">
       <div class="descripcion">
         <p>Seleccione una opción para explorar más detalles</p>
       </div>
       <div class="menu-items">
         <div class="menu-item">
-          <BotonTextoImagenComponent
-            image="/icons/carrera-universitaria-icon.svg"
-            text="Carreras"
-            @click="goCarreras"
-          />
+          <BotonTextoImagenComponent image="/icons/carrera-universitaria-icon.svg" text="Carreras"
+            @click="goCarreras" />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent
-            image="/icons/libreria-icon.svg"
-            text="Librería"
-          />
+          <BotonTextoImagenComponent image="/icons/libreria-icon.svg" text="Librería" />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent
-            image="/icons/materias-icon.svg"
-            text="Materias"
-          />
+          <BotonTextoImagenComponent image="/icons/materias-icon.svg" text="Materias" />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent
-            image="/icons/logros-icon.svg"
-            text="Logros"
-          />
+          <BotonTextoImagenComponent image="/icons/logros-icon.svg" text="Logros" />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent
-            image="/icons/coordinador-icon.svg"
-            text="Coordinadores"
-            @click="goCoordinadores"
-          />
+          <BotonTextoImagenComponent image="/icons/coordinador-icon.svg" text="Coordinadores"
+            @click="goCoordinadores" />
+        </div>
+        <div class="menu-item">
+          <BotonTextoImagenComponent image="/icons/profesor-icon.svg" text="Profesores" @click="goProfesores" />
         </div>
       </div>
     </div>
@@ -83,13 +67,30 @@ export default {
       }
     },
     goCarreras() {
-      this.$router.push({ name: 'Carreras', params: { id: this.idEscuela }, query: { nombre: this.nombreUniversidad } })
+      this.$router.push({
+        name: 'Carreras',
+        params: { id: this.idEscuela },
+        query: { nombre: this.nombreUniversidad }
+      })
       this.menuVisible = false
     },
     goCoordinadores() {
-      this.$router.push({ name: 'Coordinadores', params: { id: this.idEscuela }, query: { nombre: this.nombreUniversidad } })
+      this.$router.push({
+        name: 'Coordinadores',
+        params: { id: this.idEscuela },
+        query: { nombre: this.nombreUniversidad }
+      })
       this.menuVisible = false
-    }
+    },
+    goProfesores() {
+    this.$router.push({
+      name: 'Profesores',
+      params: { id: this.idEscuela },  
+      query: { nombre: this.nombreUniversidad }  
+    });
+
+    this.menuVisible = false
+  }
   },
   mounted() {
     console.log(`Universidad: ${this.nombreUniversidad}`)
@@ -100,7 +101,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped>
 .herramientas-universidad {

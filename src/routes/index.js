@@ -8,6 +8,7 @@ import ConfiguracionPage from '@/pages/ConfiguracionPage.vue';
 import MapaVirtualPage from '@/pages/MapaVirtualPage.vue';
 import CarrerasPage from '@/pages/CarrerasPage.vue';
 import CoordinadoresPage from '@/pages/CoordinadoresPage.vue';
+import ProfesoresPage from '@/pages/ProfesoresPage.vue';
 
 
 
@@ -69,6 +70,11 @@ const routes = [
     path: '/:id/coordinadores',
     name: 'Coordinadores',
     component: CoordinadoresPage
+  },
+  {
+    path: '/:id/profesores',
+    name: 'Profesores',
+    component: ProfesoresPage
   }
 
 
