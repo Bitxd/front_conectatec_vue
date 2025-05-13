@@ -3,7 +3,6 @@
     <header class="page-header">
       <div class="header-content">
         <h1 class="page-title">Coordinadores de <span class="highlight">{{ nombreEscuela }}</span></h1>
-        <p class="page-subtitle">Contacta con los coordinadores de tu escuela</p>
       </div>
       <div class="search-container">
         <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -147,11 +146,6 @@ export default {
   color: var(--primary-color);
 }
 
-.page-subtitle {
-  font-size: 1.1rem;
-  color: var(--gray-color);
-  margin: 0;
-}
 
 .search-container {
   position: relative;
