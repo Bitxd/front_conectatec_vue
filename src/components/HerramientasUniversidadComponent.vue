@@ -1,31 +1,49 @@
 <template>
   <div class="herramientas-universidad">
-    <BotonImagenComponent image="/icons/menu-aplicaciones-icon.svg" alt-text="Botón" description="Herramientas"
-      @click="toggleMenu" />
+    <BotonImagenComponent
+      image="/icons/menu-aplicaciones-icon.svg"
+      alt-text="Botón"
+      description="Herramientas"
+      @click="toggleMenu"
+    />
     <div v-if="menuVisible" class="menu-flotante" ref="menuFlotante">
       <div class="descripcion">
         <p>Seleccione una opción para explorar más detalles</p>
       </div>
       <div class="menu-items">
         <div class="menu-item">
-          <BotonTextoImagenComponent image="/icons/carrera-universitaria-icon.svg" text="Carreras"
-            @click="goCarreras" />
+          <BotonTextoImagenComponent
+            image="/icons/carrera-universitaria-icon.svg"
+            text="Carreras"
+            @click="goCarreras"
+          />
         </div>
         <div class="menu-item">
           <BotonTextoImagenComponent image="/icons/libreria-icon.svg" text="Librería" />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent image="/icons/materias-icon.svg" text="Materias" />
+          <BotonTextoImagenComponent
+            image="/icons/materias-icon.svg"
+            text="Materias"
+            @click="goMaterias"
+          />
         </div>
         <div class="menu-item">
           <BotonTextoImagenComponent image="/icons/logros-icon.svg" text="Logros" />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent image="/icons/coordinador-icon.svg" text="Coordinadores"
-            @click="goCoordinadores" />
+          <BotonTextoImagenComponent
+            image="/icons/coordinador-icon.svg"
+            text="Coordinadores"
+            @click="goCoordinadores"
+          />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent image="/icons/profesor-icon.svg" text="Profesores" @click="goProfesores" />
+          <BotonTextoImagenComponent
+            image="/icons/profesor-icon.svg"
+            text="Profesores"
+            @click="goProfesores"
+          />
         </div>
       </div>
     </div>
@@ -33,74 +51,72 @@
 </template>
 
 <script>
-import BotonImagenComponent from './BotonImagenComponent.vue'
-import BotonTextoImagenComponent from './BotonTextoImagenComponent.vue'
+import BotonImagenComponent from './BotonImagenComponent.vue';
+import BotonTextoImagenComponent from './BotonTextoImagenComponent.vue';
 
 export default {
   name: 'HerramientasUniversidadComponent',
-  components: {
-    BotonImagenComponent,
-    BotonTextoImagenComponent
-  },
+  components: { BotonImagenComponent, BotonTextoImagenComponent },
   props: {
-    idEscuela: {
-      type: String,
-      required: true
-    },
-    nombreUniversidad: {
-      type: String,
-      required: true
-    }
+    idEscuela:         { type: String, required: true },
+    nombreUniversidad: { type: String, required: true }
   },
   data() {
-    return {
-      menuVisible: false
-    }
+    return { menuVisible: false };
   },
   methods: {
     toggleMenu() {
-      this.menuVisible = !this.menuVisible
+      this.menuVisible = !this.menuVisible;
     },
-    handleClickOutside(event) {
-      if (this.menuVisible && !this.$refs.menuFlotante.contains(event.target)) {
-        this.menuVisible = false
+    handleClickOutside(ev) {
+      if (this.menuVisible && !this.$refs.menuFlotante.contains(ev.target)) {
+        this.menuVisible = false;
       }
     },
     goCarreras() {
       this.$router.push({
         name: 'Carreras',
         params: { id: this.idEscuela },
-        query: { nombre: this.nombreUniversidad }
-      })
-      this.menuVisible = false
+        query:  { nombre: this.nombreUniversidad }
+      });
+      this.menuVisible = false;
     },
     goCoordinadores() {
       this.$router.push({
         name: 'Coordinadores',
         params: { id: this.idEscuela },
-        query: { nombre: this.nombreUniversidad }
-      })
-      this.menuVisible = false
+        query:  { nombre: this.nombreUniversidad }
+      });
+      this.menuVisible = false;
     },
     goProfesores() {
-    this.$router.push({
-      name: 'Profesores',
-      params: { id: this.idEscuela },  
-      query: { nombre: this.nombreUniversidad }  
-    });
-
-    this.menuVisible = false
-  }
+      this.$router.push({
+        name: 'Profesores',
+        params: { id: this.idEscuela },
+        query:  { nombre: this.nombreUniversidad }
+      });
+      this.menuVisible = false;
+    },
+    goMaterias() {
+      this.$router.push({
+        name: 'Materias',
+        params: { id: this.idEscuela },
+        query:  { nombre: this.nombreUniversidad }
+      });
+      this.menuVisible = false;
+    }
   },
   mounted() {
-    console.log(`Universidad: ${this.nombreUniversidad}`)
-    document.addEventListener('click', this.handleClickOutside)
+    document.addEventListener('click', this.handleClickOutside);
   },
   beforeUnmount() {
-    document.removeEventListener('click', this.handleClickOutside)
+    document.removeEventListener('click', this.handleClickOutside);
   }
-}
+};
 </script>
+
+
+
 
 <style scoped>
 .herramientas-universidad {

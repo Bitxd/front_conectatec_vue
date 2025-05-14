@@ -2,7 +2,8 @@
     <div class="profesores-container">
         <!-- Header -->
         <div class="header">
-            <h1>Profesores de {{ universidadNombre }}</h1>
+            <h1 class="page-title">Profesores de {{ universidadNombre }}</h1>
+            <h1></h1>
             <div class="search-container">
                 <input 
                     v-model="searchQuery" 
@@ -82,11 +83,23 @@
     padding: 0 1rem;
 }
 
-h1 {
-    color: #2c3e50;
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    padding-left: 0.5rem;
+.page-title {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  position: relative;
+  display: inline-block;
+}
+
+.page-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #3498db;
 }
 
 .search-container {
@@ -258,7 +271,7 @@ export default {
     };
   },
   async created() {
-    console.log(`ID de Universidad: ${this.universidadId}, Nombre: ${this.universidadNombre}`);
+
 
     try {
       this.profesores = await obtenerProfesoresPorIdEscuela(this.universidadId);

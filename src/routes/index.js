@@ -9,8 +9,7 @@ import MapaVirtualPage from '@/pages/MapaVirtualPage.vue';
 import CarrerasPage from '@/pages/CarrerasPage.vue';
 import CoordinadoresPage from '@/pages/CoordinadoresPage.vue';
 import ProfesoresPage from '@/pages/ProfesoresPage.vue';
-
-
+import MateriasPage from '@/pages/MateriasPage.vue';
 
 const routes = [
   {
@@ -75,6 +74,11 @@ const routes = [
     path: '/:id/profesores',
     name: 'Profesores',
     component: ProfesoresPage
+  },
+  {
+    path: '/:id/materias',
+    name: 'Materias',
+    component: MateriasPage
   }
 
 
