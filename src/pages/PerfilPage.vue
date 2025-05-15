@@ -44,7 +44,11 @@
                 <div class="universidad-favorita-card">
                     <div class="universidad-favorita-card-header">Universidad favorita</div>
                     <div class="universidad-favorita-card-body">
-                        {{ usuario.universidadFavorita ? usuario.universidadFavorita : 'No tiene universidad favorita' }}
+                        <template v-if="universidad.nombre">
+                            <img :src="universidad.logo" alt="Logo Universidad" class="universidad-logo" />
+                            <span class="universidad-nombre">{{ universidad.nombre }}</span>
+                        </template>
+                        <span v-else>No tiene universidad favorita</span>
                     </div>
                 </div>
             </div>
@@ -110,7 +114,7 @@
 }
 
 .perfil-card-header,
-v .contacto-card-header,
+.contacto-card-header,
 .universidad-favorita-card-header {
     font-weight: bold;
     margin-bottom: 15px;
@@ -203,17 +207,38 @@ v .contacto-card-header,
 .universidad-favorita-card-body {
     font-size: 16px;
     color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.universidad-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+.universidad-nombre {
+    font-weight: 600;
 }
 </style>
 
-
 <script>
+import universidadApi from '@/apis/universidadApi';
+
 export default {
     name: 'PerfilPage',
     data() {
         return {
             usuario: JSON.parse(localStorage.getItem('usuario')) || {},
+            universidad: {},
         };
+    },
+    async mounted() {
+        if (this.usuario.universidadFavorita) {
+            const uni = await universidadApi.obtenerUniversidadPorId(this.usuario.universidadFavorita);
+            this.universidad = { nombre: uni.nombre, logo: uni.logoUrl };
+        }
     },
 };
 </script>

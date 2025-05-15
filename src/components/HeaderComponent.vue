@@ -27,6 +27,8 @@
     </nav>
 
     <div class="user-area">
+      <div v-if="fullname" class="user-separator"></div>
+      <span v-if="fullname" class="user-name">{{ fullname }}</span>
       <SidebarComponent v-if="isAuthenticated" />
       <AccederComponent v-else @closeMenu="closeMenu" />
     </div>
@@ -121,36 +123,58 @@
   padding-right: 20px;
   height: 100%;
 }
+
+.user-separator {
+  width: 1px;
+  height: 50%;
+  background-color: #d1d5db;
+  margin: 0 10px;
+  align-self: center;
+}
+
+.user-name {
+  margin-top: 5px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+
 </style>
 
 
 
 <script>
-import SidebarComponent from './SidebarComponent.vue'
-import AccederComponent from './AccederComponent.vue'
-import authService from '../services/authService'
+import SidebarComponent from './SidebarComponent.vue';
+import AccederComponent from './AccederComponent.vue';
+import authService from '../services/authService';
 
 export default {
   name: 'HeaderComponent',
   components: { SidebarComponent, AccederComponent },
   data() {
     return {
-      isAuthenticated: authService.isAuthenticated()
+      usuario: JSON.parse(localStorage.getItem('usuario')) || {},
+      isAuthenticated: authService.isAuthenticated(),
+    };
+  },
+  computed: {
+    fullname() {
+      return this.usuario.fullname || '';
     }
   },
   methods: {
     botonChatbot() {
-      this.$router.push({ name: 'Chatbot' })
+      this.$router.push({ name: 'Chatbot' });
     },
     botonUniversidad() {
-      this.$router.push({ name: 'Universidades' })
+      this.$router.push({ name: 'Universidades' });
     },
     goHome() {
-      this.$router.push({ name: 'Home' })
+      this.$router.push({ name: 'Home' });
     },
     closeMenu() {
-      console.log('Cerrando el menú')
+      console.log('Cerrando el menú');
     }
   }
-}
+};
 </script>
