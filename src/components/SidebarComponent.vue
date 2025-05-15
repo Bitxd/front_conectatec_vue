@@ -36,6 +36,55 @@
 
 
 
+<script>
+import clickOutside from '@/utils/v-click-outside';
+
+export default {
+  name: 'SidebarComponent',
+  directives: {
+    clickOutside,
+  },
+  data() {
+    return {
+      imagenPerfil: null,
+      menuAbierto: false,
+    };
+  },
+  mounted() {
+    const usuario = JSON.parse(localStorage.getItem('usuario'));
+    this.imagenPerfil =
+      usuario?.imagenPerfil ||
+      'https://jeffjbutler.com/wp-content/uploads/2018/01/default-user-300x300.png';
+  },
+  methods: {
+    // Ahora recibe el evento y detiene su propagación
+    toggleMenu(event) {
+      event.stopPropagation();
+      this.menuAbierto = !this.menuAbierto;
+    },
+    cerrarMenu() {
+      this.menuAbierto = false;
+    },
+    irAMiPerfil() {
+      this.$router.push({ name: 'Perfil' });
+    },
+    irARecordatorios() {
+      console.log('Navegar a Recordatorios');
+    },
+    irAConfiguracion() {
+      console.log('Navegar a Configuración');
+    },
+    cerrarSesion() {
+      console.log('Cerrar sesión');
+    },
+  },
+};
+</script>
+
+
+
+
+
 
 <style scoped>
 .sidebar {
@@ -106,49 +155,4 @@
 }
 </style>
 
-
-<script>
-import clickOutside from '@/utils/v-click-outside';
-
-export default {
-  name: 'SidebarComponent',
-  directives: {
-    clickOutside,
-  },
-  data() {
-    return {
-      imagenPerfil: null,
-      menuAbierto: false,
-    };
-  },
-  mounted() {
-    const usuario = JSON.parse(localStorage.getItem('usuario'));
-    this.imagenPerfil =
-      usuario?.imagenPerfil ||
-      'https://jeffjbutler.com/wp-content/uploads/2018/01/default-user-300x300.png';
-  },
-  methods: {
-    // Ahora recibe el evento y detiene su propagación
-    toggleMenu(event) {
-      event.stopPropagation();
-      this.menuAbierto = !this.menuAbierto;
-    },
-    cerrarMenu() {
-      this.menuAbierto = false;
-    },
-    irAMiPerfil() {
-      console.log('Navegar a Mi perfil');
-    },
-    irARecordatorios() {
-      console.log('Navegar a Recordatorios');
-    },
-    irAConfiguracion() {
-      console.log('Navegar a Configuración');
-    },
-    cerrarSesion() {
-      console.log('Cerrar sesión');
-    },
-  },
-};
-</script>
 
