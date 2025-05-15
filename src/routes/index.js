@@ -10,6 +10,7 @@ import CarrerasPage from '@/pages/CarrerasPage.vue';
 import CoordinadoresPage from '@/pages/CoordinadoresPage.vue';
 import ProfesoresPage from '@/pages/ProfesoresPage.vue';
 import MateriasPage from '@/pages/MateriasPage.vue';
+import PerfilPage from '@/pages/PerfilPage.vue';
 
 const routes = [
   {
@@ -79,6 +80,11 @@ const routes = [
     path: '/:id/materias',
     name: 'Materias',
     component: MateriasPage
+  },
+  {
+    path: '/perfil',
+    name: 'Perfil',
+    component: PerfilPage
   }
 
 
