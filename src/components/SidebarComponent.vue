@@ -68,11 +68,12 @@ export default {
     irAMiPerfil() {
       this.$router.push({ name: 'Perfil' });
     },
+
     irARecordatorios() {
       console.log('Navegar a Recordatorios');
     },
     irAConfiguracion() {
-      console.log('Navegar a Configuración');
+      this.$router.push({name: 'Configuracion'});
     },
     cerrarSesion() {
       console.log('Cerrar sesión');
@@ -80,11 +81,6 @@ export default {
   },
 };
 </script>
-
-
-
-
-
 
 <style scoped>
 .sidebar {

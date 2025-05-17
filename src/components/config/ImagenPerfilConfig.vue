@@ -29,74 +29,7 @@
     </div>
 </template>
 
-<script>
-import userApi from '@/apis/userApi';
 
-export default {
-  props: {
-    imagenPerfil: { type: String, default: null }
-  },
-  data() {
-    return {
-      defaultImage: 'https://placehold.co/180x180?text=Perfil',
-      fotoPreview: this.imagenPerfil || 'https://placehold.co/180x180?text=Perfil',
-      archivoSeleccionado: null
-    };
-  },
-  watch: {
-    imagenPerfil(newVal) {
-      this.fotoPreview = newVal || this.defaultImage;
-    }
-  },
-  mounted() {
-    console.log('imagenPerfil recibida (prop):', this.imagenPerfil);
-    console.log('fotoPreview inicial:', this.fotoPreview);
-  },
-  methods: {
-    triggerFileDialog() {
-      this.$refs.fileInput.click();
-    },
-    cargarImagen(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      this.archivoSeleccionado = file;
-      this.fotoPreview = URL.createObjectURL(file);
-      console.log('nueva fotoPreview (blob URL):', this.fotoPreview);
-      e.target.value = '';
-    },
-    eliminarImagen() {
-      this.fotoPreview = this.defaultImage;
-      this.archivoSeleccionado = null;
-      console.log('fotoPreview tras eliminar:', this.fotoPreview);
-      this.$refs.fileInput.value = null;
-    },
-    async guardarCambios() {
-      // 1) Obtener token directamente de localStorage
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No hay token de autenticación.');
-        return;
-      }
-      // 2) Verificar que haya un archivo seleccionado
-      if (!this.archivoSeleccionado) {
-        console.warn('No hay archivo nuevo seleccionado, no se hace petición.');
-        return;
-      }
-      try {
-        const response = await userApi.actualizarImagenPerfil(token, this.archivoSeleccionado);
-        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-        usuario.imagenPerfil = response.imagenPerfil; 
-        localStorage.setItem('usuario', JSON.stringify(usuario));
-        this.fotoPreview = response.imagenPerfil;
-        console.log('Imagen actualizada:', response.imagenPerfil);
-        this.$emit('imagen-guardada', usuario.imagenPerfil);
-      } catch (err) {
-        console.error('Error al actualizar la imagen:', err);
-      }
-    }
-  }
-};
-</script>
 
 <style scoped>
 .avatar-container {
@@ -184,3 +117,73 @@ export default {
     fill: currentColor;
 }
 </style>
+
+
+<script>
+import userApi from '@/apis/userApi';
+
+export default {
+  props: {
+    imagenPerfil: { type: String, default: null }
+  },
+  data() {
+    return {
+      defaultImage: 'https://placehold.co/180x180?text=Perfil',
+      fotoPreview: this.imagenPerfil || 'https://placehold.co/180x180?text=Perfil',
+      archivoSeleccionado: null
+    };
+  },
+  watch: {
+    imagenPerfil(newVal) {
+      this.fotoPreview = newVal || this.defaultImage;
+    }
+  },
+  mounted() {
+    console.log('imagenPerfil recibida (prop):', this.imagenPerfil);
+    console.log('fotoPreview inicial:', this.fotoPreview);
+  },
+  methods: {
+    triggerFileDialog() {
+      this.$refs.fileInput.click();
+    },
+    cargarImagen(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      this.archivoSeleccionado = file;
+      this.fotoPreview = URL.createObjectURL(file);
+      console.log('nueva fotoPreview (blob URL):', this.fotoPreview);
+      e.target.value = '';
+    },
+    eliminarImagen() {
+      this.fotoPreview = this.defaultImage;
+      this.archivoSeleccionado = null;
+      console.log('fotoPreview tras eliminar:', this.fotoPreview);
+      this.$refs.fileInput.value = null;
+    },
+    async guardarCambios() {
+      // 1) Obtener token directamente de localStorage
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No hay token de autenticación.');
+        return;
+      }
+      // 2) Verificar que haya un archivo seleccionado
+      if (!this.archivoSeleccionado) {
+        console.warn('No hay archivo nuevo seleccionado, no se hace petición.');
+        return;
+      }
+      try {
+        const response = await userApi.actualizarImagenPerfil(token, this.archivoSeleccionado);
+        const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+        usuario.imagenPerfil = response.imagenPerfil; 
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+        this.fotoPreview = response.imagenPerfil;
+        console.log('Imagen actualizada:', response.imagenPerfil);
+        this.$emit('imagen-guardada', usuario.imagenPerfil);
+      } catch (err) {
+        console.error('Error al actualizar la imagen:', err);
+      }
+    }
+  }
+};
+</script>
