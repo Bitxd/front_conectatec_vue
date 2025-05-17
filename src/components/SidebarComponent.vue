@@ -1,17 +1,7 @@
 <template>
   <div class="sidebar">
-    <img
-      v-if="imagenPerfil"
-      :src="imagenPerfil"
-      alt="Perfil"
-      class="avatar"
-      @click="toggleMenu"
-    />
-    <div
-      v-if="menuAbierto"
-      class="dropdown-menu"
-      v-click-outside="cerrarMenu"
-    >
+    <img v-if="imagenPerfil" :src="imagenPerfil" alt="Perfil" class="avatar" @click="toggleMenu" />
+    <div v-if="menuAbierto" class="dropdown-menu" v-click-outside="cerrarMenu">
       <ul>
         <li @click="irAMiPerfil">
           <img src="/icons/perfil.svg" alt="Icono perfil" class="icon" />
@@ -73,10 +63,11 @@ export default {
       console.log('Navegar a Recordatorios');
     },
     irAConfiguracion() {
-      this.$router.push({name: 'Configuracion'});
+      this.$router.push({ name: 'Configuracion' });
     },
     cerrarSesion() {
-      console.log('Cerrar sesión');
+      localStorage.clear();
+      location.reload();
     },
   },
 };
@@ -113,7 +104,7 @@ export default {
   right: 0;
   background: white;
   border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   width: 200px;
   z-index: 1000;
   animation: fadeIn 0.2s ease-in-out;
@@ -146,9 +137,14 @@ export default {
 
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>
-
-
