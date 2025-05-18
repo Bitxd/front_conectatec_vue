@@ -1,15 +1,47 @@
 <template>
   <div class="contenedor">
-    <h1 class="titulo">¡Bienvenido a MiApp!</h1>
-    <p class="descripcion">Gracias por visitarnos. Esperamos que disfrutes la experiencia.</p>
-    <button class="boton">Empezar</button>
+    <template v-if="universidad">
+      <h1 class="titulo">{{ universidad.nombre }}</h1>
+      <p class="descripcion">{{ universidad.descripcion }}</p>
+      <p class="info">📍 {{ universidad.direccion }} | 📞 {{ universidad.telefono }}</p>
+    </template>
+    <template v-else>
+      <PresentacionComponent />
+    </template>
   </div>
 </template>
 
 <script>
+import userApi from '@/apis/userApi';
+import PresentacionComponent from '@/dashboard/PresentacionComponent.vue';
+
 export default {
-  name: 'PagPrincipal'
-}
+  name: 'PagPrincipal',
+  components: {
+    PresentacionComponent
+  },
+  data() {
+    return {
+      universidad: null
+    };
+  },
+  async mounted() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('Token no encontrado.');
+      return;
+    }
+
+    try {
+      const data = await userApi.obtenerUniversidadFavorita(token);
+      if (data && data.universidadFavorita) {
+        this.universidad = data.universidadFavorita;
+      }
+    } catch (error) {
+      console.error('Error al obtener universidad favorita:', error);
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -19,9 +51,9 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-align: center;
   background-color: #f0f4ff;
   padding: 2rem;
+  text-align: center;
 }
 
 .titulo {
@@ -34,22 +66,12 @@ export default {
 .descripcion {
   font-size: 1.125rem;
   color: #4b5563;
-  margin-bottom: 2rem;
-  max-width: 600px;
+  margin-bottom: 1rem;
+  max-width: 700px;
 }
 
-.boton {
-  background-color: #2563eb;
-  color: white;
+.info {
   font-size: 1rem;
-  padding: 0.75rem 2rem;
-  border: none;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.boton:hover {
-  background-color: #1d4ed8;
+  color: #6b7280;
 }
 </style>

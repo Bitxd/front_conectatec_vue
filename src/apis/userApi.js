@@ -80,6 +80,7 @@ const obtenerPerfilUsuario = async (token) => {
 
 // Petición POST para establecer la universidad favorita del usuario
 const establecerUniversidadFavorita = async (token, universidadId) => {
+  
   try {
     const response = await axios.post(
       'http://localhost:5000/api/favorita',
