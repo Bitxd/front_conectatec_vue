@@ -11,11 +11,20 @@ import CoordinadoresPage from '@/pages/CoordinadoresPage.vue';
 import ProfesoresPage from '@/pages/ProfesoresPage.vue';
 import MateriasPage from '@/pages/MateriasPage.vue';
 import PerfilPage from '@/pages/PerfilPage.vue';
+import DashboardPage from '@/pages/DashboardPage.vue';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
+    beforeEnter: (to, from, next) => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        next('/dashboard');
+      } else {
+        next();
+      }
+    },
     component: () => import('@/components/BienvenidaComponent.vue')
   },
   {
@@ -38,12 +47,12 @@ const routes = [
     path: '/:id/foro',
     name: 'Foro',
     component: ForoPage,
-    props: true,
+    props: true
   },
   {
     path: '/publicacion/:id',
     name: 'Publicacion',
-    component: PublicacionPage,
+    component: PublicacionPage
   },
   {
     path: '/universidad/:id/calendario',
@@ -85,10 +94,13 @@ const routes = [
     path: '/perfil',
     name: 'Perfil',
     component: PerfilPage
+  },
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    component: DashboardPage,
+    meta: { requiresAuth: true }
   }
-
-
-
 ];
 
 const router = createRouter({
@@ -99,7 +111,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     const token = localStorage.getItem('token');
-
     if (!token) {
       window.dispatchEvent(new CustomEvent('show-auth-warning', {
         detail: {
