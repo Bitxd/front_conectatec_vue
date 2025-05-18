@@ -31,125 +31,6 @@
     </div>
 </template>
 
-<script>
-import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue';
-import BotonCorazon from '@/components/BotonCorazon.vue';
-import universidadApi from '@/apis/universidadApi';
-import userApi from '@/apis/userApi';
-import tiempoSeccion from '@/services/tiempoSeccion';
-
-export default {
-    name: 'UniversidadesPage',
-    components: {
-        EntradaTextoComponent,
-        BotonCorazon
-    },
-    data() {
-        return {
-            searchQuery: '',
-            universities: [],
-            favoriteUniversityId: null, // Almacena el _id de la universidad favorita actual
-            startTime: null  // Almacena el inicio del conteo de tiempo para la sección
-        };
-    },
-    computed: {
-        filteredUniversities() {
-            if (!this.searchQuery) return this.universities;
-            const query = this.searchQuery.toLowerCase();
-            return this.universities.filter(u =>
-                u.nombre.toLowerCase().includes(query) ||
-                (u.descripcion && u.descripcion.toLowerCase().includes(query))
-            );
-        }
-    },
-    async mounted() {
-        // Inicia el conteo de tiempo para esta sección
-        this.startTime = tiempoSeccion.iniciarConteo();
-
-        // Primero se carga la lista de universidades y luego se obtiene la favorita.
-        await this.loadUniversities();
-        await this.loadFavoriteUniversity();
-    },
-    beforeUnmount() {
-        // Finaliza el conteo cuando el usuario deje la página
-        tiempoSeccion.finalizarConteo(this.startTime, 'universidades');
-    },
-    methods: {
-        // Obtiene la lista de universidades del API
-        async loadUniversities() {
-            try {
-                this.universities = await universidadApi.obtenerUniversidades();
-            } catch (error) {
-                console.error("Error loading universities:", error);
-            }
-        },
-        // Obtiene la universidad favorita del usuario y actualiza favoriteUniversityId
-        async loadFavoriteUniversity() {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await userApi.obtenerUniversidadFavorita(token);
-                if (response && response.universidadFavorita) {
-                    this.favoriteUniversityId = response.universidadFavorita._id;
-                } else {
-                    this.favoriteUniversityId = null;
-                }
-            } catch (error) {
-                console.error("Error loading favorite university:", error);
-            }
-        },
-        // Función de ayuda para determinar si una universidad es la favorita
-        isFavorite(university) {
-            return this.favoriteUniversityId === university._id;
-        },
-        // Maneja el clic en el botón de "corazón"
-        async handleFavorite(university) {
-            const token = localStorage.getItem('token');
-
-            // Si la universidad clickeada es la favorita actual, se elimina.
-            if (this.isFavorite(university)) {
-                try {
-                    const res = await userApi.eliminarUniversidadFavorita(token);
-                    if (res && res.mensaje) {
-                        this.favoriteUniversityId = null;
-                    }
-                } catch (error) {
-                    console.error("Error removing favorite:", error);
-                }
-            } else {
-                // Si ya existe una favorita distinta, se actualiza (PUT); si no, se establece (POST)
-                try {
-                    if (this.favoriteUniversityId) {
-                        const res = await userApi.actualizarUniversidadFavorita(token, university._id);
-                        if (res && res.mensaje) {
-                            this.favoriteUniversityId = university._id;
-                        }
-                    } else {
-                        const res = await userApi.establecerUniversidadFavorita(token, university._id);
-                        if (res && res.mensaje) {
-                            this.favoriteUniversityId = university._id;
-                        }
-                    }
-                } catch (error) {
-                    console.error("Error setting/updating favorite university:", error);
-                }
-            }
-        },
-        // Navega a la página de detalles de la universidad
-        goToUniversityDetails(id) {
-            this.$router.push({ name: 'DetallesUniversidad', params: { id } });
-        },
-        // Trunca la descripción a 120 caracteres
-        truncateDescription(desc) {
-            if (!desc) return 'Descripción no disponible';
-            return desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
-        },
-        // Si hay error al cargar la imagen, asigna una imagen por defecto
-        onImageError(event) {
-            event.target.src = '/placeholder-university.png';
-        }
-    }
-};
-</script>
 
 
 <style scoped>
@@ -329,3 +210,125 @@ export default {
     }
 }
 </style>
+
+
+
+<script>
+import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue';
+import BotonCorazon from '@/components/BotonCorazon.vue';
+import universidadApi from '@/apis/universidadApi';
+import userApi from '@/apis/userApi';
+import tiempoSeccion from '@/services/tiempoSeccion';
+
+export default {
+    name: 'UniversidadesPage',
+    components: {
+        EntradaTextoComponent,
+        BotonCorazon
+    },
+    data() {
+        return {
+            searchQuery: '',
+            universities: [],
+            favoriteUniversityId: null, // Almacena el _id de la universidad favorita actual
+            startTime: null  // Almacena el inicio del conteo de tiempo para la sección
+        };
+    },
+    computed: {
+        filteredUniversities() {
+            if (!this.searchQuery) return this.universities;
+            const query = this.searchQuery.toLowerCase();
+            return this.universities.filter(u =>
+                u.nombre.toLowerCase().includes(query) ||
+                (u.descripcion && u.descripcion.toLowerCase().includes(query))
+            );
+        }
+    },
+    async mounted() {
+        // Inicia el conteo de tiempo para esta sección
+        this.startTime = tiempoSeccion.iniciarConteo();
+
+        // Primero se carga la lista de universidades y luego se obtiene la favorita.
+        await this.loadUniversities();
+        await this.loadFavoriteUniversity();
+    },
+    beforeUnmount() {
+        // Finaliza el conteo cuando el usuario deje la página
+        tiempoSeccion.finalizarConteo(this.startTime, 'universidades');
+    },
+    methods: {
+        // Obtiene la lista de universidades del API
+        async loadUniversities() {
+            try {
+                this.universities = await universidadApi.obtenerUniversidades();
+            } catch (error) {
+                console.error("Error loading universities:", error);
+            }
+        },
+        // Obtiene la universidad favorita del usuario y actualiza favoriteUniversityId
+        async loadFavoriteUniversity() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await userApi.obtenerUniversidadFavorita(token);
+                if (response && response.universidadFavorita) {
+                    this.favoriteUniversityId = response.universidadFavorita._id;
+                } else {
+                    this.favoriteUniversityId = null;
+                }
+            } catch (error) {
+                console.error("Error loading favorite university:", error);
+            }
+        },
+        // Función de ayuda para determinar si una universidad es la favorita
+        isFavorite(university) {
+            return this.favoriteUniversityId === university._id;
+        },
+        // Maneja el clic en el botón de "corazón"
+        async handleFavorite(university) {
+            const token = localStorage.getItem('token');
+
+            // Si la universidad clickeada es la favorita actual, se elimina.
+            if (this.isFavorite(university)) {
+                try {
+                    const res = await userApi.eliminarUniversidadFavorita(token);
+                    if (res && res.mensaje) {
+                        this.favoriteUniversityId = null;
+                    }
+                } catch (error) {
+                    console.error("Error removing favorite:", error);
+                }
+            } else {
+                // Si ya existe una favorita distinta, se actualiza (PUT); si no, se establece (POST)
+                try {
+                    if (this.favoriteUniversityId) {
+                        const res = await userApi.actualizarUniversidadFavorita(token, university._id);
+                        if (res && res.mensaje) {
+                            this.favoriteUniversityId = university._id;
+                        }
+                    } else {
+                        const res = await userApi.establecerUniversidadFavorita(token, university._id);
+                        if (res && res.mensaje) {
+                            this.favoriteUniversityId = university._id;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error setting/updating favorite university:", error);
+                }
+            }
+        },
+        // Navega a la página de detalles de la universidad
+        goToUniversityDetails(id) {
+            this.$router.push({ name: 'DetallesUniversidad', params: { id } });
+        },
+        // Trunca la descripción a 120 caracteres
+        truncateDescription(desc) {
+            if (!desc) return 'Descripción no disponible';
+            return desc.length > 120 ? desc.substring(0, 120) + '...' : desc;
+        },
+        // Si hay error al cargar la imagen, asigna una imagen por defecto
+        onImageError(event) {
+            event.target.src = '/placeholder-university.png';
+        }
+    }
+};
+</script>

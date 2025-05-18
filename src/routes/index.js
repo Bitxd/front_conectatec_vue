@@ -12,6 +12,7 @@ import ProfesoresPage from '@/pages/ProfesoresPage.vue';
 import MateriasPage from '@/pages/MateriasPage.vue';
 import PerfilPage from '@/pages/PerfilPage.vue';
 import DashboardPage from '@/pages/DashboardPage.vue';
+import CarreraPage from '@/pages/CarreraPage.vue';
 
 const routes = [
   {
@@ -99,6 +100,12 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: DashboardPage,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/carrera/:id',
+    name: 'Carrera',
+    component: CarreraPage,
     meta: { requiresAuth: true }
   }
 ];
