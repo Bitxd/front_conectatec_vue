@@ -14,3 +14,18 @@ export const obtenerMateriasPorIdUniversidad = async (idUniversidad) => {
         return null;
     }
 };
+
+export const obtenerMateriasPorIdCarrera = async (idCarrera) => {
+    try {
+        const response = await axios.get(
+            `http://localhost:5000/api/carrera/${idCarrera}/materias`
+        );
+        return response.data;
+    } catch (error) {
+        console.error(
+            `Error al obtener materias para la carrera con ID ${idCarrera}:`,
+            error
+        );
+        return null;
+    }
+};
