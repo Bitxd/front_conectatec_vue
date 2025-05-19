@@ -33,14 +33,36 @@
         </svg>
       </div>
 
-      <!-- Icono de Notas -->
-      
+      <!-- Separador azul -->
+      <div class="sidebar-separator"></div>
+
+      <!-- Icono de Libro -->
+      <div
+        class="sidebar-item"
+        :class="{ active: showBookModal }"
+        aria-label="Libro"
+        role="button"
+        data-tooltip="Librería"
+        @click="showBookModal = true"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="#4a90e2" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+          <path d="M4 4.5A2.5 2.5 0 0 1 6.5 7H20v14H6.5A2.5 2.5 0 0 1 4 18.5v-14z" />
+        </svg>
+      </div>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
       <component :is="currentComponent" class="view-component" />
     </main>
+
+    <!-- Modal Buscador de Libros -->
+    <BuscadorLibros
+      v-if="showBookModal"
+      :show="showBookModal"
+      @close="showBookModal = false"
+    />
   </div>
 </template>
 
@@ -48,17 +70,20 @@
 import PagPrincipal from '@/dashboard/PagPrincipal.vue'
 import ListaEventos from '@/dashboard/ListaEventos.vue'
 import NotasUsuario from '@/dashboard/NotasUsuario.vue'
+import BuscadorLibros from '@/components/Carrera/BuscarLibrosModal.vue'
 
 export default {
   name: 'DashboardPage',
   components: {
     PagPrincipal,
     ListaEventos,
-    NotasUsuario
+    NotasUsuario,
+    BuscadorLibros
   },
   data() {
     return {
-      currentView: 'home'
+      currentView: 'home',
+      showBookModal: false  // Controla la visibilidad del modal
     }
   },
   computed: {
@@ -142,14 +167,20 @@ export default {
   z-index: 100;
 }
 
+.sidebar-separator {
+  width: 80%;
+  height: 2px;
+  background-color: #4a90e2; /* azulito */
+  margin: 0.5rem auto;
+  border-radius: 1px;
+}
+
 .main-content {
   flex: 1;
   overflow-y: auto;
   padding: 0;
   position: relative; 
 }
-
-
 
 .view-component {
   width: 100%;
@@ -159,5 +190,4 @@ export default {
   position: absolute;
   inset: 0;
 }
-
 </style>

@@ -31,7 +31,7 @@
   background: var(--bg-dark);
   border-radius: 8px;
   padding: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .carrera-imagen {
@@ -69,7 +69,7 @@
   border-radius: 6px;
   background: var(--bg-dark);
   padding: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .titulo-acordeon {
@@ -80,7 +80,7 @@
   padding-bottom: 6px;
 }
 
-.semestre-compacto + .semestre-compacto {
+.semestre-compacto+.semestre-compacto {
   margin-top: 10px;
 }
 
@@ -139,7 +139,7 @@
   border-top: none;
   border-radius: 0 0 6px 6px;
   padding: 12px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
   max-height: 200px;
   overflow-y: auto;
 }
@@ -190,7 +190,7 @@
   background: var(--bg-dark);
   border-radius: 8px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   height: fit-content;
 }
 
@@ -209,6 +209,46 @@
   background-color: #90caf9;
   border-radius: 4px;
 }
+
+.btn-residencias {
+  top: 5%;
+  padding: 0.625rem 1.25rem;
+  background-color: #4f46e5;
+  color: white;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(79, 70, 229, 0.4);
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  user-select: none;
+}
+
+.btn-residencias:hover {
+  background-color: #4338ca;
+  box-shadow: 0 6px 8px rgba(67, 56, 202, 0.6);
+}
+
+.btn-residencias:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.6);
+}
+
+.btn-buscar-libros {
+  background-color: #3182ce;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+.btn-buscar-libros:hover {
+  background-color: #2b6cb0;
+}
 </style>
 
 <template>
@@ -216,34 +256,30 @@
     <div class="contenido-principal">
       <!-- Datos de la carrera -->
       <div class="info-carrera" v-if="carrera">
-        <img
-          v-if="carrera.imagen"
-          :src="carrera.imagen"
-          alt="Imagen de la carrera"
-          class="carrera-imagen"
-        />
+        <img v-if="carrera.imagen" :src="carrera.imagen" alt="Imagen de la carrera" class="carrera-imagen" />
         <div class="info-texto">
           <h3>{{ carrera.nombre }}</h3>
           <p>Semestres: {{ carrera.numero_semestres }}</p>
         </div>
+
+        <!-- Botón para abrir modal de residencias -->
+        <button @click="mostrarModal = true" class="btn-residencias">
+          Ver residencias
+        </button>
+
+        <button class="btn-residencias" @click="abrirBuscaLibros">
+          Buscar libros
+        </button>
       </div>
 
       <!-- Contenedor principal flex -->
-      <div class="contenido-flex">
+      <div class="contenido-flex" v-if="!loading && materiasPorSemestre.length">
         <!-- Acordeón de materias -->
-        <div class="acordeon-container" v-if="materiasPorSemestre.length">
+        <div class="acordeon-container">
           <h2 class="titulo-acordeon">Materias por Semestre</h2>
-          <div
-            v-for="(materias, index) in materiasPorSemestre"
-            :key="index"
-            class="semestre-compacto"
-          >
-            <button
-              class="acordeon-btn-compacto"
-              @click="toggleSemestre(index)"
-              :aria-expanded="activeIndex === index"
-            >
-              <span>{{ index + 1 }} Semestre</span>
+          <div v-for="(materias, index) in materiasPorSemestre" :key="index" class="semestre-compacto">
+            <button class="acordeon-btn-compacto" @click="toggleSemestre(index)" :aria-expanded="activeIndex === index">
+              <span>{{ index + 1 }}º Semestre</span>
               <i class="arrow" :class="{ active: activeIndex === index }"></i>
             </button>
             <transition name="slide-fade">
@@ -268,12 +304,20 @@
         </div>
       </div>
 
-      <div class="contenido-centrado">
-        <div class="otros-contenidos">
-          <!-- Otros contenidos si hay -->
-        </div>
+      <!-- Mensajes de carga o error -->
+      <div v-if="loading" class="texto-centro">Cargando datos de la carrera…</div>
+      <div v-else-if="error" class="texto-error">
+        Ocurrió un error al cargar la información.
       </div>
     </div>
+
+    <!-- Modal de residencias -->
+    <ResidenciasComponent v-if="carrera" :idCarrera="carrera._id" :mostrar="mostrarModal"
+      @cerrar="mostrarModal = false" />
+
+    <!-- Modal de buscar libros-->
+    <BuscaLibrosModal v-if="showBuscaLibros" :show="showBuscaLibros" @close="cerrarBuscaLibros" />
+
   </div>
 </template>
 
@@ -281,11 +325,16 @@
 import { obtenerCarreraPorId } from '@/apis/carrerasApi';
 import { obtenerMateriasPorIdCarrera } from '@/apis/materiasApi';
 import CoordinadorComponent from '@/components/Carrera/CoordinadorComponent.vue';
+import ResidenciasComponent from '@/components/Carrera/ResidenciasComponent.vue';
+import BuscaLibrosModal from '@/components/Carrera/BuscarLibrosModal.vue';
+
 
 export default {
   name: 'CarreraPage',
   components: {
-    CoordinadorComponent
+    CoordinadorComponent,
+    ResidenciasComponent,
+    BuscaLibrosModal
   },
   data() {
     return {
@@ -295,43 +344,45 @@ export default {
       loading: true,
       error: false,
       activeIndex: null,
+      mostrarModal: false,
+      showBuscaLibros: false
     };
   },
   async created() {
-    await this.fetchCarrera();
-    await this.fetchMaterias();
-    this.loading = false;
+    try {
+      await this.fetchCarrera();
+      await this.fetchMaterias();
+    } catch (e) {
+      this.error = true;
+    } finally {
+      this.loading = false;
+    }
   },
   methods: {
     async fetchCarrera() {
-      try {
-        this.carrera = await obtenerCarreraPorId(this.id);
-      } catch (e) {
-        this.error = true;
-      }
+      this.carrera = await obtenerCarreraPorId(this.id);
     },
     async fetchMaterias() {
-      try {
-        const materias = await obtenerMateriasPorIdCarrera(this.id);
-        if (materias && materias.length) {
-          const grouped = {};
-          materias.forEach(m => {
-            const sem = m.semestre;
-            if (!grouped[sem]) grouped[sem] = [];
-            grouped[sem].push(m);
-          });
-          this.materiasPorSemestre = Object.keys(grouped)
-            .sort((a, b) => a - b)
-            .map(key => grouped[key]);
-        }
-      } catch (e) {
-        console.error('Error al cargar materias:', e);
-        this.error = true;
+      const materias = await obtenerMateriasPorIdCarrera(this.id);
+      if (materias && materias.length) {
+        const grouped = materias.reduce((acc, m) => {
+          (acc[m.semestre] = acc[m.semestre] || []).push(m);
+          return acc;
+        }, {});
+        this.materiasPorSemestre = Object.keys(grouped)
+          .sort((a, b) => a - b)
+          .map(key => grouped[key]);
       }
     },
     toggleSemestre(index) {
       this.activeIndex = this.activeIndex === index ? null : index;
     },
-  },
+    abrirBuscaLibros() {
+      this.showBuscaLibros = true;
+    },
+    cerrarBuscaLibros() {
+      this.showBuscaLibros = false;
+    }
+  }
 };
 </script>

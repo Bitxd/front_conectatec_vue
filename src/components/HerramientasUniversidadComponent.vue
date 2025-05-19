@@ -19,16 +19,6 @@
           />
         </div>
         <div class="menu-item">
-          <BotonTextoImagenComponent image="/icons/libreria-icon.svg" text="Librería" />
-        </div>
-        <div class="menu-item">
-          <BotonTextoImagenComponent
-            image="/icons/materias-icon.svg"
-            text="Materias"
-            @click="goMaterias"
-          />
-        </div>
-        <div class="menu-item">
           <BotonTextoImagenComponent image="/icons/logros-icon.svg" text="Logros" />
         </div>
         <div class="menu-item">
@@ -92,14 +82,6 @@ export default {
     goProfesores() {
       this.$router.push({
         name: 'Profesores',
-        params: { id: this.idEscuela },
-        query:  { nombre: this.nombreUniversidad }
-      });
-      this.menuVisible = false;
-    },
-    goMaterias() {
-      this.$router.push({
-        name: 'Materias',
         params: { id: this.idEscuela },
         query:  { nombre: this.nombreUniversidad }
       });
