@@ -107,9 +107,9 @@
 
   </div>
 
-  <div v-else>
-    <p class="cargando">Cargando información de la universidad...</p>
-  </div>
+  <ServicioSocialModal v-if="modalServicioSocialVisible && universidad && universidad._id" :idEscuela="universidad._id"
+    @cerrar="cerrarModalServicioSocial" />
+
 </template>
 
 
@@ -120,6 +120,7 @@ import tiempoSeccion from '@/services/tiempoSeccion'
 import ContactoUniversidad from '@/components/Carrera/ContactoUniversidad.vue'
 import RequisitosInscripcion from '@/components/Carrera/RequisitosInscripcion.vue'
 import DescripcionUniversidad from '@/components/Carrera/DescripcionUniversidad.vue'
+import ServicioSocialModal from '@/components/Carrera/ServicioSocialModal.vue'
 
 
 
@@ -128,12 +129,14 @@ export default {
   components: {
     ContactoUniversidad,
     RequisitosInscripcion,
-    DescripcionUniversidad
+    DescripcionUniversidad,
+    ServicioSocialModal
   },
   data() {
     return {
       universidad: null,
-      startTime: null
+      startTime: null,
+      modalServicioSocialVisible: false
     }
   },
   computed: {
@@ -180,7 +183,7 @@ export default {
       this.$router.push({
         name: 'Carreras',
         params: { id: this.idEscuela },
-        query:  { nombre: this.nombreUniversidad }
+        query: { nombre: this.nombreUniversidad }
       });
     },
     botonLogros() {
@@ -190,18 +193,21 @@ export default {
       this.$router.push({
         name: 'Coordinadores',
         params: { id: this.idEscuela },
-        query:  { nombre: this.nombreUniversidad }
+        query: { nombre: this.nombreUniversidad }
       });
     },
     botonProfesores() {
       this.$router.push({
         name: 'Profesores',
         params: { id: this.idEscuela },
-        query:  { nombre: this.nombreUniversidad }
+        query: { nombre: this.nombreUniversidad }
       });
     },
     botonServicioSocial() {
-      console.log('Servicio Social botón presionado')
+      this.modalServicioSocialVisible = true;
+    },
+    cerrarModalServicioSocial() {
+      this.modalServicioSocialVisible = false;
     }
   }
 
