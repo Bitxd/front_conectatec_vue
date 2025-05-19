@@ -6,26 +6,27 @@
         <h1 class="nombre">{{ universidad.nombre }}</h1>
         <img :src="universidad.logoUrl" alt="Logo" class="imagen-header" />
       </div>
-      
+
       <div class="header-right">
         <div class="herramientas-container">
           <button class="btn-icono-texto" @click="botonMapa">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M20.5 3l-5.5 2-5-2-5.5 2v15l5.5-2 5 2 5.5-2z"/>
+              <path d="M20.5 3l-5.5 2-5-2-5.5 2v15l5.5-2 5 2 5.5-2z" />
             </svg>
             <span>Mapa Virtual</span>
           </button>
-          
+
           <button class="btn-icono-texto" @click="botonForo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M21 6h-2v9H7l-4 4V6c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v11h-2V6z"/>
+              <path d="M21 6h-2v9H7l-4 4V6c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v11h-2V6z" />
             </svg>
             <span>Foro</span>
           </button>
-          
+
           <button class="btn-icono-texto" @click="botonCalendario">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/>
+              <path
+                d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z" />
             </svg>
             <span>Calendario</span>
           </button>
@@ -34,77 +35,72 @@
     </div>
 
     <hr class="separador-header">
-
     <!-- Botones Secundarios -->
     <div class="botones-secundarios">
-      <button class="btn-secundario">
+      <button class="btn-secundario" @click="botonCarreras">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zM3 8.73V17h7v-5H8v-1.27L3 8.73zM9 17h6v-3H9v3zm8 0h2v-5.27l-2 0.91V17z"/>
+          <path
+            d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zM3 8.73V17h7v-5H8v-1.27L3 8.73zM9 17h6v-3H9v3zm8 0h2v-5.27l-2 0.91V17z" />
         </svg>
         <span>Carreras</span>
       </button>
 
-      <button class="btn-secundario">
+      <button class="btn-secundario" @click="botonLogros">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
         </svg>
         <span>Logros</span>
       </button>
 
-      <button class="btn-secundario">
+      <button class="btn-secundario" @click="botonCoordinadores">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+          <path
+            d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
         </svg>
         <span>Coordinadores</span>
       </button>
 
-      <button class="btn-secundario">
+      <button class="btn-secundario" @click="botonProfesores">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 100-8 4 4 0 000 8z"/>
+          <path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 100-8 4 4 0 000 8z" />
         </svg>
         <span>Profesores</span>
       </button>
 
-      <button class="btn-secundario">
+      <button class="btn-secundario" @click="botonServicioSocial">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+          <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
         </svg>
         <span>Servicio Social</span>
       </button>
     </div>
+
 
     <!-- Sección de Información Principal -->
     <div class="info-adicional-dos-columnas">
       <!-- Columna Izquierda -->
       <div class="columna-izquierda">
         <div class="info-card contacto-card">
-          <div class="card-title">Contacto</div>
-          <ContactoUniversidad :contacto="contactoData"/>
+          <ContactoUniversidad :contacto="contactoData" />
         </div>
 
         <div class="info-card requisitos-card">
-          <div class="card-title">Requisitos de Inscripción</div>
-          <RequisitosInscripcion 
-            :precio_inscripcion="universidad.precio_inscripcion"
+          <RequisitosInscripcion :precio_inscripcion="universidad.precio_inscripcion"
             :fecha_inscripcion="universidad.fecha_inscripcion"
-            :documentos_solicitados="universidad.documentos_solicitados"
-          />
+            :documentos_solicitados="universidad.documentos_solicitados" />
         </div>
       </div>
 
       <!-- Columna Derecha -->
       <div class="columna-derecha">
         <div class="info-card descripcion-card">
-          <div class="card-title">Acerca de la Universidad</div>
-          <DescripcionUniversidad 
-            :descripcionData="{
-              descripcion: universidad.descripcion,
-              historia: universidad.historia,
-              mision: universidad.mision,
-              vision: universidad.vision,
-              valores: universidad.valores
-            }"
-          />
+          <DescripcionUniversidad :descripcionData="{
+            descripcion: universidad.descripcion,
+            historia: universidad.historia,
+            mision: universidad.mision,
+            vision: universidad.vision,
+            valores: universidad.valores
+          }" />
         </div>
       </div>
     </div>
@@ -115,6 +111,102 @@
     <p class="cargando">Cargando información de la universidad...</p>
   </div>
 </template>
+
+
+
+<script>
+import universidadApi from '@/apis/universidadApi'
+import tiempoSeccion from '@/services/tiempoSeccion'
+import ContactoUniversidad from '@/components/Carrera/ContactoUniversidad.vue'
+import RequisitosInscripcion from '@/components/Carrera/RequisitosInscripcion.vue'
+import DescripcionUniversidad from '@/components/Carrera/DescripcionUniversidad.vue'
+
+
+
+export default {
+  name: 'DetallesUniversidad',
+  components: {
+    ContactoUniversidad,
+    RequisitosInscripcion,
+    DescripcionUniversidad
+  },
+  data() {
+    return {
+      universidad: null,
+      startTime: null
+    }
+  },
+  computed: {
+    contactoData() {
+      if (!this.universidad) return {}
+      return {
+        telefono: this.universidad.telefono,
+        correo_contacto: this.universidad.correo_contacto,
+        pagina_web: this.universidad.pagina_web
+      }
+    }
+  },
+  async mounted() {
+    this.startTime = tiempoSeccion.iniciarConteo()
+    const id = this.$route.params.id
+    try {
+      this.universidad = await universidadApi.obtenerUniversidadPorId(id)
+    } catch (e) {
+      console.error(e)
+    }
+  },
+  beforeUnmount() {
+    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad')
+  },
+  methods: {
+    botonForo() {
+      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } })
+    },
+    botonCalendario() {
+      this.$router.push({
+        name: 'Calendario',
+        params: { id: this.universidad.id },
+        query: { nombre: this.universidad.nombre }
+      })
+    },
+    botonMapa() {
+      this.$router.push({
+        name: 'Mapa',
+        params: { id: this.universidad.id },
+        query: { nombre: this.universidad.nombre }
+      })
+    },
+    botonCarreras() {
+      this.$router.push({
+        name: 'Carreras',
+        params: { id: this.idEscuela },
+        query:  { nombre: this.nombreUniversidad }
+      });
+    },
+    botonLogros() {
+      console.log('Logros botón presionado')
+    },
+    botonCoordinadores() {
+      this.$router.push({
+        name: 'Coordinadores',
+        params: { id: this.idEscuela },
+        query:  { nombre: this.nombreUniversidad }
+      });
+    },
+    botonProfesores() {
+      this.$router.push({
+        name: 'Profesores',
+        params: { id: this.idEscuela },
+        query:  { nombre: this.nombreUniversidad }
+      });
+    },
+    botonServicioSocial() {
+      console.log('Servicio Social botón presionado')
+    }
+  }
+
+}
+</script>
 
 <style scoped>
 .detalles-universidad {
@@ -267,30 +359,18 @@
   overflow: hidden;
 }
 
-.card-title {
-  background: #f8fafc;
-  padding: 18px 25px;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: relative;
-}
 
-.card-title::before {
-  content: '';
-  display: block;
-  width: 5px;
-  height: 24px;
+.contacto-card .card-title::before {
   background: #6366f1;
-  border-radius: 3px;
 }
 
-.contacto-card .card-title::before { background: #6366f1; }
-.requisitos-card .card-title::before { background: #22d3ee; }
-.descripcion-card .card-title::before { background: #f59e0b; }
+.requisitos-card .card-title::before {
+  background: #22d3ee;
+}
+
+.descripcion-card .card-title::before {
+  background: #f59e0b;
+}
 
 .descripcion-card {
   height: 100%;
@@ -302,11 +382,11 @@
   .detalles-universidad {
     padding: 25px;
   }
-  
+
   .info-adicional-dos-columnas {
     grid-template-columns: 1fr;
   }
-  
+
   .columna-derecha {
     order: -1;
   }
@@ -317,16 +397,16 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .herramientas-container {
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .botones-secundarios {
     gap: 10px;
   }
-  
+
   .btn-secundario {
     flex-grow: 1;
     justify-content: center;
@@ -365,68 +445,3 @@
   font-size: 0.95rem;
 }
 </style>
-<script>
-import universidadApi from '@/apis/universidadApi'
-import tiempoSeccion from '@/services/tiempoSeccion'
-import ContactoUniversidad from '@/components/Carrera/ContactoUniversidad.vue'
-import RequisitosInscripcion from '@/components/Carrera/RequisitosInscripcion.vue'
-import DescripcionUniversidad from '@/components/Carrera/DescripcionUniversidad.vue'
-
-
-
-export default {
-  name: 'DetallesUniversidad',
-  components: {
-    ContactoUniversidad,
-    RequisitosInscripcion,
-    DescripcionUniversidad
-  },
-  data() {
-    return {
-      universidad: null,
-      startTime: null
-    }
-  },
-  computed: {
-    contactoData() {
-      if (!this.universidad) return {}
-      return {
-        telefono: this.universidad.telefono,
-        correo_contacto: this.universidad.correo_contacto,
-        pagina_web: this.universidad.pagina_web
-      }
-    }
-  },
-  async mounted() {
-    this.startTime = tiempoSeccion.iniciarConteo()
-    const id = this.$route.params.id
-    try {
-      this.universidad = await universidadApi.obtenerUniversidadPorId(id)
-    } catch (e) {
-      console.error(e)
-    }
-  },
-  beforeUnmount() {
-    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad')
-  },
-  methods: {
-    botonForo() {
-      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } })
-    },
-    botonCalendario() {
-      this.$router.push({
-        name: 'Calendario',
-        params: { id: this.universidad.id },
-        query: { nombre: this.universidad.nombre }
-      })
-    },
-    botonMapa() {
-      this.$router.push({
-        name: 'Mapa',
-        params: { id: this.universidad.id },
-        query: { nombre: this.universidad.nombre }
-      })
-    }
-  }
-}
-</script>
