@@ -8,22 +8,25 @@
       <div class="header-right">
         <div class="herramientas-container">
           <button class="btn-icono-texto" @click="botonMapa">
+            <!-- Icono de mapa -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
+              <path d="M20.5 3l-5.5 2-5-2-5.5 2v15l5.5-2 5 2 5.5-2z"/>
             </svg>
             <span>Mapa Virtual</span>
           </button>
-          
+
           <button class="btn-icono-texto" @click="botonForo">
+            <!-- Icono de foro -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+              <path d="M21 6h-2v9H7l-4 4V6c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v11h-2V6z"/>
             </svg>
             <span>Foro</span>
           </button>
-          
+
           <button class="btn-icono-texto" @click="botonCalendario">
+            <!-- Icono de calendario -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/>
             </svg>
             <span>Calendario</span>
           </button>
@@ -33,70 +36,43 @@
     <hr class="separador-header" />
     <div class="botones-secundarios">
       <button class="btn-secundario">
+        <!-- Icono de carreras -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+          <path d="M12 2L1 7l11 5 9-4.09V17h2V7L12 2zM3 8.73V17h7v-5H8v-1.27L3 8.73zM9 17h6v-3H9v3zm8 0h2v-5.27l-2 0.91V17z"/>
         </svg>
-        <span>Información General</span>
+        <span>Carreras</span>
       </button>
-      
+
       <button class="btn-secundario">
+        <!-- Icono de logros -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
         </svg>
-        <span>Inscripciones</span>
+        <span>Logros</span>
+      </button>
+
+      <button class="btn-secundario">
+        <!-- Icono de coordinadores -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5s-3 1.34-3 3 1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+        </svg>
+        <span>Coordinadores</span>
+      </button>
+
+      <button class="btn-secundario">
+        <!-- Icono de profesores -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+        <span>Profesores</span>
       </button>
     </div>
   </div>
+  
   <div v-else>
     <p>Cargando información de la universidad...</p>
   </div>
 </template>
-
-<script>
-import universidadApi from '@/apis/universidadApi'
-import tiempoSeccion from '@/services/tiempoSeccion'
-
-export default {
-  name: 'DetallesUniversidad',
-  data() {
-    return {
-      universidad: null,
-      startTime: null
-    }
-  },
-  async mounted() {
-    this.startTime = tiempoSeccion.iniciarConteo()
-    const id = this.$route.params.id
-    try {
-      this.universidad = await universidadApi.obtenerUniversidadPorId(id)
-    } catch (e) {
-      console.error(e)
-    }
-  },
-  beforeUnmount() {
-    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad')
-  },
-  methods: {
-    botonForo() {
-      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } })
-    },
-    botonCalendario() {
-      this.$router.push({
-        name: 'Calendario',
-        params: { id: this.universidad.id },
-        query: { nombre: this.universidad.nombre }
-      })
-    },
-    botonMapa() {
-      this.$router.push({
-        name: 'Mapa',
-        params: { id: this.universidad.id },
-        query: { nombre: this.universidad.nombre }
-      })
-    }
-  }
-}
-</script>
 
 <style scoped>
 .detalles-universidad {
@@ -150,23 +126,23 @@ export default {
   margin-bottom: 20px;
 }
 
-/* Estilos botones principales */
+/* Botones principales compactos */
 .herramientas-container {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
 }
 
 .btn-icono-texto {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 15px;
+  gap: 6px;
+  padding: 8px 12px;
   background: #f8f9fa;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   color: #2c3e50;
 }
 
@@ -174,60 +150,61 @@ export default {
   background: #2688e4;
   color: white;
   border-color: #0fa7ee;
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .btn-icono-texto svg {
   fill: currentColor;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .btn-icono-texto span {
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
-/* Estilos botones secundarios */
+/* Botones secundarios compactos */
 .botones-secundarios {
   display: flex;
-  gap: 16px;
+  gap: 12px;
   margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .btn-secundario {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
+  gap: 6px;
+  padding: 10px 16px;
   background: #ffffff;
   border: 2px solid #22c1ff;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   color: #006eff;
 }
 
 .btn-secundario:hover {
   background: #0572ff;
   color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .btn-secundario svg {
   fill: currentColor;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 
 .btn-secundario span {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .nombre {
     font-size: 24px;
@@ -246,12 +223,18 @@ export default {
 
   .herramientas-container {
     flex-wrap: wrap;
+    gap: 8px;
   }
   
-  .btn-icono-texto,
+  .btn-icono-texto {
+    flex: 1 1 auto;
+    padding: 6px 10px;
+  }
+  
   .btn-secundario {
-    flex: 1 1 100%;
+    flex: 1 1 160px;
     justify-content: center;
+    padding: 8px 12px;
   }
 }
 
@@ -260,13 +243,62 @@ export default {
     padding: 15px;
   }
   
-  .btn-icono-texto span,
+  .btn-icono-texto span {
+    font-size: 0.75rem;
+  }
+  
   .btn-secundario span {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
   
   .btn-secundario {
-    padding: 10px 15px;
+    padding: 6px 10px;
   }
 }
 </style>
+
+<script>
+import universidadApi from '@/apis/universidadApi'
+import tiempoSeccion from '@/services/tiempoSeccion'
+
+export default {
+  name: 'DetallesUniversidad',
+  data() {
+    return {
+      universidad: null,
+      startTime: null
+    }
+  },
+  async mounted() {
+    this.startTime = tiempoSeccion.iniciarConteo()
+    const id = this.$route.params.id
+    try {
+      this.universidad = await universidadApi.obtenerUniversidadPorId(id)
+    } catch (e) {
+      console.error(e)
+    }
+  },
+  beforeUnmount() {
+    tiempoSeccion.finalizarConteo(this.startTime, 'detalles_universidad')
+  },
+  methods: {
+    botonForo() {
+      this.$router.push({ name: 'Foro', params: { id: this.universidad.id } })
+    },
+    botonCalendario() {
+      this.$router.push({
+        name: 'Calendario',
+        params: { id: this.universidad.id },
+        query: { nombre: this.universidad.nombre }
+      })
+    },
+    botonMapa() {
+      this.$router.push({
+        name: 'Mapa',
+        params: { id: this.universidad.id },
+        query: { nombre: this.universidad.nombre }
+      })
+    }
+  }
+}
+</script>
