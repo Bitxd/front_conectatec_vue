@@ -183,16 +183,6 @@
   color: var(--secondary-color);
 }
 
-/* Estilos para la sección del coordinador */
-.seccion-coordinador {
-  flex: 1;
-  max-width: 400px;
-  background: var(--bg-dark);
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  height: fit-content;
-}
 
 .acordeon-container::-webkit-scrollbar,
 .panel-compacto::-webkit-scrollbar {
@@ -298,10 +288,6 @@
           </div>
         </div>
 
-        <!-- Sección del coordinador a la derecha -->
-        <div class="seccion-coordinador">
-          <CoordinadorComponent :carreraId="id" />
-        </div>
       </div>
 
       <!-- Mensajes de carga o error -->
@@ -324,7 +310,6 @@
 <script>
 import { obtenerCarreraPorId } from '@/apis/carrerasApi';
 import { obtenerMateriasPorIdCarrera } from '@/apis/materiasApi';
-import CoordinadorComponent from '@/components/Carrera/CoordinadorComponent.vue';
 import ResidenciasComponent from '@/components/Carrera/ResidenciasComponent.vue';
 import BuscaLibrosModal from '@/components/Carrera/BuscarLibrosModal.vue';
 
@@ -332,7 +317,6 @@ import BuscaLibrosModal from '@/components/Carrera/BuscarLibrosModal.vue';
 export default {
   name: 'CarreraPage',
   components: {
-    CoordinadorComponent,
     ResidenciasComponent,
     BuscaLibrosModal
   },
