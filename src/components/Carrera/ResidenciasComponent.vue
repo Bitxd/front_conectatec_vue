@@ -3,7 +3,7 @@
     <div v-if="mostrar" class="residencias-modal-overlay">
       <div class="residencias-modal-container">
         <header class="residencias-modal-header">
-          <h2 class="residencias-modal-title">Oportunidades de Residencia</h2>
+          <h2 class="residencias-modal-title">Proyectos de residencias asignadados por la institución</h2>
           <button @click="cerrarModal" class="residencias-modal-close-button">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

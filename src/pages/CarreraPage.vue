@@ -254,7 +254,7 @@
 
         <!-- Botón para abrir modal de residencias -->
         <button @click="mostrarModal = true" class="btn-residencias">
-          Ver residencias
+          Proyectos residencias
         </button>
 
         <button class="btn-residencias" @click="abrirBuscaLibros">
