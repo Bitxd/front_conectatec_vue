@@ -236,9 +236,38 @@
   font-weight: 600;
   transition: background-color 0.2s;
 }
+
 .btn-buscar-libros:hover {
   background-color: #2b6cb0;
 }
+
+.contenedor-secundario {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 16px;
+  height: 20%;
+  min-width: 25%;
+  max-width: 30%;
+}
+
+.contenedor-secundario > * {
+  flex: 1;
+  min-width: 100%;
+  min-height: 100%;
+  height: auto;
+}
+
+.contenedor-secundario > *:first-child {
+  height: 50%; 
+}
+
+.contenedor-secundario > *:nth-child(2) {
+  height: 40%; 
+  margin-top: -3px; /* sube 10px hacia arriba */
+}
+
+
 </style>
 
 <template>
@@ -288,6 +317,12 @@
           </div>
         </div>
 
+        <div class="contenedor-secundario">
+          <TarjetaCoordinador :idCarrera="id" />
+          <ConsultarProfesores :departamentoId="carrera.departamento" />
+        </div>
+
+
       </div>
 
       <!-- Mensajes de carga o error -->
@@ -312,13 +347,17 @@ import { obtenerCarreraPorId } from '@/apis/carrerasApi';
 import { obtenerMateriasPorIdCarrera } from '@/apis/materiasApi';
 import ResidenciasComponent from '@/components/Carrera/ResidenciasComponent.vue';
 import BuscaLibrosModal from '@/components/Carrera/BuscarLibrosModal.vue';
+import TarjetaCoordinador from '@/components/Carrera/TarjetaCoordinador.vue';
+import ConsultarProfesores from '@/components/Carrera/ConsultarProfesores.vue';
 
 
 export default {
   name: 'CarreraPage',
   components: {
     ResidenciasComponent,
-    BuscaLibrosModal
+    BuscaLibrosModal,
+    TarjetaCoordinador,
+    ConsultarProfesores
   },
   data() {
     return {

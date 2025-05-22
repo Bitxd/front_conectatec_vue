@@ -10,3 +10,14 @@ export const obtenerCoordinadoresPorIdEscuela = async (idEscuela) => {
         return null;
     }
 };
+
+// Obtener un coordinador por id de carrera
+export const obtenerCoordinadorPorIdCarrera = async (idCarrera) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/api/carreras/${idCarrera}/coordinador`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error al obtener el coordinador para la carrera con ID ${idCarrera}:`, error);
+    return null;
+  }
+};
