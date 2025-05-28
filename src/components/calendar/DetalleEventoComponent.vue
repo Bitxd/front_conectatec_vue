@@ -59,12 +59,6 @@
           <div class="lugar-texto">
             <span><strong>Lugar:</strong> {{ calendario.lugar }}</span>
           </div>
-          <div class="contenedor-boton">
-            <BotonTextoImagenComponent
-              image="/images/localizacion.png"
-              text="Localización"
-            />
-          </div>
         </div>
       </div>
 
@@ -114,7 +108,6 @@
 import userApi from '@/apis/userApi';
 import authService from '@/services/authService';
 
-import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
 import BotonNotificacionComponent from '../buttons/BotonNotificacionComponent.vue';
 import CrearRecordatorioComponent from './CrearRecordatorioComponent.vue';
 import EditarRecordatorioComponent from './EditarRecordatorioComponent.vue';
@@ -129,7 +122,6 @@ export default {
     }
   },
   components: {
-    BotonTextoImagenComponent,
     BotonNotificacionComponent,
     CrearRecordatorioComponent,
     EditarRecordatorioComponent,
@@ -334,11 +326,6 @@ export default {
   margin-right: 0;
 }
 
-.contenedor-boton {
-  margin-left: 120px;
-  margin-right: -80px;
-  flex-shrink: 0;
-}
 
 @media (max-width: 768px) {
   .fila-horizontal {

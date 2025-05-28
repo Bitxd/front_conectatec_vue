@@ -241,33 +241,42 @@
   background-color: #2b6cb0;
 }
 
+.detalle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-grow: 1;
+  min-height: 0; 
+}
+
+
 .contenedor-secundario {
   display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  gap: 16px;
-  height: 20%;
-  min-width: 25%;
-  max-width: 30%;
+  flex-direction: row; 
+  gap: 12px; 
+  width: 100%; 
+  max-width: 360px; 
+  min-height: 400px;
 }
 
 .contenedor-secundario > * {
-  flex: 1;
-  min-width: 100%;
-  min-height: 100%;
+  flex: none;
+  width: 100%;
   height: auto;
-}
-
-.contenedor-secundario > *:first-child {
-  height: 50%; 
-}
-
-.contenedor-secundario > *:nth-child(2) {
-  height: 40%; 
-  margin-top: -3px; 
+  min-height: unset;
+  margin-top: 0;
 }
 
 
+.contenedor-secundario>*:first-child {
+  height: 50%;
+  width: 100%;
+}
+
+.contenedor-secundario>*:nth-child(2) {
+  height: 40%;
+  margin-top: -3px;
+}
 </style>
 
 <template>
@@ -317,9 +326,16 @@
           </div>
         </div>
 
-        <div class="contenedor-secundario">
-          <TarjetaCoordinador :idCarrera="id" />
-          <ConsultarProfesores :departamentoId="carrera.departamento" />
+
+        <div class="detalle-container">
+          <!-- Descripción de la carrera -->
+          <DescripcionCarrera :descripcion="carrera.descripcion" />
+
+          <!-- Tarjetas de coordinador y profesores -->
+          <div class="contenedor-secundario">
+            <TarjetaCoordinador :idCarrera="id" />
+            <ConsultarProfesores :departamentoId="carrera.departamento" />
+          </div>
         </div>
 
 
@@ -349,6 +365,7 @@ import ResidenciasComponent from '@/components/Carrera/ResidenciasComponent.vue'
 import BuscaLibrosModal from '@/components/Carrera/BuscarLibrosModal.vue';
 import TarjetaCoordinador from '@/components/Carrera/TarjetaCoordinador.vue';
 import ConsultarProfesores from '@/components/Carrera/ConsultarProfesores.vue';
+import DescripcionCarrera from '@/components/Carrera/DescripcionCarrera.vue';
 
 
 export default {
@@ -357,7 +374,8 @@ export default {
     ResidenciasComponent,
     BuscaLibrosModal,
     TarjetaCoordinador,
-    ConsultarProfesores
+    ConsultarProfesores,
+    DescripcionCarrera
   },
   data() {
     return {

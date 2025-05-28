@@ -29,7 +29,7 @@ import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
 import universidadApi from '@/apis/universidadApi';
 import ListaEventosComponent from '@/components/calendar/ListaEventosComponent.vue';
 import DetalleEventoComponent from '@/components/calendar/DetalleEventoComponent.vue';
-import tiempoSeccion from '@/services/tiempoSeccion'; // Importando el servicio
+import tiempoSeccion from '@/services/tiempoSeccion'; 
 
 export default {
     name: 'CalendarioPage',
