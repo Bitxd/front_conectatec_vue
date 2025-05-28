@@ -10,22 +10,19 @@
 
       <!-- CUERPO COMPACTO -->
       <div class="modal-body materia-body">
+        <!-- Campo nombre usuario -->
+        <div class="field-usuario">
+          <span class="label-usuario">Nombre:</span>
+          <input v-model="nombreUsuario" class="input-usuario" placeholder="Tu nombre completo" />
+        </div>
+
         <!-- Selector de materia -->
         <div class="field-materia">
-          <input
-            v-model="busqueda"
-            @focus="mostrarLista = true"
-            @blur="ocultarLista"
-            placeholder="Selecciona materia"
-            class="input-materia"
-          />
+          <input v-model="busqueda" @focus="mostrarLista = true" @blur="ocultarLista" placeholder="Selecciona materia"
+            class="input-materia" />
           <ul v-show="mostrarLista" class="lista-materias" @mousedown.prevent>
-            <li
-              v-for="materia in materiasFiltradas"
-              :key="materia"
-              class="item-materia"
-              @click="seleccionarMateria(materia)"
-            >
+            <li v-for="materia in materiasFiltradas" :key="materia" class="item-materia"
+              @click="seleccionarMateria(materia)">
               {{ materia }}
             </li>
           </ul>
@@ -38,11 +35,7 @@
         </div>
 
         <!-- Asunto -->
-        <textarea
-          v-model="asunto"
-          placeholder="Describe brevemente el motivo"
-          class="textarea-asunto"
-        ></textarea>
+        <textarea v-model="asunto" placeholder="Describe brevemente el motivo" class="textarea-asunto"></textarea>
 
         <!-- Botón dentro del mismo cuerpo -->
         <button class="btn-confirmar" @click="confirmar">
@@ -95,8 +88,14 @@
   cursor: pointer;
   color: #000;
 }
-.modal-back { left: 0.5rem; }
-.modal-close { right: 0.5rem; }
+
+.modal-back {
+  left: 0.5rem;
+}
+
+.modal-close {
+  right: 0.5rem;
+}
 
 .modal-title {
   margin: 0;
@@ -112,6 +111,36 @@
   gap: 0.75rem;
   padding: 1rem;
   background: #fff;
+}
+
+/* Campo nombre usuario */
+.field-usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.label-usuario {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #000;
+  min-width: 60px;
+}
+
+.input-usuario {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  color: #000;
+  background-color: #fff;
+}
+
+.input-usuario:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
 }
 
 /* Selector de materia */
@@ -224,9 +253,6 @@
 }
 </style>
 
-
-
-
 <script>
 import { obtenerMateriasPorIdCarrera } from '@/apis/materiasApi';
 
@@ -242,7 +268,8 @@ export default {
       busqueda: '',
       materiaSeleccionada: '',
       mostrarLista: false,
-      asunto: ''
+      asunto: '',
+      nombreUsuario: ''
     };
   },
   computed: {
@@ -266,20 +293,39 @@ export default {
       if (!this.materiaSeleccionada || !this.asunto.trim()) {
         return alert('Selecciona materia y escribe el asunto.');
       }
-      this.$emit('confirmar-asesoria', {
-        profesorId: this.profesor._id,
-        materia: this.materiaSeleccionada,
-        asunto: this.asunto
-      });
-    },
+
+      const destinatario = this.profesor.correo;
+      const asuntoTexto = encodeURIComponent(`Solicitud de asesoría en ${this.materiaSeleccionada}`);
+      const cuerpo = encodeURIComponent(
+        `Hola profesor ${this.profesor.nombre},\n\n` +
+        `Soy ${this.nombreUsuario} y me gustaría solicitar una asesoría en la materia "${this.materiaSeleccionada}".\n\n` +
+        `Motivo:\n${this.asunto}\n\n` +
+        `Gracias de antemano.`
+      );
+
+      const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${destinatario}&subject=${asuntoTexto}&body=${cuerpo}`;
+      window.open(outlookUrl, '_blank');
+    }
+
+
+    ,
     async cargarMaterias() {
       const data = await obtenerMateriasPorIdCarrera(localStorage.getItem('idActualCarrera'));
       this.materias = data || [];
+    },
+    cargarNombreUsuario() {
+      try {
+        const usuario = JSON.parse(localStorage.getItem('usuario'));
+        this.nombreUsuario = usuario?.fullname || 'Nombre no encontrado';
+      } catch (error) {
+        console.error('Error al obtener usuario:', error);
+        this.nombreUsuario = 'Error al cargar nombre';
+      }
     }
   },
   mounted() {
     this.cargarMaterias();
+    this.cargarNombreUsuario();
   }
 };
 </script>
-

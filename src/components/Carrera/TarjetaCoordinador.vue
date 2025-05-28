@@ -1,5 +1,4 @@
 <script>
-// Importa la función API (ajusta la ruta según tu proyecto)
 import { obtenerCoordinadorPorIdCarrera } from '@/apis/coordinadorApi';
 
 export default {
@@ -26,9 +25,6 @@ export default {
       } catch (error) {
         console.error('Error al cargar el coordinador:', error);
       }
-    },
-    mostrarOficina() {
-      this.$emit('mostrar-oficina', this.coordinador);
     }
   }
 };
@@ -50,14 +46,18 @@ export default {
       <div class="info">
         <h2 class="nombre">{{ coordinador.nombre }}</h2>
         <div class="detalles">
-          <p class="correo">{{ coordinador.correo }}</p>
+          <p class="correo">
+            <a
+              :href="`https://outlook.office.com/mail/deeplink/compose?to=${coordinador.correo}`"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ coordinador.correo }}
+            </a>
+          </p>
           <p class="telefono">{{ coordinador.telefono || 'Sin teléfono' }}</p>
         </div>
       </div>
-
-      <button class="btn-mostrar" @click="mostrarOficina">
-        Mostrar oficina
-      </button>
     </div>
 
     <div v-else class="contenido cargando">
@@ -65,6 +65,7 @@ export default {
     </div>
   </div>
 </template>
+
 
 <style scoped>
 .tarjeta-coordinador {
@@ -140,25 +141,6 @@ export default {
   text-align: left;
 }
 
-.btn-mostrar {
-  position: absolute;
-  bottom: 16px;
-  right: 24px;
-  padding: 8px 18px;
-  background: #1e88e5;
-  color: #ffffff;
-  border: 2px solid #e3f2fd;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn-mostrar:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(21, 101, 192, 0.3);
-}
 
 .cargando {
   justify-content: center;
