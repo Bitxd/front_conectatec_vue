@@ -53,7 +53,7 @@
   color: var(--secondary-color);
 }
 
-/* Nuevo contenedor flex */
+
 .contenido-flex {
   display: flex;
   gap: 16px;
@@ -264,7 +264,7 @@
 
 .contenedor-secundario > *:nth-child(2) {
   height: 40%; 
-  margin-top: -3px; /* sube 10px hacia arriba */
+  margin-top: -3px; 
 }
 
 

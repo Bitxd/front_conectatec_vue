@@ -1,15 +1,18 @@
 <template>
   <section class="presentacion-container">
     <div class="content">
-      <h1 class="main-title">
-        Tu espacio académico personalizado
-      </h1>
-      <p class="subtext">
-        Selecciona tu universidad y carrera para comenzar a organizar tu futuro profesional.
-      </p>
-      <button class="cta-button" @click="redirigirASeleccion">
-        Comenzar ahora
-      </button>
+      <img src="/images/estudiante.png" alt="Educación universitaria" class="hero-image">
+      <div class="text-content">
+        <h1 class="main-title">
+          Tu espacio académico personalizado
+        </h1>
+        <p class="subtext">
+          Selecciona tu universidad y carrera para comenzar
+        </p>
+        <button class="cta-button" @click="redirigirASeleccion">
+          Comenzar ahora
+        </button>
+      </div>
     </div>
   </section>
 </template>
@@ -27,57 +30,91 @@ export default {
 
 <style scoped>
 .presentacion-container {
-  height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  height: 100%;
+  padding: 40px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #f8fafc;
   font-family: 'Inter', sans-serif;
-  padding: 20px;
 }
 
+
 .content {
-  max-width: 700px;
-  text-align: center;
-  background: #ffffff;
-  padding: 48px 32px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  max-width: 1000px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-image {
+  max-width: 320px;
+  width: 100%;
+}
+
+.text-content {
+  max-width: 500px;
+  text-align: left;
 }
 
 .main-title {
   font-size: 2rem;
-  font-weight: 700;
-  color: #2d3436;
-  position: relative;
-  padding-left: 28px;
-  margin-bottom: 16px;
+  color: #1e293b;
+  margin-bottom: 20px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
-
-
 .subtext {
-  font-size: 1.1rem;
-  color: #4b5563;
-  margin-bottom: 32px;
-  line-height: 1.6;
+  color: #64748b;
+  margin-bottom: 30px;
+  line-height: 1.5;
+  font-size: 1rem;
 }
 
 .cta-button {
-  background: #4a90e2;
+  background: #3b82f6;
   color: white;
   border: none;
-  padding: 14px 28px;
-  border-radius: 10px;
+  padding: 12px 30px;
+  border-radius: 8px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .cta-button:hover {
-  background: #357abd;
-  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .text-content {
+    text-align: center;
+  }
+
+  .main-title {
+    font-size: 1.6rem;
+  }
+
+  .hero-image {
+    max-width: 240px;
+  }
+
+  .cta-button {
+    width: 100%;
+    padding: 14px 20px;
+  }
 }
 </style>
