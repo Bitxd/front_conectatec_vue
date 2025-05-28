@@ -181,9 +181,8 @@ export default {
 }
 
 .card-img-container {
-  position: relative;
   width: 100%;
-  height: 100px;
+  height: 90px; /* un poco más alta */
   overflow: hidden;
 }
 
@@ -191,7 +190,10 @@ export default {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 0;
 }
+
+
 
 .select-svg {
   position: absolute;
