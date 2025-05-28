@@ -372,6 +372,8 @@ export default {
     };
   },
   async created() {
+    // Guardar el ID actual en localStorage al entrar a la página
+    localStorage.setItem('idActualCarrera', this.id);
     try {
       await this.fetchCarrera();
       await this.fetchMaterias();
