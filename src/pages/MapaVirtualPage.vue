@@ -2,12 +2,12 @@
   <div class="page">
     <header class="page-header">
       <div class="header-left">
-        <TituloLabel text="Mapa" />
+        <TituloLabel text="Departamentos" />
         <UniversidadLabel class="titulo-universidad" :text="nombreEscuela || 'Universidad'" />
-        <!-- Botón Ver Mapa -->
+
         <button class="btn-ver-mapa" @click="openMapaPanel">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9.5 2.09l-5 1.67A1 1 0 003 4.71v15.17a1 1 0 001.32.95l5-1.67 5 1.67a1 1 0 00.68 0 1 1 0 00.68-.95V4.71a1 1 0 00-.68-.95 1 1 0 00-.68 0l-5 1.67V2.09a1 1 0 00-1-1 1 1 0 00-1 1v.  "/>
+            <path d="M9.5 2.09l-5 1.67A1 1 0 003 4.71v15.17a1 1 0 001.32.95l5-1.67 5 1.67a1 1 0 00.68 0 1 1 0 00.68-.95V4.71a1 1 0 00-.68-.95 1 1 0 00-.68 0l-5 1.67V2.09a1 1 0 00-1-1 1 1 0 00-1 1v." />
           </svg>
           Ver mapa
         </button>
@@ -15,38 +15,37 @@
     </header>
 
     <div class="container">
-      <!-- Panel izquierdo: lista de departamentos -->
       <div class="panel panel-departamentos">
-        <ListaDepartamentosComponent v-if="idEscuela" :escuelaId="idEscuela"
-          @select-departamento="onSelectDepartamento" />
+        <ListaDepartamentosComponent
+          v-if="idEscuela"
+          :escuelaId="idEscuela"
+          @select-departamento="onSelectDepartamento"
+        />
       </div>
-
-      <!-- Panel derecho: detalles de encargados -->
       <div class="panel panel-detalle">
         <div v-if="!departamentoSeleccionado" class="placeholder">
           <img src="/images/edificio-png.PNG" alt="Selecciona un departamento" class="placeholder-img" />
-          <p class="placeholder-text">
-            Selecciona un departamento para ver los encargados
-          </p>
+          <p class="placeholder-text">Selecciona un departamento para ver los encargados</p>
         </div>
-
-        <PanelInformacionComponent v-else :departamentoId="computedDeptId" :departamento="departamentoSeleccionado" />
-
+        <PanelInformacionComponent
+          v-else
+          :departamentoId="computedDeptId"
+          :departamento="departamentoSeleccionado"
+        />
       </div>
     </div>
 
-    <!-- Modal del mapa -->
     <MapaPanel v-if="showMapaPanel" @close="closeMapaPanel" />
   </div>
 </template>
 
 <script>
-import TituloLabel from '@/components/labels/TituloLabel.vue';
-import UniversidadLabel from '@/components/labels/UniversidadLabel.vue';
-import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue';
-import PanelInformacionComponent from '@/components/map/PanelInformacionComponent.vue';
-import MapaPanel from '@/components/map/MapaPanel.vue';
-import tiempoSeccion from '@/services/tiempoSeccion'; 
+import TituloLabel from '@/components/labels/TituloLabel.vue'
+import UniversidadLabel from '@/components/labels/UniversidadLabel.vue'
+import ListaDepartamentosComponent from '@/components/map/ListaDepartamentosComponent.vue'
+import PanelInformacionComponent from '@/components/map/PanelInformacionComponent.vue'
+import MapaPanel from '@/components/map/MapaPanel.vue'
+import tiempoSeccion from '@/services/tiempoSeccion'
 
 export default {
   name: 'MapaVirtualPage',
@@ -63,38 +62,36 @@ export default {
       nombreEscuela: '',
       departamentoSeleccionado: null,
       showMapaPanel: false
-    };
+    }
   },
   computed: {
-
     computedDeptId() {
-      const idObj = this.departamentoSeleccionado?._id;
-
-      return idObj?.$oid || idObj || '';
+      const idObj = this.departamentoSeleccionado?._id
+      return idObj?.$oid || idObj || ''
     }
   },
   created() {
-    this.idEscuela = this.$route.params.id;
-    this.nombreEscuela = this.$route.query.nombre || '';
-    this.startTime = tiempoSeccion.iniciarConteo(); 
+    this.idEscuela = this.$route.params.id
+    this.nombreEscuela = this.$route.query.nombre || ''
+    this.startTime = tiempoSeccion.iniciarConteo()
   },
   beforeUnmount() {
-    tiempoSeccion.finalizarConteo(this.startTime, 'mapa'); 
+    tiempoSeccion.finalizarConteo(this.startTime, 'mapa')
   },
   methods: {
     onSelectDepartamento(depto) {
-      console.log('MapaVirtualPage: departamento seleccionado →', depto);
-      this.departamentoSeleccionado = depto;
+      this.departamentoSeleccionado = depto
     },
     openMapaPanel() {
-      this.showMapaPanel = true;
+      this.showMapaPanel = true
     },
     closeMapaPanel() {
-      this.showMapaPanel = false;
+      this.showMapaPanel = false
     }
   }
-};
+}
 </script>
+
 
 
 <style scoped>
@@ -204,5 +201,21 @@ body {
 .detalle-contenido h3 {
   margin: 0 0 8px;
   color: #1e293b;
+}
+
+.btn-ver-maqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-ver-maqueta svg {
+  width: 20px;
+  height: 20px;
 }
 </style>

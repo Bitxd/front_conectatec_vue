@@ -10,11 +10,13 @@
       <div class="header-right">
         <div class="herramientas-container">
           <button class="btn-icono-texto" @click="botonMapa">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M20.5 3l-5.5 2-5-2-5.5 2v15l5.5-2 5 2 5.5-2z" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path
+                d="M3 2h18a1 1 0 0 1 1 1v19h-2v-2H4v2H2V3a1 1 0 0 1 1-1zm1 2v14h16V4H4zm2 2h2v2H6V6zm0 4h2v2H6v-2zm0 4h2v2H6v-2zm4-8h2v2h-2V6zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2zm4-8h2v2h-2V6zm0 4h2v2h-2v-2zm0 4h2v2h-2v-2z" />
             </svg>
-            <span>Mapa Virtual</span>
+            <span>Departamentos</span>
           </button>
+
 
           <button class="btn-icono-texto" @click="botonForo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">

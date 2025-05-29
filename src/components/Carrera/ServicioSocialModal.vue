@@ -4,11 +4,17 @@
       <button class="cerrar-btn" @click="cerrar" aria-label="Cerrar modal">&times;</button>
       <h3 class="title">Actividades de Servicio Social</h3>
       <p class="id-escuela">ID Escuela: {{ idEscuela }}</p>
-      <ul v-if="servicios.length" class="actividades-list">
-        <li v-for="servicio in servicios" :key="servicio._id" class="actividad-item">
-          {{ servicio.actividades }}
-        </li>
-      </ul>
+      <div v-if="servicios.length" class="servicios-container">
+        <div v-for="servicio in servicios" :key="servicio._id" class="servicio-card">
+          <p><strong>Folio:</strong> {{ servicio.folio }}</p>
+          <p><strong>Nombre:</strong> {{ servicio.nombre }}</p>
+          <p><strong>Área:</strong> {{ servicio.area }}</p>
+          <p><strong>Programa:</strong> {{ servicio.programa }}</p>
+          <p><strong>Responsable:</strong> {{ servicio.responsable }}</p>
+          <p><strong>Contacto:</strong> {{ servicio.contacto }}</p>
+          <p><strong>Actividades:</strong> {{ servicio.actividades }}</p>
+        </div>
+      </div>
       <p v-else class="no-data">No se encontraron actividades para esta escuela.</p>
     </div>
   </div>
@@ -48,7 +54,6 @@ export default {
     this.cargarServiciosSociales();
   },
   watch: {
-    // Cuando cambie idEscuela, recarga sin declarar parámetro no usado
     idEscuela() {
       this.cargarServiciosSociales();
     }
@@ -61,7 +66,7 @@ export default {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center; justify-content: center;
   z-index: 1000;
@@ -69,64 +74,74 @@ export default {
 
 .servicio-social-modal {
   position: relative;
-  max-width: 600px; width: 90%;
-  max-height: 80vh; overflow-y: auto;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  padding: 1.5rem 2rem;
+  max-width: 800px; width: 95%;
+  max-height: 90vh; overflow-y: auto;
+  background-color: #fefefe;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  padding: 2rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
 .cerrar-btn {
   position: absolute;
-  top: 0.5rem; right: 0.75rem;
-  background: transparent; border: none;
-  font-size: 2rem; line-height: 1;
-  color: #888; cursor: pointer;
+  top: 0.75rem; right: 1rem;
+  background: none; border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
   transition: color 0.2s ease;
 }
-.cerrar-btn:hover { color: #444; }
+.cerrar-btn:hover { color: #333; }
 
 .title {
-  font-size: 1.5rem; font-weight: 700;
-  margin-bottom: 1rem; text-align: center;
+  font-size: 1.75rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
   color: #2c3e50;
 }
 
 .id-escuela {
   text-align: center;
-  font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 1.5rem;
   font-style: italic;
 }
 
-.actividades-list {
-  list-style-type: disc;
-  padding-left: 1.25rem;
+.servicios-container {
+  display: grid;
+  gap: 1.25rem;
 }
 
-.actividad-item {
-  background: #e0f7fa;
-  margin-bottom: 0.8rem;
-  padding: 0.75rem 1rem;
-  border-radius: 5px;
-  font-size: 1rem; line-height: 1.4;
-  color: #00796b;
-  box-shadow: inset 0 0 5px rgba(0,121,107,0.3);
-  transition: background-color 0.3s ease;
+.servicio-card {
+  background: #f1f8e9;
+  border-left: 6px solid #689f38;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease;
 }
-.actividad-item:hover {
-  background-color: #b2dfdb;
-  cursor: default;
+.servicio-card:hover {
+  background: #e6ee9c;
+}
+
+.servicio-card p {
+  margin: 0.35rem 0;
+  font-size: 0.98rem;
+  line-height: 1.4;
+}
+
+.servicio-card strong {
+  color: #33691e;
 }
 
 .no-data {
   text-align: center;
   font-style: italic;
   color: #999;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 </style>
