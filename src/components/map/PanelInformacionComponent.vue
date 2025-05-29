@@ -4,13 +4,6 @@
     <header class="header-departamento">
       <div class="header-departamento-contenido">
         <h4>{{ departamento.nombre }}</h4>
-        <button class="btn-ver-mapa" @click="onVerEnMapa">
-          <svg class="icon-map" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M9 20l-5.447-2.724A2 2 0 013 15.382V5.618a2 2 0 011.553-1.947L9 2m0 18l6-3m-6 3V2m6 15.382V2m0 15.382l5.447-2.724A2 2 0 0021 15.382V5.618a2 2 0 00-1.553-1.947L15 2" />
-          </svg>
-          Ver en el mapa
-        </button>
       </div>
     </header>
 
@@ -107,9 +100,6 @@ export default {
     },
     toggleAcordeon(encargado) {
       encargado.isOpen = !encargado.isOpen;
-    },
-    onVerEnMapa() {
-      this.showMapaPanel = true;
     }
   }
 };
