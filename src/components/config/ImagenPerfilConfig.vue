@@ -6,24 +6,7 @@
                 <img :src="fotoPreview" alt="Avatar" class="profile-avatar" />
                 <div class="hover-overlay"></div>
             </div>
-            <div class="button-container">
-                <button class="btn-eliminar" @click="eliminarImagen">
-                    <!-- Icono de papelera -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon" aria-hidden="true">
-                        <path
-                            d="M3 6h18v2H3V6zm2 3h14l-1.2 12.4c-.1 1-1 1.6-2 1.6H8.2c-1 0-1.9-.6-2-1.6L5 9zm5 2v8h2v-8H10zm4 0v8h2v-8h-2z" />
-                    </svg>
-                    Eliminar
-                </button>
-                <button class="btn-guardar" @click="guardarCambios">
-                    <!-- Icono de disquete -->
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon" aria-hidden="true">
-                        <path
-                            d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 12H7l-4 4V5h16v10z" />
-                    </svg>
-                    Guardar cambios
-                </button>
-            </div>
+          
         </div>
         <input type="file" accept="image/*" ref="fileInput" hidden @change="cargarImagen" />
     </div>

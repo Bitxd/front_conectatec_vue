@@ -22,12 +22,6 @@
             <input id="email" type="email" v-model="email" placeholder="Introduce tu correo" required />
           </div>
 
-          <!-- Teléfono (opcional) -->
-          <div class="campo">
-            <label for="phone" class="label">Número de Teléfono (Opcional)</label>
-            <input id="phone" type="tel" v-model="phone" placeholder="Introduce tu número" />
-          </div>
-
           <!-- Contraseña -->
           <div class="campo">
             <label for="password" class="label">Contraseña</label>
@@ -81,7 +75,6 @@ export default {
       user: "",
       fullname: "",
       email: "",
-      phone: "",
       password: "",
       confirmpassword: ""
     };
@@ -100,7 +93,6 @@ export default {
           this.email,
           this.password,
           this.confirmpassword,
-          this.phone
         );
         alert(response.data.mensaje);
         this.handleCancel();
@@ -114,7 +106,6 @@ export default {
       this.user = "";
       this.fullname = "";
       this.email = "";
-      this.phone = "";
       this.password = "";
       this.confirmpassword = "";
       this.$emit("close");

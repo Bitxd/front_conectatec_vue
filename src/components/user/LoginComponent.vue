@@ -4,23 +4,9 @@
       <div class="modal-container">
         <h1 class="titulo">Iniciar sesión</h1>
         <form @submit.prevent="handleLogin" class="formulario">
-          <!-- Botón para alternar entre correo y teléfono -->
-          <div class="switch">
-            <button type="button" @click="toggleInputType" class="switch-btn">
-              {{ isEmail ? 'Usar número de teléfono' : 'Usar correo electrónico' }}
-            </button>
-          </div>
-
-          <!-- Campo de correo electrónico -->
-          <div v-if="isEmail" class="campo">
+          <div class="campo">
             <label for="email" class="label">Correo Electrónico</label>
             <input type="email" id="email" v-model="email" placeholder="Introduce tu correo" required />
-          </div>
-
-          <!-- Campo de teléfono -->
-          <div v-if="!isEmail" class="campo">
-            <label for="telefono" class="label">Número de Teléfono (Opcional)</label>
-            <input type="phone" id="telefono" v-model="telefono" placeholder="Introduce tu número" />
           </div>
 
           <div class="campo">
@@ -40,14 +26,13 @@
     <div class="backdrop" @click="handleCancel"></div>
   </div>
 
-  <!-- Notification Component -->
   <NotificationComponent v-if="notificationVisible" :message="notificationMessage"
     :notificationType="notificationType" />
 </template>
 
 <script>
 import BotonTextoImagenComponent from '../BotonTextoImagenComponent.vue';
-import authService from '../../apis/userApi';  // Asegúrate de tener esta API configurada correctamente
+import authService from '../../apis/userApi';
 import NotificationComponent from '../alerts/NotificationComponent.vue';
 
 export default
@@ -62,9 +47,7 @@ export default
     return{
       isModalVisible: true,
       email: '',
-      telefono: '',
       password: '',
-      isEmail: true,
       notificationVisible: false,
       notificationMessage: '',
       notificationType: '',
@@ -72,33 +55,20 @@ export default
   },
   methods:
   {
-    toggleInputType()
-    {
-      this.isEmail = !this.isEmail;
-      this.email = '';
-      this.telefono = '';
-    },
     async handleLogin()
     {
       try
       {
-        // Intentar login
         const userLoggedIn = await authService.login(this.email, this.password);
 
         if (userLoggedIn)
         {
-          // Mostrar notificación de éxito
           this.showNotification('Autenticación exitosa', 'success');
           this.handleCancel();
 
-          // Obtener configuración del usuario después de iniciar sesión
-          const token = userLoggedIn.token; // Suponiendo que el token esté en la respuesta
+          const token = userLoggedIn.token;
           const configuracion = await authService.obtenerConfiguracionUsuario(token);
-          
-          // Guardar la configuración en localStorage
           localStorage.setItem('configuracionUsuario', JSON.stringify(configuracion));
-
-          // Recargar la página para que se refresquen los datos
           location.reload();
         }
       }
@@ -111,7 +81,6 @@ export default
     {
       this.isModalVisible = false;
       this.email = '';
-      this.telefono = '';
       this.password = '';
       this.$emit("close");
     },

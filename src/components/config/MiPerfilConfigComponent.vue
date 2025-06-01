@@ -24,20 +24,6 @@
           </div>
         </div>
 
-        <div class="info-card">
-          <h2 class="metodos-title">
-            <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 5h2a2 2 0 012 2v1a2 2 0 01-2 2H3v6h2a2 2 0 012 2v1a2 2 0 01-2 2H3m12-6a4 4 0 01-8 0 4 4 0 018 0z" />
-            </svg>
-            Número telefónico
-          </h2>
-          <div class="info-body">
-            <span>{{ usuario?.phone || 'No disponible' }}</span>
-            <button class="modificar-btn">
-              Modificar
-            </button>
-          </div>
-        </div>
       </div>
     </div>
 

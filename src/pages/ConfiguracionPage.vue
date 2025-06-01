@@ -3,7 +3,7 @@
     <aside class="config-sidebar">
       <div class="sidebar-title">Configuración</div>
       <nav class="menu-opciones">
-        <button class="menu-item" @click="setActiveComponent('perfil')">
+        <button class="menu-item">
           <svg class="menu-icon" viewBox="0 0 24 24" fill="none">
             <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 4 8 5.79 8 8s1.79 4 4 4z" stroke="#333" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round" />
@@ -12,57 +12,25 @@
           </svg>
           <span>Mi perfil</span>
         </button>
-        <button class="menu-item" @click="setActiveComponent('notificaciones')">
-          <svg class="menu-icon" viewBox="0 0 24 24" fill="none">
-            <path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9z" stroke="#333" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-            <path d="M13.73 21a2 2 0 01-3.46 0" stroke="#333" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-          <span>Notificaciones</span>
-        </button>
       </nav>
     </aside>
 
     <main class="config-content">
-      <MiPerfilConfigComponent v-if="activeComponent === 'perfil'" />
-      <NotificacionConfigComponent v-else-if="activeComponent === 'notificaciones'" />
+      <MiPerfilConfigComponent />
     </main>
   </div>
 </template>
 
 <script>
 import MiPerfilConfigComponent from '@/components/config/MiPerfilConfigComponent.vue';
-import NotificacionConfigComponent from '@/components/config/NotificacionConfigComponent.vue';
 
 export default {
   components: {
     MiPerfilConfigComponent,
-    NotificacionConfigComponent,
-  },
-  data() {
-    return {
-      activeComponent: 'perfil',
-    };
-  },
-  watch: {
-    '$route.query.seccion': {
-      immediate: true,
-      handler(nuevaSeccion) {
-        if (nuevaSeccion === 'notificaciones' || nuevaSeccion === 'perfil') {
-          this.activeComponent = nuevaSeccion;
-        }
-      }
-    }
-  },
-  methods: {
-    setActiveComponent(component) {
-      this.activeComponent = component;
-      this.$router.replace({ query: { seccion: component } });
-    }
   }
 };
 </script>
+
 
 <style scoped>
 .configuracion-page {

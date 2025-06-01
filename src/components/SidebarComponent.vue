@@ -7,10 +7,6 @@
           <img src="/icons/perfil.svg" alt="Icono perfil" class="icon" />
           Mi perfil
         </li>
-        <li @click="irARecordatorios">
-          <img src="/icons/recordatorio.svg" alt="Icono recordatorios" class="icon" />
-          Recordatorios
-        </li>
         <li @click="irAConfiguracion">
           <img src="/icons/configuracion-icon.svg" alt="Icono configuración" class="icon" />
           Configuración

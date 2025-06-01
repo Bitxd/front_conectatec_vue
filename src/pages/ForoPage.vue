@@ -8,7 +8,6 @@
       <div class="header-right">
         <BotonTextoImagenComponent image="/icons/agregar-icon.svg" altText="Publicar" text="Publicar"
           @click="crearPublicacion" />
-        <BotonImagenComponent image="/icons/filtrar-icon.svg" altText="Filtrar" description="Filtrar" />
       </div>
     </header>
 
@@ -110,7 +109,6 @@
 </style>
 <script>
 import BotonTextoImagenComponent from '@/components/BotonTextoImagenComponent.vue'
-import BotonImagenComponent from '@/components/BotonImagenComponent.vue'
 import EntradaTextoComponent from '@/components/EntradaTextoComponent.vue'
 import TituloLabel from '@/components/labels/TituloLabel.vue'
 import UniversidadLabel from '@/components/labels/UniversidadLabel.vue'
@@ -126,7 +124,6 @@ export default {
   name: 'ForoPage',
   components: {
     BotonTextoImagenComponent,
-    BotonImagenComponent,
     EntradaTextoComponent,
     TituloLabel,
     UniversidadLabel,
