@@ -12,20 +12,13 @@
     <div class="documentos">
       <h3>Documentos solicitados:</h3>
       <ul>
-        <li v-for="(doc, index) in enlaces" :key="index">
-          <a :href="doc.url" target="_blank" rel="noopener" class="doc-link">
-            {{ doc.name }}
-            <svg class="external-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"/>
-              <path d="M5 5h5V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-5h-2v5H5V5z"/>
-            </svg>
-          </a>
+        <li v-for="(doc, index) in documentos_solicitados" :key="index">
+          <span class="doc-item">{{ doc }}</span>
         </li>
       </ul>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .requisitos-inscripcion-card {
@@ -72,39 +65,19 @@
 .documentos li {
   margin-bottom: 8px;
 }
-.doc-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-  color: #006eff;
+.doc-item {
+  color: #2c3e50;
   font-weight: 500;
-  transition: color 0.2s ease;
-}
-.doc-link:hover {
-  color: #004bb5;
-}
-.external-icon {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-  margin-left: 4px;
 }
 </style>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'RequisitosInscripcion',
   props: {
     precio_inscripcion: Number,
     fecha_inscripcion: String,
     documentos_solicitados: Array
-  },
-  data() {
-    return {
-      enlaces: []
-    };
   },
   computed: {
     formattedPrecio() {
@@ -115,27 +88,6 @@ export default {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(this.fecha_inscripcion).toLocaleDateString('es-MX', options);
     }
-  },
-  async mounted() {
-    this.enlaces = this.documentos_solicitados.map(name => ({ name, url: null }));
-    await Promise.all(
-      this.enlaces.map(async item => {
-        try {
-          const response = await axios.get('https://api.duckduckgo.com/', {
-            params: { q: `${item.name} site:gob.mx México`, format: 'json' }
-          });
-          const data = response.data;
-          // Prioriza AbstractURL, si no existe usa FirstURL del primer RelatedTopic
-          let url = data.AbstractURL ||
-                    (data.RelatedTopics && data.RelatedTopics[0] && data.RelatedTopics[0].FirstURL) ||
-                    '#';
-          item.url = url;
-        } catch (e) {
-          console.error('Error obteniendo enlace para', item.name, e);
-          item.url = '#';
-        }
-      })
-    );
   }
 };
 </script>

@@ -22,7 +22,6 @@ const obtenerForoPorEscuela = async (idEscuela) =>
 // Peticion post para publicar en el foro
 const crearPublicacion = async (token, formData) => {
   try {
-    alert(`Intentando publicar`);
     // Enviamos el FormData; axios se encargará de establecer el Content-Type adecuado
     const response = await axios.post('http://localhost:5000/api/foro/publicar', formData, { 
       headers: { 
